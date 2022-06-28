@@ -43,5 +43,4 @@ public class SiteStatusTest {
     final var status = SiteStatus.builder().build();
     assertFalse(status.isEndangered());
   }
-
 }

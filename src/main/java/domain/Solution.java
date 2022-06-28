@@ -3,9 +3,7 @@ package domain;
 import java.util.List;
 import lombok.Getter;
 
-/**
- * XXX
- */
+/** XXX */
 @Getter
 public class Solution {
 
@@ -18,6 +16,4 @@ public class Solution {
     this.activities = activities;
     this.isFeasible = true; // TODO update with ConstraintManager
   }
-
-
 }

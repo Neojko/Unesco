@@ -17,5 +17,4 @@ public class Country {
   public String toString() {
     return name;
   }
-
 }
