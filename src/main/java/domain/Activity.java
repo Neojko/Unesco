@@ -6,8 +6,8 @@ import java.time.Instant;
 import java.time.temporal.TemporalAmount;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
-/** @author XXX */
 @AllArgsConstructor
 @Getter
 public class Activity {
@@ -15,6 +15,6 @@ public class Activity {
   public static final TemporalAmount NUMBER_OF_HOURS_PER_SITE = Duration.ofHours(6);
 
   private final Site site;
-  private final Instant earliestArrivalTime;
-  private final Instant latestArrivalTime;
+  @Setter private Instant earliestArrivalTime;
+  @Setter private Instant latestArrivalTime;
 }

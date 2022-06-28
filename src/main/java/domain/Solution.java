@@ -3,7 +3,6 @@ package domain;
 import java.util.List;
 import lombok.Getter;
 
-/** XXX */
 @Getter
 public class Solution {
 
