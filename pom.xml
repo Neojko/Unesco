@@ -13,7 +13,7 @@
   <url>to do</url>
 
   <properties>
-    <java.version>8</java.version>
+    <java.version>1.8</java.version>
     <log4j_version>2.17.2</log4j_version>
     <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
     <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -35,7 +35,7 @@
     <dependency>
       <groupId>com.google.googlejavaformat</groupId>
       <artifactId>google-java-format</artifactId>
-      <version>1.13.0</version>
+      <version>1.7</version>
     </dependency>
 
     <dependency>
@@ -86,8 +86,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <showDeprecation>true</showDeprecation>
-          <source>8</source>
-          <target>8</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
         <groupId>org.apache.maven.plugins</groupId>
         <version>3.8.1</version>
@@ -204,7 +204,7 @@
             <toggleOffOn/>
             <removeUnusedImports/>
             <googleJavaFormat>
-              <version>1.11.0</version>
+              <version>1.7</version>
               <style>GOOGLE</style>
             </googleJavaFormat>
           </java>

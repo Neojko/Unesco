@@ -12,9 +12,9 @@ public class HaversineComputer {
     final var a =
         Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
             + Math.cos(toRadius(first.getLatitude()))
-            * Math.cos(toRadius(second.getLatitude()))
-            * Math.sin(lonDistance / 2)
-            * Math.sin(lonDistance / 2);
+                * Math.cos(toRadius(second.getLatitude()))
+                * Math.sin(lonDistance / 2)
+                * Math.sin(lonDistance / 2);
     final var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return 6371.009 * c;
   }
@@ -22,5 +22,4 @@ public class HaversineComputer {
   private static double toRadius(final double value) {
     return value * Math.PI / 180;
   }
-
 }

@@ -16,9 +16,8 @@ public class TravelMatrix {
   private final double[][] travelTimeInSeconds;
 
   public TravelMatrix(List<Site> sites) {
-    indices = IntStream.range(0, sites.size())
-        .boxed()
-        .collect(Collectors.toMap(sites::get, i -> i));
+    indices =
+        IntStream.range(0, sites.size()).boxed().collect(Collectors.toMap(sites::get, i -> i));
     travelTimeInSeconds = new double[sites.size()][sites.size()];
     for (int i = 0; i < sites.size(); i++) {
       final Site first = sites.get(i);

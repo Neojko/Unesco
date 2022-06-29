@@ -27,5 +27,4 @@ public class Site {
   public boolean isEndangered() {
     return status.isEndangered();
   }
-
 }

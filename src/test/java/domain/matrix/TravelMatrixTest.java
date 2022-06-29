@@ -1,10 +1,10 @@
 package domain.matrix;
 
-import com.sun.tools.javac.util.List;
 import domain.site.Coordinates;
 import domain.site.Country;
 import domain.site.Site;
 import domain.site.SiteStatus;
+import java.util.Arrays;
 import lombok.var;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,7 @@ public class TravelMatrixTest {
     final var status = SiteStatus.builder().build();
     site1 = new Site("site1", coordinates1, country, status);
     site2 = new Site("site2", coordinates2, country, status);
-    matrix = new TravelMatrix(List.of(site1, site2));
+    matrix = new TravelMatrix(Arrays.asList(site1, site2));
   }
 
   @Test

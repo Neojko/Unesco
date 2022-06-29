@@ -50,5 +50,4 @@ public class SiteTest {
     final var other = new Site("Other name", coordinates, country, status);
     assertNotEquals(site, other);
   }
-
 }

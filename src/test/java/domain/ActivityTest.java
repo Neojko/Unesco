@@ -52,7 +52,4 @@ public class ActivityTest {
     activity.setLatestArrivalTime(newInstant);
     assertEquals(newInstant, activity.getLatestArrivalTime());
   }
-
-
-
 }

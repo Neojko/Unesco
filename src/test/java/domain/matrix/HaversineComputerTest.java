@@ -7,11 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * All compared values come from https://www.vcalc.com/wiki/vCalc/Haversine+-+Distance
- * The website might not be the best, but the first two links when googling "Get Haversine distance"
- * already don't give the same result.
+ * All compared values come from https://www.vcalc.com/wiki/vCalc/Haversine+-+Distance The website
+ * might not be the best, but the first two links when googling "Get Haversine distance" already
+ * don't give the same result.
  */
-
 public class HaversineComputerTest {
 
   private Coordinates minCoordinates, sixDigitsCoordinates1, sixDigitsCoordinates2, maxCoordinates;
@@ -50,12 +49,12 @@ public class HaversineComputerTest {
 
   @Test
   public void test_correct_distance_with_two_six_digits_sites() {
-    final var distance = HaversineComputer.getDistance(sixDigitsCoordinates1, sixDigitsCoordinates2);
+    final var distance =
+        HaversineComputer.getDistance(sixDigitsCoordinates1, sixDigitsCoordinates2);
     Assertions.assertTrue(isMinimeError(10118.15, distance));
   }
 
   private boolean isMinimeError(final double expected, final double actual) {
     return Math.abs(expected - actual) < 0.01;
   }
-
 }
