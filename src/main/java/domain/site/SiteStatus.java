@@ -8,7 +8,6 @@ import lombok.Getter;
 @Getter
 @Immutable
 public class SiteStatus {
-
   private final boolean isCultural;
   private final boolean isNatural;
   private final boolean isEndangered;

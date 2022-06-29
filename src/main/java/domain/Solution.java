@@ -1,5 +1,6 @@
 package domain;
 
+import domain.matrix.TravelMatrix;
 import java.util.List;
 import lombok.Getter;
 
