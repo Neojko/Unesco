@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +34,8 @@ public class SiteTest {
             .name(name)
             .uniqueNumber(uniqueNumber)
             .coordinates(coordinates)
-            .countries(countries)
+            .country(country1)
+            .country(country2)
             .status(status)
             .build();
   }
@@ -95,7 +95,7 @@ public class SiteTest {
             .name(name)
             .uniqueNumber(uniqueNumber)
             .coordinates(coordinates)
-            .countries(new ArrayList<>(Collections.singletonList(country1)))
+            .country(country1) // missing country2
             .status(status)
             .build();
     assertNotEquals(site, other);

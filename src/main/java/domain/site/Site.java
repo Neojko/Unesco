@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Singular;
 
 @Builder
 @Getter
@@ -15,7 +16,7 @@ public class Site {
   private final String name;
   private final int uniqueNumber;
   private final Coordinates coordinates;
-  private final List<Country> countries;
+  @Singular private final List<Country> countries;
   private final SiteStatus status;
 
   public boolean isCultural() {
