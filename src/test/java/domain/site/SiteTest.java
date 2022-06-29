@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import lombok.var;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class SiteTest {
 
   private String name;
-  private int uniqueNumber;
+  private int siteNumber;
   private Coordinates coordinates;
   private Country country1;
   private List<Country> countries;
@@ -23,7 +24,7 @@ public class SiteTest {
   @BeforeEach
   public void setUp() {
     name = "Eiffel Tower";
-    uniqueNumber = 24;
+    siteNumber = 24;
     coordinates = new Coordinates(2.45, 1.903);
     country1 = new Country("France");
     final Country country2 = new Country("England");
@@ -32,7 +33,7 @@ public class SiteTest {
     site =
         Site.builder()
             .name(name)
-            .uniqueNumber(uniqueNumber)
+            .number(siteNumber)
             .coordinates(coordinates)
             .country(country1)
             .country(country2)
@@ -80,7 +81,7 @@ public class SiteTest {
     final var other =
         Site.builder()
             .name(name)
-            .uniqueNumber(uniqueNumber)
+            .number(siteNumber)
             .coordinates(coordinates)
             .countries(countries)
             .status(status)
@@ -93,11 +94,17 @@ public class SiteTest {
     final var other =
         Site.builder()
             .name(name)
-            .uniqueNumber(uniqueNumber)
+            .number(siteNumber)
             .coordinates(coordinates)
             .country(country1) // missing country2
             .status(status)
             .build();
     assertNotEquals(site, other);
+  }
+
+  @Test
+  public void to_short_format_test() {
+    final var expected = "Eiffel Tower,24,2.45,1.903,[France;England],true,false,false";
+    Assertions.assertEquals(expected, site.toShortFormat());
   }
 }

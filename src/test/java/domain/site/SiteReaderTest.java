@@ -18,7 +18,7 @@ public class SiteReaderTest {
     final var first =
         Site.builder()
             .name("Cultural Landscape and Archaeological Remains of the Bamiyan Valley")
-            .uniqueNumber(230)
+            .number(230)
             .coordinates(new Coordinates(34.84694, 67.82525))
             .countries(new ArrayList<>(Collections.singletonList(new Country("Afghanistan"))))
             .status(SiteStatus.builder().isCultural(true).isEndangered(true).build())
@@ -26,7 +26,7 @@ public class SiteReaderTest {
     final var second =
         Site.builder()
             .name("Tassili n'Ajjer")
-            .uniqueNumber(198)
+            .number(198)
             .coordinates(new Coordinates(25.5, 9))
             .countries(new ArrayList<>(Collections.singletonList(new Country("Algeria"))))
             .status(SiteStatus.builder().isCultural(true).isNatural(true).build())
@@ -34,7 +34,7 @@ public class SiteReaderTest {
     final var third =
         Site.builder()
             .name("Mosi-oa-Tunya / Victoria Falls")
-            .uniqueNumber(593)
+            .number(593)
             .coordinates(new Coordinates(-17.92453, 25.85539))
             .countries(
                 new ArrayList<>(Arrays.asList(new Country("Zambia"), new Country("Zimbabwe"))))

@@ -62,7 +62,7 @@ public class SiteReader {
   private Site createSite(final Row row) {
     return Site.builder()
         .name(row.getCell(SITE_NAME_INDEX).getStringCellValue())
-        .uniqueNumber((int) row.getCell(SITE_UNIQUE_NUMBER).getNumericCellValue())
+        .number((int) row.getCell(SITE_UNIQUE_NUMBER).getNumericCellValue())
         .coordinates(
             new Coordinates(
                 row.getCell(LATITUDE_INDEX).getNumericCellValue(),
