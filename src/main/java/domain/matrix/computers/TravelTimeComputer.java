@@ -9,7 +9,7 @@ public class TravelTimeComputer {
    * @param distance: distance in kilometers
    * @return travel time to cover distance in seconds
    */
-  public static double convertToTime(final double distance) {
-    return distance * 3600 / travelSpeed;
+  public static long convertToTime(final double distance) {
+    return (long) (distance * 3600 / travelSpeed);
   }
 }

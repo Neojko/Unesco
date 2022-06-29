@@ -33,6 +33,6 @@ public class TravelMatrixTest {
   @Test
   public void test_time_from_two_six_digits_coordinates() {
     final var distance = HaversineComputer.getDistance(coordinates1, coordinates2);
-    Assertions.assertEquals(distance * 3600 / 80, matrix.time(site1, site2));
+    Assertions.assertEquals((long) (distance * 3600 / 80), matrix.time(site1, site2));
   }
 }

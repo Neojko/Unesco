@@ -13,7 +13,7 @@ public class TravelMatrix {
 
   // Map Site unique number -> index in below array
   private final Map<Integer, Integer> indices;
-  private final double[][] travelTimeInSeconds;
+  private final long[][] travelTimeInSeconds;
 
   public TravelMatrix(final List<Site> sites) {
     final var uniqueNumbers =
@@ -22,10 +22,10 @@ public class TravelMatrix {
         IntStream.range(0, sites.size())
             .boxed()
             .collect(Collectors.toMap(uniqueNumbers::get, i -> i));
-    travelTimeInSeconds = new double[sites.size()][sites.size()];
+    travelTimeInSeconds = new long[sites.size()][sites.size()];
     for (int i = 0; i < sites.size(); i++) {
       final var firstSiteIndex = indices.get(sites.get(i).getUniqueNumber());
-      travelTimeInSeconds[firstSiteIndex][firstSiteIndex] = 0d;
+      travelTimeInSeconds[firstSiteIndex][firstSiteIndex] = 0;
       for (int j = i + 1; j < sites.size(); j++) {
         final var secondSiteIndex = indices.get(sites.get(j).getUniqueNumber());
         final var distance =
