@@ -1,5 +1,6 @@
 package domain.matrix;
 
+import domain.site.Coordinates;
 import domain.site.Site;
 import java.util.List;
 import java.util.Map;
@@ -12,20 +13,19 @@ public class TravelMatrix {
   // Travel speed in kilometers per hour
   private static final double travelSpeed = 80;
 
-  private final Map<Site, Integer> indices;
+  private final Map<Coordinates, Integer> indices;
   private final double[][] travelTimeInSeconds;
 
-  public TravelMatrix(List<Site> sites) {
-    indices =
-        IntStream.range(0, sites.size()).boxed().collect(Collectors.toMap(sites::get, i -> i));
-    travelTimeInSeconds = new double[sites.size()][sites.size()];
-    for (int i = 0; i < sites.size(); i++) {
-      final Site first = sites.get(i);
+  public TravelMatrix(List<Coordinates> coordinates) {
+    indices = IntStream.range(0, coordinates.size()).boxed()
+        .collect(Collectors.toMap(coordinates::get, i -> i));
+    travelTimeInSeconds = new double[coordinates.size()][coordinates.size()];
+    for (int i = 0; i < coordinates.size(); i++) {
+      final Coordinates first = coordinates.get(i);
       travelTimeInSeconds[indices.get(first)][indices.get(first)] = 0d;
-      for (int j = i + 1; j < sites.size(); j++) {
-        final Site second = sites.get(j);
-        final var distance =
-            HaversineComputer.getDistance(first.getCoordinates(), second.getCoordinates());
+      for (int j = i + 1; j < coordinates.size(); j++) {
+        final Coordinates second = coordinates.get(j);
+        final var distance = HaversineComputer.getDistance(first, second);
         final var time = distance * 3600 / travelSpeed;
         travelTimeInSeconds[indices.get(first)][indices.get(second)] = time;
         travelTimeInSeconds[indices.get(second)][indices.get(first)] = time;
@@ -34,7 +34,9 @@ public class TravelMatrix {
   }
 
   /** @return travel time in seconds between first and second Site */
-  public double seconds(final Site first, final Site second) {
-    return travelTimeInSeconds[indices.get(first)][indices.get(second)];
+  public double time(final Site first, final Site second) {
+    final var firstIndex = indices.get(first.getCoordinates());
+    final var secondIndex = indices.get(second.getCoordinates());
+    return travelTimeInSeconds[firstIndex][secondIndex];
   }
 }

@@ -24,18 +24,18 @@ public class TravelMatrixTest {
     final var status = SiteStatus.builder().build();
     site1 = new Site("site1", coordinates1, country, status);
     site2 = new Site("site2", coordinates2, country, status);
-    matrix = new TravelMatrix(Arrays.asList(site1, site2));
+    matrix = new TravelMatrix(Arrays.asList(coordinates1, coordinates2));
   }
 
   @Test
   public void test_time_from_site_to_itself() {
-    Assertions.assertEquals(0d, matrix.seconds(site1, site1));
-    Assertions.assertEquals(0d, matrix.seconds(site2, site2));
+    Assertions.assertEquals(0d, matrix.time(site1, site1));
+    Assertions.assertEquals(0d, matrix.time(site2, site2));
   }
 
   @Test
   public void test_time_from_two_six_digits_coordinates() {
     final var distance = HaversineComputer.getDistance(coordinates1, coordinates2);
-    Assertions.assertEquals(distance * 3600 / 80, matrix.seconds(site1, site2));
+    Assertions.assertEquals(distance * 3600 / 80, matrix.time(site1, site2));
   }
 }
