@@ -10,15 +10,14 @@ import lombok.var;
 
 public class TravelMatrix {
 
-  // Travel speed in kilometers per hour
-  private static final double travelSpeed = 80;
-
   private final Map<Coordinates, Integer> indices;
   private final double[][] travelTimeInSeconds;
 
   public TravelMatrix(List<Coordinates> coordinates) {
-    indices = IntStream.range(0, coordinates.size()).boxed()
-        .collect(Collectors.toMap(coordinates::get, i -> i));
+    indices =
+        IntStream.range(0, coordinates.size())
+            .boxed()
+            .collect(Collectors.toMap(coordinates::get, i -> i));
     travelTimeInSeconds = new double[coordinates.size()][coordinates.size()];
     for (int i = 0; i < coordinates.size(); i++) {
       final Coordinates first = coordinates.get(i);
@@ -26,7 +25,7 @@ public class TravelMatrix {
       for (int j = i + 1; j < coordinates.size(); j++) {
         final Coordinates second = coordinates.get(j);
         final var distance = HaversineComputer.getDistance(first, second);
-        final var time = distance * 3600 / travelSpeed;
+        final var time = TravelTimeComputer.convertToTime(distance);
         travelTimeInSeconds[indices.get(first)][indices.get(second)] = time;
         travelTimeInSeconds[indices.get(second)][indices.get(first)] = time;
       }
