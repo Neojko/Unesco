@@ -1,5 +1,7 @@
 package domain.matrix;
 
+import domain.matrix.computers.HaversineComputer;
+import domain.matrix.computers.TravelTimeComputer;
 import domain.site.Coordinates;
 import domain.site.Site;
 import java.util.List;

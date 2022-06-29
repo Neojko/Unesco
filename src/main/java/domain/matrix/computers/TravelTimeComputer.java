@@ -1,4 +1,4 @@
-package domain.matrix;
+package domain.matrix.computers;
 
 public class TravelTimeComputer {
 

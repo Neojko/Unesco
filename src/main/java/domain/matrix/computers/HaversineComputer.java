@@ -1,4 +1,4 @@
-package domain.matrix;
+package domain.matrix.computers;
 
 import domain.site.Coordinates;
 import lombok.var;

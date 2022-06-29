@@ -1,5 +1,6 @@
-package domain.matrix;
+package domain.matrix.computers;
 
+import domain.matrix.computers.HaversineComputer;
 import domain.site.Coordinates;
 import lombok.var;
 import org.junit.jupiter.api.Assertions;

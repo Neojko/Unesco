@@ -3,6 +3,10 @@ package domain.site;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +15,8 @@ public class SiteTest {
 
   private String name;
   private Coordinates coordinates;
-  private Country country;
+  private Country country1;
+  private List<Country> countries;
   private SiteStatus status;
   private Site site;
 
@@ -19,9 +24,31 @@ public class SiteTest {
   public void setUp() {
     name = "Eiffel Tower";
     coordinates = new Coordinates(2.45, 1.903);
-    country = new Country("France");
+    country1 = new Country("France");
+    Country country2 = new Country("England");
+    countries = new ArrayList<>(Arrays.asList(country1, country2));
     status = SiteStatus.builder().isCultural(true).build();
-    site = new Site(name, coordinates, country, status);
+    site = new Site(name, coordinates, countries, status);
+  }
+
+  @Test
+  public void get_name_test() {
+    assertEquals(name, site.getName());
+  }
+
+  @Test
+  public void get_coordinates_test() {
+    assertEquals(coordinates, site.getCoordinates());
+  }
+
+  @Test
+  public void get_countries_test() {
+    assertEquals(countries, site.getCountries());
+  }
+
+  @Test
+  public void get_status_test() {
+    assertEquals(status, site.getStatus());
   }
 
   @Test
@@ -41,13 +68,14 @@ public class SiteTest {
 
   @Test
   public void equals_returns_true() {
-    final var other = new Site(name, coordinates, country, status);
+    final var other = new Site(name, coordinates, countries, status);
     assertEquals(site, other);
   }
 
   @Test
   public void equals_returns_false() {
-    final var other = new Site("Other name", coordinates, country, status);
+    final var otherCountries = new ArrayList<>(Collections.singletonList(country1));
+    final var other = new Site("Other name", coordinates, otherCountries, status);
     assertNotEquals(site, other);
   }
 }

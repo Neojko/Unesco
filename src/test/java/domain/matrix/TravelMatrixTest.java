@@ -1,10 +1,13 @@
 package domain.matrix;
 
+import domain.matrix.computers.HaversineComputer;
 import domain.site.Coordinates;
 import domain.site.Country;
 import domain.site.Site;
 import domain.site.SiteStatus;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import lombok.var;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,10 +23,8 @@ public class TravelMatrixTest {
   public void setUp() {
     coordinates1 = new Coordinates(0.345918, -34.109321);
     coordinates2 = new Coordinates(-89.342565, 43.652214);
-    final var country = new Country("England");
-    final var status = SiteStatus.builder().build();
-    site1 = new Site("site1", coordinates1, country, status);
-    site2 = new Site("site2", coordinates2, country, status);
+    site1 = Site.builder().coordinates(coordinates1).build();
+    site2 = Site.builder().coordinates(coordinates2).build();
     matrix = new TravelMatrix(Arrays.asList(coordinates1, coordinates2));
   }
 
