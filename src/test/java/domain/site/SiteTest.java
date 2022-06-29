@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 public class SiteTest {
 
   private String name;
+  private int uniqueNumber;
   private Coordinates coordinates;
   private Country country1;
   private List<Country> countries;
@@ -23,12 +24,20 @@ public class SiteTest {
   @BeforeEach
   public void setUp() {
     name = "Eiffel Tower";
+    uniqueNumber = 24;
     coordinates = new Coordinates(2.45, 1.903);
     country1 = new Country("France");
-    Country country2 = new Country("England");
+    final Country country2 = new Country("England");
     countries = new ArrayList<>(Arrays.asList(country1, country2));
     status = SiteStatus.builder().isCultural(true).build();
-    site = new Site(name, coordinates, countries, status);
+    site =
+        Site.builder()
+            .name(name)
+            .uniqueNumber(uniqueNumber)
+            .coordinates(coordinates)
+            .countries(countries)
+            .status(status)
+            .build();
   }
 
   @Test
@@ -68,14 +77,27 @@ public class SiteTest {
 
   @Test
   public void equals_returns_true() {
-    final var other = new Site(name, coordinates, countries, status);
+    final var other =
+        Site.builder()
+            .name(name)
+            .uniqueNumber(uniqueNumber)
+            .coordinates(coordinates)
+            .countries(countries)
+            .status(status)
+            .build();
     assertEquals(site, other);
   }
 
   @Test
   public void equals_returns_false() {
-    final var otherCountries = new ArrayList<>(Collections.singletonList(country1));
-    final var other = new Site("Other name", coordinates, otherCountries, status);
+    final var other =
+        Site.builder()
+            .name(name)
+            .uniqueNumber(uniqueNumber)
+            .coordinates(coordinates)
+            .countries(new ArrayList<>(Collections.singletonList(country1)))
+            .status(status)
+            .build();
     assertNotEquals(site, other);
   }
 }

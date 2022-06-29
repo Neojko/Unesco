@@ -13,6 +13,7 @@ import lombok.Getter;
 public class Site {
 
   private final String name;
+  private final int uniqueNumber;
   private final Coordinates coordinates;
   private final List<Country> countries;
   private final SiteStatus status;
