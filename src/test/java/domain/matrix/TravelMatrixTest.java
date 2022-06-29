@@ -1,9 +1,8 @@
 package domain.matrix;
 
+import domain.matrix.computers.HaversineComputer;
 import domain.site.Coordinates;
-import domain.site.Country;
 import domain.site.Site;
-import domain.site.SiteStatus;
 import java.util.Arrays;
 import lombok.var;
 import org.junit.jupiter.api.Assertions;
@@ -20,22 +19,20 @@ public class TravelMatrixTest {
   public void setUp() {
     coordinates1 = new Coordinates(0.345918, -34.109321);
     coordinates2 = new Coordinates(-89.342565, 43.652214);
-    final var country = new Country("England");
-    final var status = SiteStatus.builder().build();
-    site1 = new Site("site1", coordinates1, country, status);
-    site2 = new Site("site2", coordinates2, country, status);
+    site1 = Site.builder().coordinates(coordinates1).uniqueNumber(1).build();
+    site2 = Site.builder().coordinates(coordinates2).uniqueNumber(2).build();
     matrix = new TravelMatrix(Arrays.asList(site1, site2));
   }
 
   @Test
   public void test_time_from_site_to_itself() {
-    Assertions.assertEquals(0d, matrix.seconds(site1, site1));
-    Assertions.assertEquals(0d, matrix.seconds(site2, site2));
+    Assertions.assertEquals(0d, matrix.time(site1, site1));
+    Assertions.assertEquals(0d, matrix.time(site2, site2));
   }
 
   @Test
   public void test_time_from_two_six_digits_coordinates() {
     final var distance = HaversineComputer.getDistance(coordinates1, coordinates2);
-    Assertions.assertEquals(distance * 3600 / 80, matrix.seconds(site1, site2));
+    Assertions.assertEquals((long) (distance * 3600 / 80), matrix.time(site1, site2));
   }
 }
