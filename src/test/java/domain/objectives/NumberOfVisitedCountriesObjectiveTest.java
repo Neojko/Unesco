@@ -39,28 +39,32 @@ public class NumberOfVisitedCountriesObjectiveTest {
   }
 
   @Test
-  public void test_get_objective_value_when_list_of_visited_countries_contains_same_number_of_sites_and_countries() {
+  public void
+      test_get_objective_value_when_list_of_visited_countries_contains_same_number_of_sites_and_countries() {
     final var sites = new SiteReader().createSites(SiteReaderTest.testFile);
     final var matrix = new TravelMatrix(sites);
     final var afghanSite = sites.get(0);
     final var algerianSite = sites.get(1);
-    final var solution = new SolutionBuilder()
-        .start(new Coordinates(0, 0))
-        .visitedSite(afghanSite).visitedSite(algerianSite)
-        .build(matrix);
+    final var solution =
+        new SolutionBuilder()
+            .start(new Coordinates(0, 0))
+            .visitedSite(afghanSite)
+            .visitedSite(algerianSite)
+            .build(matrix);
     assertEquals(2L, objective.computeObjectiveValue(solution).getValue());
   }
 
   @Test
-  public void test_get_objective_value_when_list_of_visited_countries_contains_different_number_of_sites_and_countries() {
+  public void
+      test_get_objective_value_when_list_of_visited_countries_contains_different_number_of_sites_and_countries() {
     final var sites = new SiteReader().createSites(SiteReaderTest.testFile);
     final var matrix = new TravelMatrix(sites);
     final var twoCountriesSite = sites.get(2);
-    final var solution = new SolutionBuilder()
-        .start(new Coordinates(0, 0))
-        .visitedSite(twoCountriesSite)
-        .build(matrix);
+    final var solution =
+        new SolutionBuilder()
+            .start(new Coordinates(0, 0))
+            .visitedSite(twoCountriesSite)
+            .build(matrix);
     assertEquals(2L, objective.computeObjectiveValue(solution).getValue());
   }
-
 }

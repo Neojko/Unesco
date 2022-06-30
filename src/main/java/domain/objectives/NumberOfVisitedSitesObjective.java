@@ -22,9 +22,6 @@ public class NumberOfVisitedSitesObjective implements Objective {
 
   @Override
   public ObjectiveValue computeObjectiveValue(final Solution solution) {
-    return ObjectiveValue.builder()
-        .sense(sense)
-        .value(solution.getVisitedSites().size())
-        .build();
+    return ObjectiveValue.builder().sense(sense).value(solution.getVisitedSites().size()).build();
   }
 }

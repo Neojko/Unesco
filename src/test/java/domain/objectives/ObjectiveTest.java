@@ -39,5 +39,4 @@ public class ObjectiveTest {
     when(objective.getWorstObjectiveValue()).thenCallRealMethod();
     assertEquals(ObjectiveValue.WORST_MIN_OBJECTIVE_VALUE, objective.getWorstObjectiveValue());
   }
-
 }

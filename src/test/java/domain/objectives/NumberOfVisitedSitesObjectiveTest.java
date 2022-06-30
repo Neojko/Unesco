@@ -42,11 +42,12 @@ public class NumberOfVisitedSitesObjectiveTest {
   public void test_get_objective_value_when_list_of_visited_sites_contains_at_least_one_site() {
     final var sites = new SiteReader().createSites(SiteReaderTest.testFile);
     final var matrix = new TravelMatrix(sites);
-    final var solution = new SolutionBuilder()
-        .start(new Coordinates(0, 0))
-        .visitedSite(sites.get(0)).visitedSite(sites.get(1))
-        .build(matrix);
+    final var solution =
+        new SolutionBuilder()
+            .start(new Coordinates(0, 0))
+            .visitedSite(sites.get(0))
+            .visitedSite(sites.get(1))
+            .build(matrix);
     assertEquals(2L, objective.computeObjectiveValue(solution).getValue());
   }
-
 }

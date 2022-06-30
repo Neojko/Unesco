@@ -14,16 +14,12 @@ public class ObjectiveValues {
   private final Map<Objective, ObjectiveValue> objectiveValuesMap;
   private final List<Objective> objectives; // ordered list from most important to less important
 
-  /**
-   * Initialises the lexicographic list of objectives but does not give them any ObjectiveValue
-   */
+  /** Initialises the lexicographic list of objectives but does not give them any ObjectiveValue */
   public static ObjectiveValues createEmptyObjectiveValues(final List<Objective> objectives) {
     return new ObjectiveValues(objectives);
   }
 
-  /**
-   * Initialises the lexicographic list of objectives and give them all a value 0
-   */
+  /** Initialises the lexicographic list of objectives and give them all a value 0 */
   public static ObjectiveValues createZeroObjectiveValues(final List<Objective> objectives) {
     final var objectiveValues = new ObjectiveValues(objectives);
     for (final Objective objective : objectives) {
@@ -32,9 +28,7 @@ public class ObjectiveValues {
     return objectiveValues;
   }
 
-  /**
-   * Initialises the lexicographic list of objectives and give them all the worst possible value
-   */
+  /** Initialises the lexicographic list of objectives and give them all the worst possible value */
   public static ObjectiveValues createWorstObjectiveValues(final List<Objective> objectives) {
     final var objectiveValues = new ObjectiveValues(objectives);
     for (final Objective objective : objectives) {
@@ -43,9 +37,7 @@ public class ObjectiveValues {
     return objectiveValues;
   }
 
-  /**
-   * Used in all above public static constructors
-   */
+  /** Used in all above public static constructors */
   private ObjectiveValues(final List<Objective> objectives) {
     objectiveValuesMap = new HashMap<>();
     this.objectives = objectives;
@@ -53,6 +45,7 @@ public class ObjectiveValues {
 
   /**
    * Updating the ObjectiveValue of a contained Objective
+   *
    * @param objective: needs to be contained in this
    */
   public void set(final Objective objective, final ObjectiveValue objectiveValue) {
@@ -61,9 +54,10 @@ public class ObjectiveValues {
 
   /**
    * Updating the current ObjectiveValues by adding the other ObjectiveValues
+   *
    * @param other: needs to have the same Objective as this
    */
-  public void plus(final ObjectiveValues other) {
+  public void add(final ObjectiveValues other) {
     for (final Objective objective : other.objectives) {
       objectiveValuesMap.put(
           objective,
@@ -73,6 +67,7 @@ public class ObjectiveValues {
 
   /**
    * Compares two ObjectiveValues objects in the lexicographic order of their ObjectiveValue objects
+   *
    * @param other: needs to have the same Objective objects as this
    * @return true if this is better than other, false otherwise (included equality)
    */

@@ -3,10 +3,9 @@ package domain.objectives;
 import domain.Solution;
 
 /**
- * An Objective object represents an objective in Operational Research.
- * It has a sense (maximise or minimise) and a value.
- * In this project, we model all problem objectives with classes that implement this interface.
- * A Solution will then store ObjectiveValues to record its quality.
+ * An Objective object represents an objective in Operational Research. It has a sense (maximise or
+ * minimise) and a value. In this project, we model all problem objectives with classes that
+ * implement this interface. A Solution will then store ObjectiveValues to record its quality.
  */
 public interface Objective {
 
@@ -32,9 +31,6 @@ public interface Objective {
         : ObjectiveValue.WORST_MIN_OBJECTIVE_VALUE;
   }
 
-  /**
-   * @return the ObjectiveValue of the Objective relatively to the given Solution
-   */
+  /** @return the ObjectiveValue of the Objective relatively to the given Solution */
   ObjectiveValue computeObjectiveValue(final Solution solution);
-
 }
