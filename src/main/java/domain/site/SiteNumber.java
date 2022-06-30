@@ -10,5 +10,5 @@ import lombok.Getter;
 @Immutable
 @AllArgsConstructor
 public class SiteNumber {
-  private final int number;
+  private final int value;
 }

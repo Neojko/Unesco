@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
-import lombok.var;
 
 @Builder
 @Getter
@@ -18,18 +17,15 @@ public class Site {
   private final SiteNumber number;
   private final Coordinates coordinates;
   @Singular private final List<Country> countries;
-  private final SiteStatus status;
+  private final SiteType type;
+  private final boolean isEndangered;
 
   public boolean isCultural() {
-    return status.isCultural();
+    return type.isCultural();
   }
 
   public boolean isNatural() {
-    return status.isNatural();
-  }
-
-  public boolean isEndangered() {
-    return status.isEndangered();
+    return type.isNatural();
   }
 
   public static class SiteBuilder {
@@ -37,18 +33,15 @@ public class Site {
       this.number = new SiteNumber(number);
       return this;
     }
-  }
 
-  public String toShortFormat() {
-    final StringBuilder countryNames = new StringBuilder();
-    countryNames.append("[");
-    for (final var country : countries) {
-      countryNames.append(country.getName()).append(";");
+    public SiteBuilder isEndangered() {
+      this.isEndangered = true;
+      return this;
     }
-    countryNames.deleteCharAt(countryNames.length()-1);
-    countryNames.append("]");
-    return name + "," + number.getNumber() + ","
-        + coordinates.getLatitude() + "," + coordinates.getLongitude() + "," + countryNames + ","
-        + status.isCultural() + "," + status.isNatural() + "," + status.isEndangered();
+
+    public SiteBuilder isEndangered(final boolean value) {
+      this.isEndangered = value;
+      return this;
+    }
   }
 }
