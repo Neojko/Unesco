@@ -1,15 +1,16 @@
 package domain.objectives;
 
 import domain.Solution;
+import domain.objectives.components.ObjectiveSense;
+import domain.objectives.components.ObjectiveValue;
 
 /**
  * An Objective object represents an objective in Operational Research. It has a sense (maximise or
  * minimise) and a value. In this project, we model all problem objectives with classes that
- * implement this interface. A Solution will then store ObjectiveValues to record its quality.
+ * implement this interface. A Solution will then store ObjectiveValues the values of the considered
+ * Objective objects.
  */
 public interface Objective {
-
-  ObjectiveName getObjectiveName();
 
   ObjectiveSense getObjectiveSense();
 

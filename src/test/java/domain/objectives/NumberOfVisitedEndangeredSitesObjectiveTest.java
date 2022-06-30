@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import domain.Solution.SolutionBuilder;
 import domain.matrix.TravelMatrix;
+import domain.objectives.components.ObjectiveSense;
 import domain.site.Coordinates;
 import domain.site.SiteReader;
 import domain.site.SiteReaderTest;
@@ -19,11 +20,6 @@ public class NumberOfVisitedEndangeredSitesObjectiveTest {
   @BeforeEach
   public void setUp() {
     objective = new NumberOfVisitedEndangeredSitesObjective();
-  }
-
-  @Test
-  public void test_get_name() {
-    assertEquals(ObjectiveName.NUMBER_OF_ENDANGERED_VISITED_SITES, objective.getObjectiveName());
   }
 
   @Test

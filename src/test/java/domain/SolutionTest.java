@@ -10,6 +10,7 @@ import domain.matrix.computers.TravelTimeComputer;
 import domain.site.Coordinates;
 import domain.site.Country;
 import domain.site.Site;
+import domain.site.SiteType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +38,7 @@ public class SolutionTest {
             .coordinates(new Coordinates(23.183948, 2.349192))
             .country(france)
             .country(england)
+            .type(SiteType.Cultural)
             .build();
     site2 =
         Site.builder()
@@ -44,18 +46,21 @@ public class SolutionTest {
             .coordinates(new Coordinates(81.183948, -35.349192))
             .country(england)
             .country(spain)
+            .type(SiteType.Natural)
             .build();
     site3 =
         Site.builder()
             .uniqueNumber(3)
             .coordinates(new Coordinates(1.183948, 9.349192))
             .country(spain)
+            .type(SiteType.Mixed)
             .build();
     site4 =
         Site.builder()
             .uniqueNumber(4)
             .coordinates(new Coordinates(15.183948, 4.349192))
             .country(germany)
+            .type(SiteType.Natural)
             .build();
     final List<Site> sites = new ArrayList<>(Arrays.asList(site1, site2, site3, site4));
     matrix = new TravelMatrix(sites);
@@ -108,6 +113,10 @@ public class SolutionTest {
             + matrix.time(site2, site3)
             + TravelTimeComputer.convertToTime(site3.getCoordinates(), start);
     assertEquals(expectedTripTime, solution.getTripTime());
+    // Cultural sites
+    assertEquals(2, solution.getNumberOfCulturalVisitedSites()); // site1 and site2
+    // Natural sites
+    assertEquals(2, solution.getNumberOfNaturalVisitedSites()); // site2 and site3
   }
 
   @Test
