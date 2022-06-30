@@ -2,7 +2,6 @@ package domain.site;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import domain.matrix.SiteReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +20,8 @@ public class SiteReaderTest {
             .uniqueNumber(230)
             .coordinates(new Coordinates(34.84694, 67.82525))
             .countries(new ArrayList<>(Collections.singletonList(new Country("Afghanistan"))))
-            .status(SiteStatus.builder().isCultural(true).isEndangered(true).build())
+            .type(SiteType.Cultural)
+            .isEndangered()
             .build();
     final var second =
         Site.builder()
@@ -29,7 +29,7 @@ public class SiteReaderTest {
             .uniqueNumber(198)
             .coordinates(new Coordinates(25.5, 9))
             .countries(new ArrayList<>(Collections.singletonList(new Country("Algeria"))))
-            .status(SiteStatus.builder().isCultural(true).isNatural(true).build())
+            .type(SiteType.Mixed)
             .build();
     final var third =
         Site.builder()
@@ -38,7 +38,7 @@ public class SiteReaderTest {
             .coordinates(new Coordinates(-17.92453, 25.85539))
             .countries(
                 new ArrayList<>(Arrays.asList(new Country("Zambia"), new Country("Zimbabwe"))))
-            .status(SiteStatus.builder().isNatural(true).build())
+            .type(SiteType.Natural)
             .build();
     assertEquals(sites.get(0), first);
     assertEquals(sites.get(1), second);

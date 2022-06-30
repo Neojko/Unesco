@@ -14,20 +14,34 @@ import lombok.Singular;
 public class Site {
 
   private final String name;
-  private final int uniqueNumber;
+  private final SiteNumber uniqueNumber;
   private final Coordinates coordinates;
   @Singular private final List<Country> countries;
-  private final SiteStatus status;
+  private final SiteType type;
+  private final boolean isEndangered;
 
   public boolean isCultural() {
-    return status.isCultural();
+    return type.isCultural();
   }
 
   public boolean isNatural() {
-    return status.isNatural();
+    return type.isNatural();
   }
 
-  public boolean isEndangered() {
-    return status.isEndangered();
+  public static class SiteBuilder {
+    public SiteBuilder uniqueNumber(final int uniqueNumber) {
+      this.uniqueNumber = new SiteNumber(uniqueNumber);
+      return this;
+    }
+
+    public SiteBuilder isEndangered() {
+      this.isEndangered = true;
+      return this;
+    }
+
+    public SiteBuilder isEndangered(final boolean value) {
+      this.isEndangered = value;
+      return this;
+    }
   }
 }
