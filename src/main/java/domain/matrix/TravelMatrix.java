@@ -17,13 +17,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import lombok.EqualsAndHashCode;
 import lombok.var;
 
+@EqualsAndHashCode
 public class TravelMatrix {
 
   private final Map<SiteNumber, Integer> indices;
   private final long[][] travelTimeInSeconds;
 
+  /**
+   * Creates TravelMatrix by computing time to travel Haversine distance for all pairs of sites
+   */
   public TravelMatrix(final List<Site> sites) {
     indices = initIndices(sites);
     travelTimeInSeconds = new long[sites.size()][sites.size()];
@@ -42,6 +47,12 @@ public class TravelMatrix {
     }
   }
 
+  /**
+   * Creates TravelMatrix from a list of sites and a csv file containing times between pairs
+   * @param sites: contains all sites whose numbers belong to csv file
+   * @param inputCSVFileName: contains time for all pairs of site numbers with time(i,j) = time(j,i)
+   * @throws IOException: file not found
+   */
   public TravelMatrix(final List<Site> sites, final String inputCSVFileName) throws IOException {
     indices = initIndices(sites);
     travelTimeInSeconds = new long[sites.size()][sites.size()];
@@ -57,7 +68,7 @@ public class TravelMatrix {
   }
 
   /** @return travel time in seconds between first and second Site */
-  public double time(final Site first, final Site second) {
+  public long time(final Site first, final Site second) {
     return time(first.getNumber(), second.getNumber());
   }
 
@@ -83,7 +94,7 @@ public class TravelMatrix {
   }
 
   /** @return travel time in seconds between first and second SiteNumber */
-  private double time(final SiteNumber first, final SiteNumber second) {
+  private long time(final SiteNumber first, final SiteNumber second) {
     final var firstIndex = indices.get(first);
     final var secondIndex = indices.get(second);
     return travelTimeInSeconds[firstIndex][secondIndex];
@@ -94,15 +105,15 @@ public class TravelMatrix {
    */
   private String[] createCSVEntry(final SiteNumber first, final SiteNumber second) {
     return new String[]{
-        String.valueOf(first),
-        String.valueOf(second),
+        String.valueOf(first.getValue()),
+        String.valueOf(second.getValue()),
         String.valueOf(time(first, second))
     };
   }
 
   /**
    * Writes a CSV file containing the processed matrix object
-   * @data: list of triplets (SiteNumber, SiteNumber, travel time)
+   * @param data: list of triplets (SiteNumber, SiteNumber, travel time)
    */
   private void write(final List<String[]> data, final String filename) throws IOException {
     final CSVWriter writer = new CSVWriter(
