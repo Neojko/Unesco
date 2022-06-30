@@ -10,10 +10,12 @@ import org.junit.jupiter.api.Test;
 
 public class SiteReaderTest {
 
+  public static String testFile = "src/test/resources/whc-sites-2021-small.xls";
+
   @Test
   public void create_sites_test() {
     final SiteReader reader = new SiteReader();
-    final var sites = reader.createSites("src/test/resources/whc-sites-2021-small.xls");
+    final var sites = reader.createSites(testFile);
     final var first =
         Site.builder()
             .name("Cultural Landscape and Archaeological Remains of the Bamiyan Valley")
