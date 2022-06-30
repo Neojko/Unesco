@@ -22,7 +22,6 @@ public class SolutionTest {
   private Coordinates start;
   private Country france, england, spain, germany;
   private Site site1, site2, site3, site4;
-  private List<Site> sites;
   private TravelMatrix matrix;
   private Solution solution;
 
@@ -58,7 +57,7 @@ public class SolutionTest {
             .coordinates(new Coordinates(15.183948, 4.349192))
             .country(germany)
             .build();
-    sites = new ArrayList<>(Arrays.asList(site1, site2, site3, site4));
+    final List<Site> sites = new ArrayList<>(Arrays.asList(site1, site2, site3, site4));
     matrix = new TravelMatrix(sites);
     solution =
         new SolutionBuilder()

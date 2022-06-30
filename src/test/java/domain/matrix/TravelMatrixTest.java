@@ -6,6 +6,7 @@ import domain.matrix.computers.HaversineComputer;
 import domain.site.Coordinates;
 import domain.site.Site;
 import domain.site.SiteReader;
+import domain.site.SiteReaderTest;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class TravelMatrixTest {
 
   @Test
   public void matrix_stays_same_when_exported_and_read_from_export() throws IOException {
-    final var sites = new SiteReader().createSites("src/test/resources/whc-sites-2021-small.xls");
+    final var sites = new SiteReader().createSites(SiteReaderTest.testFile);
     final var matrix = new TravelMatrix(sites);
     matrix.exportToCSV(outputFileName);
     final var newMatrix = new TravelMatrix(sites, outputFileName);
