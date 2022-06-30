@@ -1,5 +1,6 @@
-package domain.objectives;
+package domain.objectives.components;
 
+import domain.objectives.Objective;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.var;
 
+/**
+ * The goal of this class is to : - record the associated ObjectiveValue object of each contained
+ * Objective - compare itself against other ObjectiveValues
+ */
 @EqualsAndHashCode
 @Getter
 public class ObjectiveValues {

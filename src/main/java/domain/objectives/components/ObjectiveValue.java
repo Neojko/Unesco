@@ -1,4 +1,4 @@
-package domain.objectives;
+package domain.objectives.components;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
