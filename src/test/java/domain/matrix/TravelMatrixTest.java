@@ -26,8 +26,8 @@ public class TravelMatrixTest {
   public void setUp() {
     coordinates1 = new Coordinates(0.345918, -34.109321);
     coordinates2 = new Coordinates(-89.342565, 43.652214);
-    site1 = Site.builder().coordinates(coordinates1).number(1).build();
-    site2 = Site.builder().coordinates(coordinates2).number(2).build();
+    site1 = Site.builder().coordinates(coordinates1).uniqueNumber(1).build();
+    site2 = Site.builder().coordinates(coordinates2).uniqueNumber(2).build();
     matrix = new TravelMatrix(Arrays.asList(site1, site2));
     outputFileName = "src/test/resources/export.csv";
   }

@@ -33,7 +33,7 @@ public class SiteTest {
     site =
         Site.builder()
             .name(name)
-            .number(siteNumber)
+            .uniqueNumber(siteNumber)
             .coordinates(coordinates)
             .country(country1)
             .country(country2)
@@ -77,7 +77,7 @@ public class SiteTest {
     final var other =
         Site.builder()
             .name(name)
-            .number(siteNumber)
+            .uniqueNumber(siteNumber)
             .coordinates(coordinates)
             .countries(countries)
             .type(siteType)
@@ -91,7 +91,7 @@ public class SiteTest {
     final var other =
         Site.builder()
             .name(name)
-            .number(siteNumber)
+            .uniqueNumber(siteNumber)
             .coordinates(coordinates)
             .country(country1) // missing country2
             .type(siteType)

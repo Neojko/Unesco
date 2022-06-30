@@ -14,7 +14,7 @@ import lombok.Singular;
 public class Site {
 
   private final String name;
-  private final SiteNumber number;
+  private final SiteNumber uniqueNumber;
   private final Coordinates coordinates;
   @Singular private final List<Country> countries;
   private final SiteType type;
@@ -29,8 +29,8 @@ public class Site {
   }
 
   public static class SiteBuilder {
-    public SiteBuilder number(final int number) {
-      this.number = new SiteNumber(number);
+    public SiteBuilder uniqueNumber(final int uniqueNumber) {
+      this.uniqueNumber = new SiteNumber(uniqueNumber);
       return this;
     }
 

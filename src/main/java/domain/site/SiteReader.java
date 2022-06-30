@@ -54,7 +54,7 @@ public class SiteReader {
   private Site createSite(final Row row) {
     return Site.builder()
         .name(row.getCell(NAME_INDEX).getStringCellValue())
-        .number((int) row.getCell(UNIQUE_NUMBER_INDEX).getNumericCellValue())
+        .uniqueNumber((int) row.getCell(UNIQUE_NUMBER_INDEX).getNumericCellValue())
         .coordinates(
             new Coordinates(
                 row.getCell(LATITUDE_INDEX).getNumericCellValue(),
