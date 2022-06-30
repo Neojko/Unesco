@@ -20,18 +20,24 @@ public class Solution {
   private final List<Site> unvisitedSites;
   private final Map<Country, List<Site>> visitedCountries;
   private final long tripTime;
+  private final int numberOfCulturalVisitedSites;
+  private final int numberOfNaturalVisitedSites;
 
   private Solution(
       final Coordinates start,
       final List<Site> visitedSites,
       final List<Site> unvisitedSites,
       final Map<Country, List<Site>> visitedCountries,
-      final long tripTime) {
+      final long tripTime,
+      final int numberOfCulturalVisitedSites,
+      final int numberOfNaturalVisitedSites) {
     this.start = start;
     this.visitedSites = visitedSites;
     this.unvisitedSites = unvisitedSites;
     this.visitedCountries = visitedCountries;
     this.tripTime = tripTime;
+    this.numberOfCulturalVisitedSites = numberOfCulturalVisitedSites;
+    this.numberOfNaturalVisitedSites = numberOfNaturalVisitedSites;
   }
 
   public boolean isVisitingSite(final Site site) {
@@ -85,7 +91,13 @@ public class Solution {
      */
     public Solution build(final TravelMatrix matrix) {
       return new Solution(
-          start, visitedSites, unvisitedSites, visitedCountries, computeTripTime(matrix));
+          start,
+          visitedSites,
+          unvisitedSites,
+          visitedCountries,
+          computeTripTime(matrix),
+          computeNumberOfCulturalVisitedSites(),
+          computeNumberOfNaturalVisitedSites());
     }
 
     private long computeTripTime(final TravelMatrix matrix) {
@@ -99,6 +111,14 @@ public class Solution {
       final var lastVisitedSite = visitedSites.get(visitedSites.size() - 1);
       result += TravelTimeComputer.convertToTime(lastVisitedSite.getCoordinates(), start);
       return result;
+    }
+
+    private int computeNumberOfCulturalVisitedSites() {
+      return (int) visitedSites.stream().filter(Site::isCultural).count();
+    }
+
+    private int computeNumberOfNaturalVisitedSites() {
+      return (int) visitedSites.stream().filter(Site::isNatural).count();
     }
   }
 }
