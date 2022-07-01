@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import domain.objectives.NumberOfVisitedCountriesObjective;
 import domain.objectives.NumberOfVisitedSitesObjective;
-import domain.objectives.Objective;
 import java.util.stream.Stream;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;

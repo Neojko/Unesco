@@ -1,6 +1,5 @@
 package domain.objectives.components;
 
-import domain.objectives.Objective;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;

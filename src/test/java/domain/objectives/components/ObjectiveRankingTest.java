@@ -3,7 +3,6 @@ package domain.objectives.components;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
-import domain.objectives.Objective;
 import domain.objectives.components.ObjectiveRanking.ObjectiveRankingBuilder;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,7 +1,6 @@
 package domain.objectives.components;
 
 import com.google.errorprone.annotations.Immutable;
-import domain.objectives.Objective;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
