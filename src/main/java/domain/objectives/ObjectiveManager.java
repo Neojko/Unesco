@@ -14,7 +14,6 @@ import lombok.var;
  * This class contains all Objectives of the problem and is used to compute everything that is
  * related to the ObjectiveValues of a Solution.
  */
-
 @Getter
 public class ObjectiveManager {
 
@@ -22,9 +21,7 @@ public class ObjectiveManager {
   private final List<VisitNewSiteObjective> visitNewSiteObjectives;
 
   private ObjectiveManager(
-      final List<Objective> objectives,
-      final List<VisitNewSiteObjective> visitNewSiteObjectives
-  ) {
+      final List<Objective> objectives, final List<VisitNewSiteObjective> visitNewSiteObjectives) {
     this.objectives = objectives;
     this.visitNewSiteObjectives = visitNewSiteObjectives;
   }
@@ -42,15 +39,11 @@ public class ObjectiveManager {
   }
 
   public ObjectiveValues computeVisitNewSiteObjectiveValuesDelta(
-      final Solution solution,
-      final Site site
-  ) {
+      final Solution solution, final Site site) {
     final var objectiveValues = ObjectiveValues.builder().build();
     for (final var objective : visitNewSiteObjectives) {
       objectiveValues.set(
-          (Objective) objective,
-          objective.getVisitNewSiteObjectiveValueDelta(solution, site)
-      );
+          (Objective) objective, objective.getVisitNewSiteObjectiveValueDelta(solution, site));
     }
     return objectiveValues;
   }

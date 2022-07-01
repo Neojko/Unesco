@@ -12,5 +12,4 @@ public interface VisitNewSiteObjective {
    * @return delta of the ObjectiveValues of the Solution if site was visited
    */
   ObjectiveValue getVisitNewSiteObjectiveValueDelta(final Solution solution, final Site site);
-
 }

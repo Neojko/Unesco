@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 
 public class MaxTripDurationConstraint implements Constraint, VisitNewSiteConstraint {
 
-  private final static long maxDuration = Duration.of(3, ChronoUnit.WEEKS).getSeconds();
+  private static final long maxDuration = Duration.of(3, ChronoUnit.WEEKS).getSeconds();
 
   @Override
   public boolean isFeasible(final Solution solution) {
@@ -19,10 +19,7 @@ public class MaxTripDurationConstraint implements Constraint, VisitNewSiteConstr
 
   @Override
   public boolean canVisitNewSite(
-      final Solution solution,
-      final Site site,
-      final int position,
-      final TravelMatrix matrix) {
+      final Solution solution, final Site site, final int position, final TravelMatrix matrix) {
     return false;
   }
 }

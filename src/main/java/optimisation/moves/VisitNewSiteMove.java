@@ -23,13 +23,11 @@ public class VisitNewSiteMove implements Move {
       final int position,
       final TravelMatrix matrix,
       final ConstraintManager constraintManager,
-      final ObjectiveManager objectiveManager
-  ) {
+      final ObjectiveManager objectiveManager) {
     this.solution = solution;
     this.site = site;
     this.position = position;
     isFeasible = constraintManager.canVisitNewSite(solution, site, position, matrix);
     objectiveValuesDelta = objectiveManager.computeVisitNewSiteObjectiveValuesDelta(solution, site);
   }
-
 }

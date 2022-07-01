@@ -4,11 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 import domain.Solution;
 import domain.objectives.components.ObjectiveValue;
 import domain.objectives.components.ObjectiveValues;
 import domain.objectives.interfaces.Objective;
+import domain.objectives.interfaces.VisitNewSiteObjective;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,7 @@ public class ObjectiveManagerTest {
 
   @BeforeEach
   public void setUp() {
-    objective1 = mock(Objective.class);
+    objective1 = mock(Objective.class, withSettings().extraInterfaces(VisitNewSiteObjective.class));
     objective2 = mock(Objective.class);
     objectiveManager =
         ObjectiveManager.builder().objective(objective1).objective(objective2).build();
@@ -28,9 +30,13 @@ public class ObjectiveManagerTest {
 
   @Test
   public void test_constructor() {
+    // Generic objectives
     assertEquals(2, objectiveManager.getObjectives().size());
     assertTrue(objectiveManager.getObjectives().contains(objective1));
     assertTrue(objectiveManager.getObjectives().contains(objective2));
+    // Visit new site objectives
+    assertEquals(1, objectiveManager.getVisitNewSiteObjectives().size());
+    assertTrue(objectiveManager.getVisitNewSiteObjectives().contains(objective1));
   }
 
   @Test

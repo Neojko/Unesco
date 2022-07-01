@@ -19,7 +19,7 @@ import lombok.var;
 @Getter
 public class Solution {
 
-  public static long timePerSite = Duration.of(6, ChronoUnit.HOURS).getSeconds();
+  public static final long timePerSite = Duration.of(6, ChronoUnit.HOURS).getSeconds();
 
   private final Coordinates start;
   private final List<Site> visitedSites;

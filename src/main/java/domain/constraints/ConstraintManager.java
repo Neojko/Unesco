@@ -34,10 +34,7 @@ public class ConstraintManager implements Constraint, VisitNewSiteConstraint {
 
   @Override
   public boolean canVisitNewSite(
-      final Solution solution,
-      final Site site,
-      final int position,
-      final TravelMatrix matrix) {
+      final Solution solution, final Site site, final int position, final TravelMatrix matrix) {
     for (final var constraint : visitNewSiteConstraints) {
       if (!constraint.canVisitNewSite(solution, site, position, matrix)) {
         return false;
@@ -67,5 +64,4 @@ public class ConstraintManager implements Constraint, VisitNewSiteConstraint {
       return new ConstraintManager(constraints, visitNewSiteConstraints);
     }
   }
-
 }
