@@ -7,145 +7,117 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import domain.objectives.NumberOfVisitedCountriesObjective;
 import domain.objectives.NumberOfVisitedSitesObjective;
-import domain.objectives.Objective;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.stream.Stream;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class ObjectiveValuesTest {
 
   private Objective objective1, objective2;
-  private ObjectiveSense sense;
-  private List<Objective> objectives;
+  private ObjectiveRanking objectiveRanking;
 
   @BeforeEach
   public void setUp() {
     objective1 = new NumberOfVisitedSitesObjective();
     objective2 = new NumberOfVisitedCountriesObjective();
-    sense = ObjectiveSense.MAXIMIZE; // both objectives have this sense, tests will be more compact
-    objectives = new ArrayList<>(Arrays.asList(objective1, objective2));
-  }
-
-  @Test
-  public void test_create_empty_objectives() {
-    final var objectiveValues = ObjectiveValues.createEmptyObjectiveValues(objectives);
-    assertEquals(2, objectiveValues.getObjectives().size());
-    assertTrue(objectiveValues.getObjectives().containsAll(objectives));
-    assertEquals(0, objectiveValues.getObjectiveValuesMap().keySet().size());
+    objectiveRanking =
+        ObjectiveRanking.builder().objective(objective1).objective(objective2).build();
   }
 
   @Test
   public void test_create_zero_objective_values() {
-    final var objectiveValues = ObjectiveValues.createZeroObjectiveValues(objectives);
-    assertEquals(2, objectiveValues.getObjectives().size());
-    assertTrue(objectiveValues.getObjectives().containsAll(objectives));
-    assertEquals(2, objectiveValues.getObjectiveValuesMap().keySet().size());
-    assertEquals(
-        objective1.getZeroObjectiveValue(),
-        objectiveValues.getObjectiveValuesMap().get(objective1));
-    assertEquals(
-        objective2.getZeroObjectiveValue(),
-        objectiveValues.getObjectiveValuesMap().get(objective2));
+    final var objectiveValues = ObjectiveValues.createZeroObjectiveValues(objectiveRanking);
+    assertEquals(2, objectiveValues.getValues().keySet().size());
+    assertEquals(objective1.getZeroObjectiveValue(), objectiveValues.getValues().get(objective1));
+    assertEquals(objective2.getZeroObjectiveValue(), objectiveValues.getValues().get(objective2));
   }
 
   @Test
   public void test_create_worst_objective_values() {
-    final var objectiveValues = ObjectiveValues.createWorstObjectiveValues(objectives);
-    assertEquals(2, objectiveValues.getObjectives().size());
-    assertTrue(objectiveValues.getObjectives().containsAll(objectives));
-    assertEquals(2, objectiveValues.getObjectiveValuesMap().keySet().size());
-    assertEquals(
-        objective1.getWorstObjectiveValue(),
-        objectiveValues.getObjectiveValuesMap().get(objective1));
-    assertEquals(
-        objective2.getWorstObjectiveValue(),
-        objectiveValues.getObjectiveValuesMap().get(objective2));
+    final var objectiveValues = ObjectiveValues.createWorstObjectiveValues(objectiveRanking);
+    assertEquals(2, objectiveValues.getValues().keySet().size());
+    assertEquals(objective1.getWorstObjectiveValue(), objectiveValues.getValues().get(objective1));
+    assertEquals(objective2.getWorstObjectiveValue(), objectiveValues.getValues().get(objective2));
   }
 
   @Test
   public void test_set_objective_value() {
-    final var objectiveValues = ObjectiveValues.createEmptyObjectiveValues(objectives);
-    assertFalse(objectiveValues.getObjectiveValuesMap().containsKey(objective1));
-    objectiveValues.set(objective1, new ObjectiveValue(1L, sense));
-    assertTrue(objectiveValues.getObjectiveValuesMap().containsKey(objective1));
-    assertEquals(1L, objectiveValues.getObjectiveValuesMap().get(objective1).getValue());
-  }
-
-  @ParameterizedTest(
-      name =
-          "ObjectiveValues1Value1 = {0}, "
-              + "ObjectiveValues2Value1 = {1}, "
-              + "ObjectiveValues1Value2 = {2}, "
-              + "ObjectiveValues2Value2 = {3}, "
-              + "expectedResult = {4}")
-  @CsvSource({
-    "1, 0, 0, 0, true", // first ObjectiveValues has better first comparison
-    "0, 1, 0, 0, false", // second ObjectiveValues has better first comparison
-    "0, 0, 1, 0, true", // first ObjectiveValues has better second comparison (first is same)
-    "0, 0, 0, 0, false", // second ObjectiveValues has better second comparison (first is same)
-    "0, 0, 0, 0, false", // both ObjectiveValues have the same values
-  })
-  public void test_is_better_than(
-      final long objectiveValues1Value1,
-      final long objectiveValues2Value1,
-      final long objectiveValues1Value2,
-      final long objectiveValues2Value2,
-      final boolean expectedResult) {
-    final var objectiveValues = ObjectiveValues.createEmptyObjectiveValues(objectives);
-    objectiveValues.set(objective1, new ObjectiveValue(objectiveValues1Value1, sense));
-    objectiveValues.set(objective2, new ObjectiveValue(objectiveValues1Value2, sense));
-
-    final var otherObjectiveValues = ObjectiveValues.createEmptyObjectiveValues(objectives);
-    otherObjectiveValues.set(objective1, new ObjectiveValue(objectiveValues2Value1, sense));
-    otherObjectiveValues.set(objective2, new ObjectiveValue(objectiveValues2Value2, sense));
-
-    assertEquals(expectedResult, objectiveValues.isBetterThan(otherObjectiveValues));
+    final var objectiveValues = ObjectiveValues.builder().build();
+    final var objectiveValue = new ObjectiveValue(1L, ObjectiveSense.MAXIMIZE);
+    assertFalse(objectiveValues.getValues().containsKey(objective1));
+    objectiveValues.set(objective1, objectiveValue);
+    assertTrue(objectiveValues.getValues().containsKey(objective1));
+    assertEquals(objectiveValue, objectiveValues.getValues().get(objective1));
   }
 
   @Test
   public void test_plus() {
-    final var objectiveValues = ObjectiveValues.createEmptyObjectiveValues(objectives);
-    objectiveValues.set(objective1, ObjectiveValue.builder().value(2L).build());
-    objectiveValues.set(objective2, ObjectiveValue.builder().value(3L).build());
-
-    final var otherObjectiveValues = ObjectiveValues.createEmptyObjectiveValues(objectives);
-    otherObjectiveValues.set(objective1, ObjectiveValue.builder().value(4L).build());
-    otherObjectiveValues.set(objective2, ObjectiveValue.builder().value(5L).build());
+    final var objectiveValues = withValues(2L, 3L);
+    final var otherObjectiveValues = withValues(4L, 5L);
 
     objectiveValues.add(otherObjectiveValues);
+    assertEquals(6L, objectiveValues.getValues().get(objective1).getValue());
+    assertEquals(8L, objectiveValues.getValues().get(objective2).getValue());
+  }
 
-    assertEquals(6L, objectiveValues.getObjectiveValuesMap().get(objective1).getValue());
-    assertEquals(8L, objectiveValues.getObjectiveValuesMap().get(objective2).getValue());
+  private static Stream<Arguments> test_compare_to() {
+    return Stream.of(
+        Arguments.of(1, 0, 0, 0, -1), // better first objective value
+        Arguments.of(0, 1, 0, 0, 1), // worst first objective value
+        Arguments.of(1, 1, 1, 0, -1), // same first and better second objective value
+        Arguments.of(1, 1, 0, 1, 1), // same first and worst second objective value
+        Arguments.of(1, 1, 1, 1, 0) // same objective values
+        );
+  }
+
+  @ParameterizedTest
+  @MethodSource
+  public void test_compare_to(
+      final long objective1value1,
+      final long objective1value2,
+      final long objective2value1,
+      final long objective2value2,
+      final int expectedResult) {
+    final var objectiveValues = withValues(objective1value1, objective2value1);
+    final var otherObjectiveValues = withValues(objective1value2, objective2value2);
+    assertEquals(expectedResult, objectiveValues.compareTo(otherObjectiveValues));
   }
 
   @Test
   public void test_copy_empty_objective_values() {
-    final var objectiveValues = ObjectiveValues.createEmptyObjectiveValues(objectives);
-
+    final var objectiveValues = ObjectiveValues.builder().build();
     final var copy = objectiveValues.copy();
     assertEquals(objectiveValues, copy);
 
     objectiveValues.set(objective1, ObjectiveValue.builder().value(1L).build());
     assertNotEquals(objectiveValues, copy);
-    assertFalse(copy.getObjectiveValuesMap().containsKey(objective1));
+    assertFalse(copy.getValues().containsKey(objective1));
   }
 
   @Test
-  public void copy_withObjectiveValues_test() {
-    final ObjectiveValues objectiveValues = ObjectiveValues.createEmptyObjectiveValues(objectives);
-    objectiveValues.set(objective1, ObjectiveValue.builder().value(2L).build());
-    objectiveValues.set(objective2, ObjectiveValue.builder().value(3L).build());
-
+  public void copy_with_non_empty_objective_values() {
+    final var objectiveValues = withValues(2L, 3L);
     final var copy = objectiveValues.copy();
     assertEquals(objectiveValues, copy);
 
     objectiveValues.set(objective1, ObjectiveValue.builder().value(1L).build());
     assertNotEquals(objectiveValues, copy);
-    assertEquals(2L, copy.getObjectiveValuesMap().get(objective1).getValue());
+    assertEquals(2L, copy.getValues().get(objective1).getValue());
+  }
+
+  private ObjectiveValues withValues(final long value1, final long value2) {
+    return ObjectiveValues.builder()
+        .value(
+            objective1,
+            ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(value1).build())
+        .value(
+            objective2,
+            ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(value2).build())
+        .ranking(objectiveRanking)
+        .build();
   }
 }
