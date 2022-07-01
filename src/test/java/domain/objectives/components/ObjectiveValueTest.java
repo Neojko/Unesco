@@ -45,35 +45,35 @@ public class ObjectiveValueTest {
   }
 
   private static Stream<Arguments> test_is_better_than_when_maximising() {
-    return Stream.of(Arguments.of(9L, true), Arguments.of(10L, false), Arguments.of(11L, false));
+    return Stream.of(Arguments.of(9L, -1), Arguments.of(10L, 0), Arguments.of(11L, 1));
   }
 
   @ParameterizedTest
   @MethodSource
   public void test_is_better_than_when_maximising(
-      final long valueOfOtherObjectiveValue, final boolean expectedResult) {
+      final long valueOfOtherObjectiveValue, final int expectedResult) {
     final var other =
         ObjectiveValue.builder()
             .value(valueOfOtherObjectiveValue)
             .sense(ObjectiveSense.MAXIMIZE)
             .build();
-    assertEquals(expectedResult, maxWithValue10.isBetterThan(other));
+    assertEquals(expectedResult, maxWithValue10.compareTo(other));
   }
 
   private static Stream<Arguments> test_is_better_than_when_minimising() {
-    return Stream.of(Arguments.of(9L, false), Arguments.of(10L, false), Arguments.of(11L, true));
+    return Stream.of(Arguments.of(9L, 1), Arguments.of(10L, 0), Arguments.of(11L, -1));
   }
 
   @ParameterizedTest
   @MethodSource
   public void test_is_better_than_when_minimising(
-      final long valueOfOtherObjectiveValue, final boolean expectedResult) {
+      final long valueOfOtherObjectiveValue, final int expectedResult) {
     final var other =
         ObjectiveValue.builder()
             .value(valueOfOtherObjectiveValue)
             .sense(ObjectiveSense.MINIMIZE)
             .build();
-    assertEquals(expectedResult, minWithValue10.isBetterThan(other));
+    assertEquals(expectedResult, minWithValue10.compareTo(other));
   }
 
   @Test

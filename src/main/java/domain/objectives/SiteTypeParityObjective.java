@@ -1,6 +1,7 @@
 package domain.objectives;
 
 import domain.Solution;
+import domain.objectives.components.ObjectiveName;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
 import lombok.var;
@@ -16,6 +17,11 @@ public class SiteTypeParityObjective implements Objective {
 
   public SiteTypeParityObjective() {
     this.sense = ObjectiveSense.MINIMIZE;
+  }
+
+  @Override
+  public ObjectiveName getName() {
+    return ObjectiveName.SITE_TYPE_PARITY;
   }
 
   @Override

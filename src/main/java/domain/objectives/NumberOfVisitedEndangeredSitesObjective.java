@@ -1,6 +1,7 @@
 package domain.objectives;
 
 import domain.Solution;
+import domain.objectives.components.ObjectiveName;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
 import domain.site.Site;
@@ -12,6 +13,11 @@ public class NumberOfVisitedEndangeredSitesObjective implements Objective {
 
   public NumberOfVisitedEndangeredSitesObjective() {
     this.sense = ObjectiveSense.MAXIMIZE;
+  }
+
+  @Override
+  public ObjectiveName getName() {
+    return ObjectiveName.NUMBER_OF_ENDANGERED_VISITED_SITES;
   }
 
   @Override

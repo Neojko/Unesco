@@ -3,12 +3,13 @@ package domain.objectives.components;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 
 /** An ObjectiveValue object contains the value of an Objective object. */
 @Builder
 @EqualsAndHashCode
 @Getter
-public class ObjectiveValue {
+public class ObjectiveValue implements Comparable<ObjectiveValue> {
 
   public static final ObjectiveValue ZERO_MAX_OBJECTIVE_VALUE =
       ObjectiveValue.builder().value(0L).sense(ObjectiveSense.MAXIMIZE).build();
@@ -30,15 +31,28 @@ public class ObjectiveValue {
     return ObjectiveValue.builder().value(value + other.value).sense(sense).build();
   }
 
-  public boolean isBetterThan(final ObjectiveValue other) {
-    if (sense.equals(ObjectiveSense.MAXIMIZE)) {
-      return value > other.value;
-    } else {
-      return value < other.value;
-    }
-  }
-
   public ObjectiveValue copy() {
     return ObjectiveValue.builder().value(value).sense(sense).build();
+  }
+
+  // PRE: both ObjectiveValue objects have the same sense
+  @Override
+  public int compareTo(@NonNull final ObjectiveValue other) {
+    if (sense.equals(ObjectiveSense.MAXIMIZE)) {
+      if (value > other.value) {
+        return -1;
+      }
+      if (value < other.value) {
+        return 1;
+      }
+    } else {
+      if (value < other.value) {
+        return -1;
+      }
+      if (value > other.value) {
+        return 1;
+      }
+    }
+    return 0;
   }
 }
