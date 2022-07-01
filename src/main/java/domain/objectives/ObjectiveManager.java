@@ -9,11 +9,8 @@ import lombok.Singular;
 import lombok.var;
 
 /**
- * This class aggregates all Objectives and is in charge of comparing their related ObjectiveValues
- * relatively to a lexicographical order and / or a weighted sum fashion.
- * It acts as a bridge between a Solution and its ObjectiveValues.
- * Note: following the YAGNI principle, the way to compare ObjectiveValues is hard-coded as the
- * objectives as well as their respected ranking are known and won't change.
+ * This class contains all Objectives of the problem and is used to compute everything that is
+ * related to the ObjectiveValues of a Solution.
  */
 
 @Builder

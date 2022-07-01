@@ -62,16 +62,10 @@ public class ObjectiveValuesTest {
 
   @Test
   public void test_plus() {
-    final var objectiveValues = ObjectiveValues.builder().build();
-    objectiveValues.set(objective1, ObjectiveValue.builder().value(2L).build());
-    objectiveValues.set(objective2, ObjectiveValue.builder().value(3L).build());
-
-    final var otherObjectiveValues = ObjectiveValues.builder().build();
-    otherObjectiveValues.set(objective1, ObjectiveValue.builder().value(4L).build());
-    otherObjectiveValues.set(objective2, ObjectiveValue.builder().value(5L).build());
+    final var objectiveValues = withValues(2L, 3L);
+    final var otherObjectiveValues = withValues(4L, 5L);
 
     objectiveValues.add(otherObjectiveValues);
-
     assertEquals(6L, objectiveValues.getValues().get(objective1).getValue());
     assertEquals(8L, objectiveValues.getValues().get(objective2).getValue());
   }
@@ -79,7 +73,6 @@ public class ObjectiveValuesTest {
   @Test
   public void test_copy_empty_objective_values() {
     final var objectiveValues = ObjectiveValues.builder().build();
-
     final var copy = objectiveValues.copy();
     assertEquals(objectiveValues, copy);
 
@@ -90,15 +83,19 @@ public class ObjectiveValuesTest {
 
   @Test
   public void copy_withObjectiveValues_test() {
-    final ObjectiveValues objectiveValues = ObjectiveValues.builder().build();
-    objectiveValues.set(objective1, ObjectiveValue.builder().value(2L).build());
-    objectiveValues.set(objective2, ObjectiveValue.builder().value(3L).build());
-
+    final var objectiveValues = withValues(2L, 3L);
     final var copy = objectiveValues.copy();
     assertEquals(objectiveValues, copy);
 
     objectiveValues.set(objective1, ObjectiveValue.builder().value(1L).build());
     assertNotEquals(objectiveValues, copy);
     assertEquals(2L, copy.getValues().get(objective1).getValue());
+  }
+
+  private ObjectiveValues withValues(final long value1, final long value2) {
+    return ObjectiveValues.builder()
+        .value(objective1, ObjectiveValue.builder().value(value1).build())
+        .value(objective2, ObjectiveValue.builder().value(value2).build())
+        .build();
   }
 }

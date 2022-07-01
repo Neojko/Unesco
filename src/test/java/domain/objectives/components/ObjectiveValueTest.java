@@ -44,13 +44,13 @@ public class ObjectiveValueTest {
     assertEquals(ObjectiveSense.MINIMIZE, ObjectiveValue.WORST_MIN_OBJECTIVE_VALUE.getSense());
   }
 
-  private static Stream<Arguments> test_is_better_than_when_maximising() {
+  private static Stream<Arguments> test_compare_to_when_maximising() {
     return Stream.of(Arguments.of(9L, -1), Arguments.of(10L, 0), Arguments.of(11L, 1));
   }
 
   @ParameterizedTest
   @MethodSource
-  public void test_is_better_than_when_maximising(
+  public void test_compare_to_when_maximising(
       final long valueOfOtherObjectiveValue, final int expectedResult) {
     final var other =
         ObjectiveValue.builder()
@@ -60,13 +60,13 @@ public class ObjectiveValueTest {
     assertEquals(expectedResult, maxWithValue10.compareTo(other));
   }
 
-  private static Stream<Arguments> test_is_better_than_when_minimising() {
+  private static Stream<Arguments> test_compare_to_when_minimising() {
     return Stream.of(Arguments.of(9L, 1), Arguments.of(10L, 0), Arguments.of(11L, -1));
   }
 
   @ParameterizedTest
   @MethodSource
-  public void test_is_better_than_when_minimising(
+  public void test_compare_to_when_minimising(
       final long valueOfOtherObjectiveValue, final int expectedResult) {
     final var other =
         ObjectiveValue.builder()
@@ -77,23 +77,37 @@ public class ObjectiveValueTest {
   }
 
   @Test
-  public void test_plus_when_minimising() {
+  public void test_sum_when_minimising() {
     final var otherObjectiveValue =
         ObjectiveValue.builder().value(3L).sense(ObjectiveSense.MINIMIZE).build();
-    final var sum = minWithValue10.plus(otherObjectiveValue);
+    final var sum = minWithValue10.sum(otherObjectiveValue);
 
     assertEquals(ObjectiveSense.MINIMIZE, sum.getSense());
     assertEquals(13L, sum.getValue());
   }
 
   @Test
-  public void test_plus_when_maximising() {
+  public void test_sum_when_maximising() {
     final var otherObjectiveValue =
         ObjectiveValue.builder().value(4L).sense(ObjectiveSense.MAXIMIZE).build();
-    final var sum = maxWithValue10.plus(otherObjectiveValue);
+    final var sum = maxWithValue10.sum(otherObjectiveValue);
 
     assertEquals(ObjectiveSense.MAXIMIZE, sum.getSense());
     assertEquals(14L, sum.getValue());
+  }
+
+  @Test
+  public void test_multiply_when_minimising() {
+    final var product = minWithValue10.multiply(3);
+    assertEquals(ObjectiveSense.MINIMIZE, product.getSense());
+    assertEquals(30, product.getValue());
+  }
+
+  @Test
+  public void test_multiply_when_maximising() {
+    final var product = maxWithValue10.multiply(3);
+    assertEquals(ObjectiveSense.MAXIMIZE, product.getSense());
+    assertEquals(30, product.getValue());
   }
 
   @Test
@@ -102,7 +116,7 @@ public class ObjectiveValueTest {
     assertEquals(minWithValue10, copiedObjectiveValue);
 
     // Modify minWithValue10's value and check that copiedObjectiveValue is unaffected
-    minWithValue10 = minWithValue10.plus(minWithValue10);
+    minWithValue10 = minWithValue10.sum(minWithValue10);
 
     assertEquals(10L, copiedObjectiveValue.getValue());
     assertEquals(ObjectiveSense.MINIMIZE, copiedObjectiveValue.getSense());
@@ -116,7 +130,7 @@ public class ObjectiveValueTest {
     assertEquals(maxWithValue10, copiedObjectiveValue);
 
     // Modify maxWithValue10's value and check that copiedObjectiveValue is unaffected
-    maxWithValue10 = maxWithValue10.plus(maxWithValue10);
+    maxWithValue10 = maxWithValue10.sum(maxWithValue10);
 
     assertEquals(10L, copiedObjectiveValue.getValue());
     assertEquals(ObjectiveSense.MAXIMIZE, copiedObjectiveValue.getSense());

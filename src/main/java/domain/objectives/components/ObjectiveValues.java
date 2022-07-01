@@ -1,12 +1,11 @@
 package domain.objectives.components;
 
 import domain.objectives.Objective;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Singular;
 import lombok.var;
 
 /**
@@ -14,10 +13,13 @@ import lombok.var;
  */
 @EqualsAndHashCode
 @Getter
-@Builder
 public class ObjectiveValues {
 
-  @Singular private final Map<Objective, ObjectiveValue> values;
+  private final Map<Objective, ObjectiveValue> values;
+
+  ObjectiveValues(final Map<Objective, ObjectiveValue> values) {
+    this.values = values;
+  }
 
   /** Initialises the lexicographic list of objectives and give them all a value 0 */
   public static ObjectiveValues createZeroObjectiveValues(final List<Objective> objectives) {
@@ -35,6 +37,10 @@ public class ObjectiveValues {
       objectiveValues.set(objective, objective.getWorstObjectiveValue());
     }
     return objectiveValues;
+  }
+
+  public static ObjectiveValuesBuilder builder() {
+    return new ObjectiveValuesBuilder();
   }
 
   /**
@@ -55,7 +61,7 @@ public class ObjectiveValues {
     for (final var entry : other.getValues().entrySet()) {
       final var objective = entry.getKey();
       final var otherObjectiveValue = entry.getValue();
-      values.put(objective, values.get(objective).plus(otherObjectiveValue));
+      values.put(objective, values.get(objective).sum(otherObjectiveValue));
     }
   }
 
@@ -65,5 +71,24 @@ public class ObjectiveValues {
       copy.set(entry.getKey(), entry.getValue().copy());
     }
     return copy;
+  }
+
+  // Not using lombok builder because values can be empty and it does not work with Singular
+  public static class ObjectiveValuesBuilder {
+    private final Map<Objective, ObjectiveValue> values;
+
+    ObjectiveValuesBuilder() {
+      values = new HashMap<>();
+    }
+
+    public ObjectiveValuesBuilder value(
+        final Objective objective, final ObjectiveValue objectiveValue) {
+      values.put(objective, objectiveValue);
+      return this;
+    }
+
+    public ObjectiveValues build() {
+      return new ObjectiveValues(values);
+    }
   }
 }

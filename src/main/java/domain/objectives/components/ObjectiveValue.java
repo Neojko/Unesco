@@ -27,12 +27,12 @@ public class ObjectiveValue implements Comparable<ObjectiveValue> {
   private final ObjectiveSense sense;
 
   /** @return new ObjectiveValue with the sum of the two values */
-  public ObjectiveValue plus(final ObjectiveValue other) {
+  public ObjectiveValue sum(final ObjectiveValue other) {
     return ObjectiveValue.builder().value(value + other.value).sense(sense).build();
   }
 
   /** @return new ObjectiveValue with value multiplied by factor */
-  public ObjectiveValue times(final long factor) {
+  public ObjectiveValue multiply(final long factor) {
     return ObjectiveValue.builder().value(value * factor).sense(sense).build();
   }
 
