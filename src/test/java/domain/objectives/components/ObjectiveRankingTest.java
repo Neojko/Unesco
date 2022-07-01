@@ -18,10 +18,8 @@ public class ObjectiveRankingTest {
   public void setUp() {
     objective1 = mock(Objective.class);
     objective2 = mock(Objective.class);
-    objectiveRanking = new ObjectiveRankingBuilder()
-        .objective(objective1)
-        .objective(objective2)
-        .build();
+    objectiveRanking =
+        new ObjectiveRankingBuilder().objective(objective1).objective(objective2).build();
   }
 
   @Test
@@ -31,5 +29,4 @@ public class ObjectiveRankingTest {
     assertEquals(objective1, objectiveRanking.getObjectives().get(0));
     assertEquals(objective2, objectiveRanking.getObjectives().get(1));
   }
-
 }

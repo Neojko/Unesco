@@ -30,9 +30,9 @@ public class WeightedSumObjective implements Objective {
     for (final var entry : weights.entrySet()) {
       final var objective = entry.getKey();
       final var weight = entry.getValue();
-      objectiveValue = objectiveValue.sum(objective.computeObjectiveValue(solution).multiply(weight));
+      objectiveValue =
+          objectiveValue.sum(objective.computeObjectiveValue(solution).multiply(weight));
     }
     return objectiveValue;
   }
-
 }

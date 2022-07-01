@@ -12,7 +12,6 @@ import lombok.var;
  * This class contains all Objectives of the problem and is used to compute everything that is
  * related to the ObjectiveValues of a Solution.
  */
-
 @Builder
 @Getter
 public class ObjectiveManager {
@@ -26,5 +25,4 @@ public class ObjectiveManager {
     }
     return objectiveValues;
   }
-
 }
