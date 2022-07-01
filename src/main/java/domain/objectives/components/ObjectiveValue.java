@@ -31,6 +31,11 @@ public class ObjectiveValue implements Comparable<ObjectiveValue> {
     return ObjectiveValue.builder().value(value + other.value).sense(sense).build();
   }
 
+  /** @return new ObjectiveValue with value multiplied by factor */
+  public ObjectiveValue times(final long factor) {
+    return ObjectiveValue.builder().value(value * factor).sense(sense).build();
+  }
+
   public ObjectiveValue copy() {
     return ObjectiveValue.builder().value(value).sense(sense).build();
   }

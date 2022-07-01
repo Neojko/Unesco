@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import domain.Solution.SolutionBuilder;
 import domain.matrix.TravelMatrix;
-import domain.objectives.components.ObjectiveName;
 import domain.objectives.components.ObjectiveSense;
 import domain.site.Coordinates;
 import domain.site.SiteReader;
@@ -25,11 +24,6 @@ public class SiteTypeParityObjectiveTest {
   @BeforeEach
   public void setUp() {
     objective = new SiteTypeParityObjective();
-  }
-
-  @Test
-  public void test_get_name() {
-    assertEquals(ObjectiveName.SITE_TYPE_PARITY, objective.getName());
   }
 
   @Test

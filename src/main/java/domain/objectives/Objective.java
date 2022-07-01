@@ -1,7 +1,6 @@
 package domain.objectives;
 
 import domain.Solution;
-import domain.objectives.components.ObjectiveName;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
 
@@ -12,8 +11,6 @@ import domain.objectives.components.ObjectiveValue;
  * Objective objects.
  */
 public interface Objective {
-
-  ObjectiveName getName();
 
   ObjectiveSense getObjectiveSense();
 
