@@ -11,6 +11,7 @@ import domain.objectives.components.ObjectiveValue;
 import domain.objectives.components.ObjectiveValues;
 import domain.objectives.interfaces.Objective;
 import domain.objectives.interfaces.VisitNewSiteObjective;
+import domain.site.Site;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,5 +53,20 @@ public class ObjectiveManagerTest {
             .value(objective2, objectiveValue2)
             .build();
     assertEquals(expectedObjectiveValues, objectiveManager.computeObjectiveValues(solution));
+  }
+
+  // objective1 is a VisitNewSiteObjective (not objective2)
+  @Test
+  public void test_compute_visit_new_site_objective_values_delta() {
+    final var solution = mock(Solution.class);
+    final var site = mock(Site.class);
+    final var objective1AsVisitNewSiteObjective = (VisitNewSiteObjective) objective1;
+    final var objectiveValue1 = ObjectiveValue.WORST_MAX_OBJECTIVE_VALUE;
+    when(objective1AsVisitNewSiteObjective.getVisitNewSiteObjectiveValueDelta(solution, site))
+        .thenReturn(objectiveValue1);
+    final var expectedObjectiveValues =
+        ObjectiveValues.builder().value(objective1, objectiveValue1).build();
+    final var result = objectiveManager.computeVisitNewSiteObjectiveValuesDelta(solution, site);
+    assertEquals(expectedObjectiveValues, result);
   }
 }
