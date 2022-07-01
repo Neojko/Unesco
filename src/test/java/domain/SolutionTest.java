@@ -138,4 +138,12 @@ public class SolutionTest {
   public void test_is_visiting_country_returns_false() {
     assertFalse(solution.isVisitingCountry(germany));
   }
+
+  @Test
+  public void test_copy() {
+    final var otherSolution = solution.copy();
+    assertEquals(solution, otherSolution);
+  }
+
+  // TODO add new copy() tests when able to modify visited sites / countries / endangered sites
 }

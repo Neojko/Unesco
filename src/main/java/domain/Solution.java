@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.var;
 
+@EqualsAndHashCode
 @Getter
 public class Solution {
 
@@ -46,6 +48,20 @@ public class Solution {
 
   public boolean isVisitingCountry(final Country country) {
     return visitedCountries.containsKey(country);
+  }
+
+  public Solution copy() {
+    final var visitedSites = new ArrayList<>(this.visitedSites);
+    final var unvisitedSites = new ArrayList<>(this.unvisitedSites);
+    final var visitedCountries = new HashMap<>(this.visitedCountries);
+    return new Solution(
+        start,
+        visitedSites,
+        unvisitedSites,
+        visitedCountries,
+        tripTime,
+        numberOfCulturalVisitedSites,
+        numberOfNaturalVisitedSites);
   }
 
   public static class SolutionBuilder {
