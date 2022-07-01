@@ -3,12 +3,13 @@ package domain.objectives;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import domain.Solution.SolutionBuilder;
+import domain.locations.Coordinates;
+import domain.locations.TravelStartLocation;
+import domain.locations.sites.SiteReader;
+import domain.locations.sites.SiteReaderTest;
 import domain.matrix.TravelMatrix;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.interfaces.Objective;
-import domain.site.Coordinates;
-import domain.site.SiteReader;
-import domain.site.SiteReaderTest;
 import java.util.ArrayList;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,11 +39,12 @@ public class NumberOfVisitedEndangeredSitesObjectiveTest {
   @Test
   public void test_get_objective_value_when_visited_sites_are_all_endangered() {
     final var sites = new SiteReader().createSites(SiteReaderTest.testFile);
-    final var matrix = new TravelMatrix(sites);
+    final var start = TravelStartLocation.builder().coordinates(new Coordinates(0, 0)).build();
+    final var matrix = new TravelMatrix(sites, start);
     final var endangeredSite = sites.get(0);
     final var solution =
         new SolutionBuilder()
-            .start(new Coordinates(0, 0))
+            .start(start)
             .visitedSite(endangeredSite)
             .build(matrix);
     assertEquals(1L, objective.computeObjectiveValue(solution).getValue());
@@ -51,12 +53,13 @@ public class NumberOfVisitedEndangeredSitesObjectiveTest {
   @Test
   public void test_get_objective_value_when_visited_sites_are_not_all_endangered() {
     final var sites = new SiteReader().createSites(SiteReaderTest.testFile);
-    final var matrix = new TravelMatrix(sites);
+    final var start = TravelStartLocation.builder().coordinates(new Coordinates(0, 0)).build();
+    final var matrix = new TravelMatrix(sites, start);
     final var endangeredSite = sites.get(0);
     final var notEndangeredSite = sites.get(1);
     final var solution =
         new SolutionBuilder()
-            .start(new Coordinates(0, 0))
+            .start(start)
             .visitedSite(endangeredSite)
             .visitedSite(notEndangeredSite)
             .build(matrix);

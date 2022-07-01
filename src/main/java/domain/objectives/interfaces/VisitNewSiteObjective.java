@@ -1,8 +1,8 @@
 package domain.objectives.interfaces;
 
 import domain.Solution;
+import domain.locations.sites.Site;
 import domain.objectives.components.ObjectiveValue;
-import domain.site.Site;
 
 public interface VisitNewSiteObjective {
 

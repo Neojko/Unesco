@@ -1,4 +1,4 @@
-package domain.site;
+package domain.locations.sites;
 
 import com.google.errorprone.annotations.Immutable;
 import lombok.AllArgsConstructor;
@@ -9,8 +9,12 @@ import lombok.Getter;
 @Getter
 @EqualsAndHashCode
 @Immutable
-public class Coordinates {
+public class Country {
 
-  private final double latitude;
-  private final double longitude;
+  private final String name;
+
+  @Override
+  public String toString() {
+    return name;
+  }
 }

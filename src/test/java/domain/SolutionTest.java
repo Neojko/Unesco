@@ -5,12 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import domain.Solution.SolutionBuilder;
+import domain.locations.Coordinates;
+import domain.locations.Location;
+import domain.locations.TravelStartLocation;
+import domain.locations.sites.Country;
+import domain.locations.sites.Site;
+import domain.locations.sites.SiteType;
 import domain.matrix.TravelMatrix;
 import domain.matrix.computers.TravelTimeComputer;
-import domain.site.Coordinates;
-import domain.site.Country;
-import domain.site.Site;
-import domain.site.SiteType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +22,7 @@ import org.junit.jupiter.api.Test;
 
 public class SolutionTest {
 
-  private Coordinates start;
+  private TravelStartLocation start;
   private Country france, england, spain, germany;
   private Site site1, site2, site3, site4;
   private TravelMatrix matrix;
@@ -28,13 +30,15 @@ public class SolutionTest {
 
   @BeforeEach
   public void setUp() {
-    start = new Coordinates(-83.839219, 87.234581);
+    start = TravelStartLocation.builder()
+        .coordinates(new Coordinates(-83.839219, 87.234581))
+        .build();
     france = new Country("France");
     england = new Country("England");
     spain = new Country("spain");
     site1 =
         Site.builder()
-            .uniqueNumber(1)
+            .locationID(1)
             .coordinates(new Coordinates(23.183948, 2.349192))
             .country(france)
             .country(england)
@@ -42,7 +46,7 @@ public class SolutionTest {
             .build();
     site2 =
         Site.builder()
-            .uniqueNumber(2)
+            .locationID(2)
             .coordinates(new Coordinates(81.183948, -35.349192))
             .country(england)
             .country(spain)
@@ -50,20 +54,20 @@ public class SolutionTest {
             .build();
     site3 =
         Site.builder()
-            .uniqueNumber(3)
+            .locationID(3)
             .coordinates(new Coordinates(1.183948, 9.349192))
             .country(spain)
             .type(SiteType.Mixed)
             .build();
     site4 =
         Site.builder()
-            .uniqueNumber(4)
+            .locationID(4)
             .coordinates(new Coordinates(15.183948, 4.349192))
             .country(germany)
             .type(SiteType.Natural)
             .build();
-    final List<Site> sites = new ArrayList<>(Arrays.asList(site1, site2, site3, site4));
-    matrix = new TravelMatrix(sites);
+    final List<Location> locations = new ArrayList<>(Arrays.asList(site1, site2, site3, site4, start));
+    matrix = new TravelMatrix(locations);
     solution =
         new SolutionBuilder()
             .start(start)
@@ -108,10 +112,10 @@ public class SolutionTest {
     assertFalse(solution.getVisitedCountries().containsKey(germany));
     // Trip time
     final var expectedTripDuration =
-        TravelTimeComputer.convertToTime(start, site1.getCoordinates())
+        TravelTimeComputer.convertToTime(start.getCoordinates(), site1.getCoordinates())
             + matrix.time(site1, site2)
             + matrix.time(site2, site3)
-            + TravelTimeComputer.convertToTime(site3.getCoordinates(), start)
+            + TravelTimeComputer.convertToTime(site3.getCoordinates(), start.getCoordinates())
             + 3 * Solution.timePerSite;
     assertEquals(expectedTripDuration, solution.getTripDuration());
     // Cultural sites

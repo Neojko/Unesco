@@ -1,5 +1,6 @@
-package domain.site;
+package domain.locations.sites;
 
+import domain.locations.Coordinates;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,7 +24,7 @@ public class SiteReader {
 
   private final Logger LOGGER = LoggerFactory.getLogger(SiteReader.class);
 
-  private static final int UNIQUE_NUMBER_INDEX = 0;
+  private static final int LOCATION_ID_INDEX = 0;
   private static final int NAME_INDEX = 3;
   private static final int DANGER_INDEX = 11;
   private static final int LONGITUDE_INDEX = 14;
@@ -54,7 +55,7 @@ public class SiteReader {
   private Site createSite(final Row row) {
     return Site.builder()
         .name(row.getCell(NAME_INDEX).getStringCellValue())
-        .uniqueNumber((int) row.getCell(UNIQUE_NUMBER_INDEX).getNumericCellValue())
+        .locationID((int) row.getCell(LOCATION_ID_INDEX).getNumericCellValue())
         .coordinates(
             new Coordinates(
                 row.getCell(LATITUDE_INDEX).getNumericCellValue(),

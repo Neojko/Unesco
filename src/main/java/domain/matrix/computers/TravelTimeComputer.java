@@ -1,6 +1,6 @@
 package domain.matrix.computers;
 
-import domain.site.Coordinates;
+import domain.locations.Coordinates;
 import lombok.var;
 
 public class TravelTimeComputer {

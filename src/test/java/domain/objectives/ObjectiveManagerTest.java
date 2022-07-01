@@ -7,11 +7,11 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
 
 import domain.Solution;
+import domain.locations.sites.Site;
 import domain.objectives.components.ObjectiveValue;
 import domain.objectives.components.ObjectiveValues;
 import domain.objectives.interfaces.Objective;
 import domain.objectives.interfaces.VisitNewSiteObjective;
-import domain.site.Site;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

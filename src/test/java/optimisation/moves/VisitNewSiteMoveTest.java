@@ -6,10 +6,10 @@ import static org.mockito.Mockito.when;
 
 import domain.Solution;
 import domain.constraints.ConstraintManager;
+import domain.locations.sites.Site;
 import domain.matrix.TravelMatrix;
 import domain.objectives.ObjectiveManager;
 import domain.objectives.components.ObjectiveValues;
-import domain.site.Site;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

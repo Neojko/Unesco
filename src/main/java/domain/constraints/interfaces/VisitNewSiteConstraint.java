@@ -1,8 +1,8 @@
 package domain.constraints.interfaces;
 
 import domain.Solution;
+import domain.locations.sites.Site;
 import domain.matrix.TravelMatrix;
-import domain.site.Site;
 
 public interface VisitNewSiteConstraint {
 

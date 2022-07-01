@@ -1,10 +1,10 @@
 package domain.objectives;
 
 import domain.Solution;
+import domain.locations.sites.Site;
 import domain.objectives.components.ObjectiveValues;
 import domain.objectives.interfaces.Objective;
 import domain.objectives.interfaces.VisitNewSiteObjective;
-import domain.site.Site;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;

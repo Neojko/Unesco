@@ -1,9 +1,10 @@
-package domain.site;
+package domain.locations.sites;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import domain.locations.Coordinates;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +34,7 @@ public class SiteTest {
     site =
         Site.builder()
             .name(name)
-            .uniqueNumber(siteNumber)
+            .locationID(siteNumber)
             .coordinates(coordinates)
             .country(country1)
             .country(country2)
@@ -77,7 +78,7 @@ public class SiteTest {
     final var other =
         Site.builder()
             .name(name)
-            .uniqueNumber(siteNumber)
+            .locationID(siteNumber)
             .coordinates(coordinates)
             .countries(countries)
             .type(siteType)
@@ -91,7 +92,7 @@ public class SiteTest {
     final var other =
         Site.builder()
             .name(name)
-            .uniqueNumber(siteNumber)
+            .locationID(siteNumber)
             .coordinates(coordinates)
             .country(country1) // missing country2
             .type(siteType)
