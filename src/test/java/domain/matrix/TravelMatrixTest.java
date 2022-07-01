@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 
 public class TravelMatrixTest {
 
-  private Coordinates coordinates1, coordinates2;
   private Site site1, site2;
   private List<Location> locations;
   private TravelMatrix matrix;
@@ -28,8 +27,8 @@ public class TravelMatrixTest {
 
   @BeforeEach
   public void setUp() {
-    coordinates1 = new Coordinates(0.345918, -34.109321);
-    coordinates2 = new Coordinates(-89.342565, 43.652214);
+    final Coordinates coordinates1 = new Coordinates(0.345918, -34.109321);
+    final Coordinates coordinates2 = new Coordinates(-89.342565, 43.652214);
     site1 = Site.builder().coordinates(coordinates1).locationID(1).build();
     site2 = Site.builder().coordinates(coordinates2).locationID(2).build();
     locations = Arrays.asList(site1, site2);
@@ -59,7 +58,7 @@ public class TravelMatrixTest {
   @Test
   public void matrix_stays_same_when_exported_and_read_from_export() throws IOException {
     final var sites = new SiteReader().createSites(SiteReaderTest.testFile);
-    final var start = TravelStartLocation.builder().coordinates(new Coordinates(0, 0)).build();
+    final var start = TravelStartLocation.builder().coordinates(0, 0).build();
     final var matrix = new TravelMatrix(sites, start);
     matrix.exportToCSV(outputFileName);
     final var newMatrix = new TravelMatrix(sites, outputFileName, start);

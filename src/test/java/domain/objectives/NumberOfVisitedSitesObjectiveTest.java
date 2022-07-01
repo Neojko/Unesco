@@ -3,7 +3,6 @@ package domain.objectives;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import domain.Solution.SolutionBuilder;
-import domain.locations.Coordinates;
 import domain.locations.TravelStartLocation;
 import domain.locations.sites.SiteReader;
 import domain.locations.sites.SiteReaderTest;
@@ -39,7 +38,7 @@ public class NumberOfVisitedSitesObjectiveTest {
   @Test
   public void test_get_objective_value_when_list_of_visited_sites_contains_at_least_one_site() {
     final var sites = new SiteReader().createSites(SiteReaderTest.testFile);
-    final var start = TravelStartLocation.builder().coordinates(new Coordinates(0, 0)).build();
+    final var start = TravelStartLocation.builder().coordinates(0, 0).build();
     final var matrix = new TravelMatrix(sites, start);
     final var solution =
         new SolutionBuilder()

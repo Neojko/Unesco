@@ -30,9 +30,7 @@ public class SolutionTest {
 
   @BeforeEach
   public void setUp() {
-    start = TravelStartLocation.builder()
-        .coordinates(new Coordinates(-83.839219, 87.234581))
-        .build();
+    start = TravelStartLocation.builder().coordinates(-83.839219, 87.234581).build();
     france = new Country("France");
     england = new Country("England");
     spain = new Country("spain");
@@ -117,7 +115,7 @@ public class SolutionTest {
             + matrix.time(site2, site3)
             + TravelTimeComputer.convertToTime(site3.getCoordinates(), start.getCoordinates())
             + 3 * Solution.timePerSite;
-    assertEquals(expectedTripDuration, solution.getTripDuration());
+    assertEquals(expectedTripDuration, solution.getDurationInSeconds());
     // Cultural sites
     assertEquals(2, solution.getNumberOfCulturalVisitedSites()); // site1 and site2
     // Natural sites

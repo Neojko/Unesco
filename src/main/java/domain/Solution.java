@@ -25,7 +25,7 @@ public class Solution {
   private final List<Site> visitedSites;
   private final List<Site> unvisitedSites;
   private final Map<Country, List<Site>> visitedCountries;
-  private final long tripDuration;
+  private final long durationInSeconds;
   private final int numberOfCulturalVisitedSites;
   private final int numberOfNaturalVisitedSites;
 
@@ -34,16 +34,20 @@ public class Solution {
       final List<Site> visitedSites,
       final List<Site> unvisitedSites,
       final Map<Country, List<Site>> visitedCountries,
-      final long tripDuration,
+      final long durationInSeconds,
       final int numberOfCulturalVisitedSites,
       final int numberOfNaturalVisitedSites) {
     this.start = start;
     this.visitedSites = visitedSites;
     this.unvisitedSites = unvisitedSites;
     this.visitedCountries = visitedCountries;
-    this.tripDuration = tripDuration;
+    this.durationInSeconds = durationInSeconds;
     this.numberOfCulturalVisitedSites = numberOfCulturalVisitedSites;
     this.numberOfNaturalVisitedSites = numberOfNaturalVisitedSites;
+  }
+
+  public static SolutionBuilder builder() {
+    return new SolutionBuilder();
   }
 
   public boolean isVisitingSite(final Site site) {
@@ -63,7 +67,7 @@ public class Solution {
         visitedSites,
         unvisitedSites,
         visitedCountries,
-        tripDuration,
+        durationInSeconds,
         numberOfCulturalVisitedSites,
         numberOfNaturalVisitedSites);
   }

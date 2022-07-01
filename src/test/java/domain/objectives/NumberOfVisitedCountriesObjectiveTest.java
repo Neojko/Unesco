@@ -3,7 +3,6 @@ package domain.objectives;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import domain.Solution.SolutionBuilder;
-import domain.locations.Coordinates;
 import domain.locations.TravelStartLocation;
 import domain.locations.sites.SiteReader;
 import domain.locations.sites.SiteReaderTest;
@@ -40,7 +39,7 @@ public class NumberOfVisitedCountriesObjectiveTest {
   public void
       test_get_objective_value_when_list_of_visited_countries_contains_same_number_of_sites_and_countries() {
     final var sites = new SiteReader().createSites(SiteReaderTest.testFile);
-    final var start = TravelStartLocation.builder().coordinates(new Coordinates(0, 0)).build();
+    final var start = TravelStartLocation.builder().coordinates(0, 0).build();
     final var matrix = new TravelMatrix(sites, start);
     final var afghanSite = sites.get(0);
     final var algerianSite = sites.get(1);
@@ -57,7 +56,7 @@ public class NumberOfVisitedCountriesObjectiveTest {
   public void
       test_get_objective_value_when_list_of_visited_countries_contains_different_number_of_sites_and_countries() {
     final var sites = new SiteReader().createSites(SiteReaderTest.testFile);
-    final var start = TravelStartLocation.builder().coordinates(new Coordinates(0, 0)).build();
+    final var start = TravelStartLocation.builder().coordinates(0, 0).build();
     final var matrix = new TravelMatrix(sites, start);
     final var twoCountriesSite = sites.get(2);
     final var solution =
