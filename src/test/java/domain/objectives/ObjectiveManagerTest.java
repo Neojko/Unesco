@@ -6,9 +6,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import domain.Solution;
-import domain.objectives.components.Objective;
 import domain.objectives.components.ObjectiveValue;
 import domain.objectives.components.ObjectiveValues;
+import domain.objectives.interfaces.Objective;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,6 +45,6 @@ public class ObjectiveManagerTest {
             .value(objective1, objectiveValue1)
             .value(objective2, objectiveValue2)
             .build();
-    assertEquals(expectedObjectiveValues, objectiveManager.computeObjectivesValues(solution));
+    assertEquals(expectedObjectiveValues, objectiveManager.computeObjectiveValues(solution));
   }
 }

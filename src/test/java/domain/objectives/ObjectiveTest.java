@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import domain.objectives.components.Objective;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
+import domain.objectives.interfaces.Objective;
 import org.junit.jupiter.api.Test;
 
 public class ObjectiveTest {

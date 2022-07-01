@@ -5,6 +5,8 @@ import domain.matrix.computers.TravelTimeComputer;
 import domain.site.Coordinates;
 import domain.site.Country;
 import domain.site.Site;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,11 +19,13 @@ import lombok.var;
 @Getter
 public class Solution {
 
+  public static long timePerSite = Duration.of(6, ChronoUnit.HOURS).getSeconds();
+
   private final Coordinates start;
   private final List<Site> visitedSites;
   private final List<Site> unvisitedSites;
   private final Map<Country, List<Site>> visitedCountries;
-  private final long tripTime;
+  private final long tripDuration;
   private final int numberOfCulturalVisitedSites;
   private final int numberOfNaturalVisitedSites;
 
@@ -30,14 +34,14 @@ public class Solution {
       final List<Site> visitedSites,
       final List<Site> unvisitedSites,
       final Map<Country, List<Site>> visitedCountries,
-      final long tripTime,
+      final long tripDuration,
       final int numberOfCulturalVisitedSites,
       final int numberOfNaturalVisitedSites) {
     this.start = start;
     this.visitedSites = visitedSites;
     this.unvisitedSites = unvisitedSites;
     this.visitedCountries = visitedCountries;
-    this.tripTime = tripTime;
+    this.tripDuration = tripDuration;
     this.numberOfCulturalVisitedSites = numberOfCulturalVisitedSites;
     this.numberOfNaturalVisitedSites = numberOfNaturalVisitedSites;
   }
@@ -59,7 +63,7 @@ public class Solution {
         visitedSites,
         unvisitedSites,
         visitedCountries,
-        tripTime,
+        tripDuration,
         numberOfCulturalVisitedSites,
         numberOfNaturalVisitedSites);
   }
@@ -111,12 +115,12 @@ public class Solution {
           visitedSites,
           unvisitedSites,
           visitedCountries,
-          computeTripTime(matrix),
+          computeTripDuration(matrix),
           computeNumberOfCulturalVisitedSites(),
           computeNumberOfNaturalVisitedSites());
     }
 
-    private long computeTripTime(final TravelMatrix matrix) {
+    private long computeTripDuration(final TravelMatrix matrix) {
       if (visitedSites.isEmpty()) {
         return 0L;
       }
@@ -126,6 +130,7 @@ public class Solution {
       }
       final var lastVisitedSite = visitedSites.get(visitedSites.size() - 1);
       result += TravelTimeComputer.convertToTime(lastVisitedSite.getCoordinates(), start);
+      result += visitedSites.size() * timePerSite;
       return result;
     }
 

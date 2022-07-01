@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import domain.Solution.SolutionBuilder;
 import domain.matrix.TravelMatrix;
-import domain.objectives.components.Objective;
 import domain.objectives.components.ObjectiveSense;
+import domain.objectives.interfaces.Objective;
 import domain.site.Coordinates;
 import domain.site.SiteReader;
 import domain.site.SiteReaderTest;

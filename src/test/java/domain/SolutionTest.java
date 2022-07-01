@@ -107,12 +107,13 @@ public class SolutionTest {
     // Visited countries -- Germany
     assertFalse(solution.getVisitedCountries().containsKey(germany));
     // Trip time
-    final var expectedTripTime =
+    final var expectedTripDuration =
         TravelTimeComputer.convertToTime(start, site1.getCoordinates())
             + matrix.time(site1, site2)
             + matrix.time(site2, site3)
-            + TravelTimeComputer.convertToTime(site3.getCoordinates(), start);
-    assertEquals(expectedTripTime, solution.getTripTime());
+            + TravelTimeComputer.convertToTime(site3.getCoordinates(), start)
+            + 3 * Solution.timePerSite;
+    assertEquals(expectedTripDuration, solution.getTripDuration());
     // Cultural sites
     assertEquals(2, solution.getNumberOfCulturalVisitedSites()); // site1 and site2
     // Natural sites
