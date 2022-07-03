@@ -1,8 +1,8 @@
 package domain.objectives.interfaces;
 
-import domain.Solution;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
+import domain.solution.Solution;
 
 /**
  * An Objective object represents an objective in Operational Research. It has a sense (maximise or

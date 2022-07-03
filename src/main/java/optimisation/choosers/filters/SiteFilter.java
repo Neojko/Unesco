@@ -1,7 +1,7 @@
 package optimisation.choosers.filters;
 
-import domain.Solution;
 import domain.locations.sites.Site;
+import domain.solution.Solution;
 import java.util.List;
 import java.util.stream.Collectors;
 

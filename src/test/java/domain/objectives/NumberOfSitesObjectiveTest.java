@@ -2,7 +2,6 @@ package domain.objectives;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import domain.Solution.SolutionBuilder;
 import domain.locations.Coordinates;
 import domain.locations.TravelStartLocation;
 import domain.locations.sites.Country;
@@ -11,6 +10,7 @@ import domain.locations.sites.SiteType;
 import domain.matrix.TravelMatrix;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
+import domain.solution.Solution.SolutionBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,7 +18,7 @@ import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class NumberOfVisitedSitesObjectiveTest {
+public class NumberOfSitesObjectiveTest {
 
   private NumberOfVisitedSitesObjective objective;
   private Site site1, site2;
@@ -71,8 +71,11 @@ public class NumberOfVisitedSitesObjectiveTest {
   @Test
   public void test_get_objective_values_delta_when_visiting_new_site() {
     final var solution = new SolutionBuilder().start(start).unvisitedSite(site1).build(matrix);
+    final var tripDurationDelta = 1L;
     final var expectedResult =
         ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(1L).build();
-    assertEquals(expectedResult, objective.getVisitNewSiteObjectiveValueDelta(solution, site1));
+    assertEquals(
+        expectedResult,
+        objective.getVisitNewSiteObjectiveValueDelta(solution, site1, tripDurationDelta));
   }
 }

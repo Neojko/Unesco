@@ -1,12 +1,12 @@
 package optimisation.choosers.filters;
 
-import domain.Solution;
 import domain.locations.Coordinates;
 import domain.locations.TravelStartLocation;
 import domain.locations.sites.Country;
 import domain.locations.sites.Site;
 import domain.locations.sites.SiteType;
 import domain.matrix.TravelMatrix;
+import domain.solution.Solution;
 import java.util.Arrays;
 import lombok.var;
 import org.junit.jupiter.api.Assertions;

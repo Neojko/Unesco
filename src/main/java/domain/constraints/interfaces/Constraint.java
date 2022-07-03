@@ -1,6 +1,6 @@
 package domain.constraints.interfaces;
 
-import domain.Solution;
+import domain.solution.Solution;
 
 public interface Constraint {
 

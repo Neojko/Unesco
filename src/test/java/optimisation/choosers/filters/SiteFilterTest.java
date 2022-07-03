@@ -3,8 +3,8 @@ package optimisation.choosers.filters;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import domain.Solution;
 import domain.locations.sites.Site;
+import domain.solution.Solution;
 import java.util.Arrays;
 import java.util.Collections;
 import lombok.var;

@@ -1,6 +1,6 @@
 package optimisation.modificators.destroyers;
 
-import domain.Solution;
+import domain.solution.Solution;
 
 /**
  * A Destroyer is in charge of removing some parts of a Solution. For the Unesco problem, it will

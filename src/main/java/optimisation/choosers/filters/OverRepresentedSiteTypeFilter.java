@@ -1,8 +1,8 @@
 package optimisation.choosers.filters;
 
-import domain.Solution;
 import domain.locations.sites.Site;
 import domain.locations.sites.SiteType;
+import domain.solution.Solution;
 import lombok.var;
 
 /**
@@ -13,8 +13,8 @@ public class OverRepresentedSiteTypeFilter implements SiteFilter {
 
   @Override
   public boolean siteHasInterest(final Solution solution, final Site site) {
-    final var cultural = solution.getNumberOfCulturalVisitedSites();
-    final var natural = solution.getNumberOfNaturalVisitedSites();
+    final var cultural = solution.getVisitedSites().getNumberOfCulturalSites();
+    final var natural = solution.getVisitedSites().getNumberOfNaturalSites();
     if (natural < cultural) {
       return site.getType().equals(SiteType.Cultural); // not taking mixed into account
     }

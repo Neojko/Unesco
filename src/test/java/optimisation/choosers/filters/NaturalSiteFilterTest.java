@@ -2,9 +2,9 @@ package optimisation.choosers.filters;
 
 import static org.mockito.Mockito.mock;
 
-import domain.Solution;
 import domain.locations.sites.Site;
 import domain.locations.sites.SiteType;
+import domain.solution.Solution;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package optimisation.choosers.filters;
 
-import domain.Solution;
 import domain.locations.sites.Site;
+import domain.solution.Solution;
 import lombok.var;
 
 public class SiteWithNotVisitedCountriesFilter implements SiteFilter {
@@ -9,7 +9,7 @@ public class SiteWithNotVisitedCountriesFilter implements SiteFilter {
   @Override
   public boolean siteHasInterest(final Solution solution, final Site site) {
     for (final var country : site.getCountries()) {
-      if (!solution.getVisitedCountries().containsKey(country)) {
+      if (!solution.getVisitedSites().containsCountry(country)) {
         return true;
       }
     }
