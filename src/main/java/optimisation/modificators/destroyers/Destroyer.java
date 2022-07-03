@@ -1,4 +1,4 @@
-package optimisation.destroyers;
+package optimisation.modificators.destroyers;
 
 import domain.Solution;
 

@@ -1,4 +1,4 @@
-package optimisation.repairers;
+package optimisation.modificators.repairers;
 
 import domain.Solution;
 
@@ -7,6 +7,8 @@ import domain.Solution;
  * sites to visit to the given Solution
  */
 public interface Repairer {
+
+
 
   void repair(final Solution solution);
 }
