@@ -82,34 +82,20 @@ public class NumberOfVisitedEndangeredSitesObjectiveTest {
   @Test
   public void test_get_objective_values_delta_when_visiting_new_endangered_site() {
     final var solution =
-        new SolutionBuilder()
-            .start(start)
-            .unvisitedSite(endangeredSite)
-            .build(matrix);
-    final var expectedResult = ObjectiveValue.builder()
-        .sense(ObjectiveSense.MAXIMIZE)
-        .value(1L)
-        .build();
+        new SolutionBuilder().start(start).unvisitedSite(endangeredSite).build(matrix);
+    final var expectedResult =
+        ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(1L).build();
     assertEquals(
-        expectedResult,
-        objective.getVisitNewSiteObjectiveValueDelta(solution, endangeredSite)
-    );
+        expectedResult, objective.getVisitNewSiteObjectiveValueDelta(solution, endangeredSite));
   }
 
   @Test
   public void test_get_objective_values_delta_when_visiting_new_not_endangered_site() {
     final var solution =
-        new SolutionBuilder()
-            .start(start)
-            .unvisitedSite(notEndangeredSite)
-            .build(matrix);
-    final var expectedResult = ObjectiveValue.builder()
-        .sense(ObjectiveSense.MAXIMIZE)
-        .value(0L)
-        .build();
+        new SolutionBuilder().start(start).unvisitedSite(notEndangeredSite).build(matrix);
+    final var expectedResult =
+        ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(0L).build();
     assertEquals(
-        expectedResult,
-        objective.getVisitNewSiteObjectiveValueDelta(solution, notEndangeredSite)
-    );
+        expectedResult, objective.getVisitNewSiteObjectiveValueDelta(solution, notEndangeredSite));
   }
 }

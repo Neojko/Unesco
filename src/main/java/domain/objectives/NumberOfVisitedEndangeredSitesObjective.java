@@ -29,11 +29,7 @@ public class NumberOfVisitedEndangeredSitesObjective implements Objective, Visit
 
   @Override
   public ObjectiveValue getVisitNewSiteObjectiveValueDelta(
-      final Solution solution,
-      final Site site) {
-    return ObjectiveValue.builder()
-        .sense(sense)
-        .value(site.isEndangered() ? 1L : 0L)
-        .build();
+      final Solution solution, final Site site) {
+    return ObjectiveValue.builder().sense(sense).value(site.isEndangered() ? 1L : 0L).build();
   }
 }

@@ -27,11 +27,7 @@ public class NumberOfVisitedSitesObjective implements Objective, VisitNewSiteObj
 
   @Override
   public ObjectiveValue getVisitNewSiteObjectiveValueDelta(
-      final Solution solution,
-      final Site site) {
-    return ObjectiveValue.builder()
-        .sense(sense)
-        .value(1L)
-        .build();
+      final Solution solution, final Site site) {
+    return ObjectiveValue.builder().sense(sense).value(1L).build();
   }
 }

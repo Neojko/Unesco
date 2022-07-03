@@ -31,14 +31,11 @@ public class NumberOfVisitedCountriesObjective implements Objective, VisitNewSit
 
   @Override
   public ObjectiveValue getVisitNewSiteObjectiveValueDelta(
-      final Solution solution,
-      final Site site) {
-    final var value = site.getCountries().stream()
-        .filter(country -> !solution.isVisitingCountry(country))
-        .count();
-    return ObjectiveValue.builder()
-        .sense(sense)
-        .value(value)
-        .build();
+      final Solution solution, final Site site) {
+    final var value =
+        site.getCountries().stream()
+            .filter(country -> !solution.isVisitingCountry(country))
+            .count();
+    return ObjectiveValue.builder().sense(sense).value(value).build();
   }
 }

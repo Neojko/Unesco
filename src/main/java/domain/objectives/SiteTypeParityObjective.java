@@ -36,8 +36,7 @@ public class SiteTypeParityObjective implements Objective, VisitNewSiteObjective
 
   @Override
   public ObjectiveValue getVisitNewSiteObjectiveValueDelta(
-      final Solution solution,
-      final Site site) {
+      final Solution solution, final Site site) {
     final var cultural = solution.getNumberOfCulturalVisitedSites() + (site.isCultural() ? 1 : 0);
     final var natural = solution.getNumberOfNaturalVisitedSites() + (site.isNatural() ? 1 : 0);
     final var value = Math.abs(cultural - natural);
