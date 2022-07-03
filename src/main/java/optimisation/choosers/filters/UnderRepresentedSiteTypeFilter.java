@@ -4,6 +4,10 @@ import domain.Solution;
 import domain.locations.sites.Site;
 import lombok.var;
 
+/**
+ * Keeps sites whose type is the most represented in the solution
+ */
+
 public class UnderRepresentedSiteTypeFilter implements SiteFilter {
 
   @Override
@@ -14,7 +18,7 @@ public class UnderRepresentedSiteTypeFilter implements SiteFilter {
       return site.isNatural();
     }
     if (cultural < natural) {
-      return site.isNatural();
+      return site.isCultural();
     }
     return true;
   }

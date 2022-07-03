@@ -5,6 +5,10 @@ import domain.locations.sites.Site;
 import domain.locations.sites.SiteType;
 import lombok.var;
 
+/**
+ * Keeps sites whose type is the most represented in the solution
+ */
+
 public class OverRepresentedSiteTypeFilter implements SiteFilter {
 
   @Override

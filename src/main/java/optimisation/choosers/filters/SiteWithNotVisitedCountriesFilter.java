@@ -4,7 +4,7 @@ import domain.Solution;
 import domain.locations.sites.Site;
 import lombok.var;
 
-public class SitesWithNotVisitedCountriesFilter implements SiteFilter {
+public class SiteWithNotVisitedCountriesFilter implements SiteFilter {
 
   @Override
   public boolean siteHasInterest(final Solution solution, final Site site) {
