@@ -38,7 +38,7 @@ public class MaxTripDurationConstraintTest {
         Arguments.of(-1L, false), // Max duration is 1s less than solution duration
         Arguments.of(0L, true), // Max duration is same as solution duration
         Arguments.of(1L, true) // Max duration is 1s more than solution duration
-    );
+        );
   }
 
   @ParameterizedTest
@@ -55,7 +55,7 @@ public class MaxTripDurationConstraintTest {
         Arguments.of(-1L, false), // Max duration is 1s less than solution duration
         Arguments.of(0L, true), // Max duration is same as solution duration
         Arguments.of(1L, true) // Max duration is 1s more than solution duration
-    );
+        );
   }
 
   @ParameterizedTest
@@ -84,7 +84,7 @@ public class MaxTripDurationConstraintTest {
         Arguments.of(SitePosition.END, -1L, false), // 1s less than max duration
         Arguments.of(SitePosition.END, 0L, true), // same as max duration
         Arguments.of(SitePosition.END, 1L, true) // 1s more than max duration
-    );
+        );
   }
 
   @ParameterizedTest

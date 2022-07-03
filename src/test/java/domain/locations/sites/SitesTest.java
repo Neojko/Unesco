@@ -19,24 +19,20 @@ public class SitesTest {
     england = new Country("England");
     spain = new Country("Splain");
     germany = new Country("Germany");
-    frenchCulturalSite = Site.builder()
-        .type(SiteType.Cultural)
-        .country(france)
-        .build();
-    englishNaturalSite = Site.builder()
-        .type(SiteType.Natural)
-        .country(england)
-        .build();
-    frenchAndSpanishMixedSite = Site.builder()
-        .type(SiteType.Mixed)
-        .country(france).country(spain)
-        .build();
+    frenchCulturalSite = Site.builder().type(SiteType.Cultural).country(france).build();
+    englishNaturalSite = Site.builder().type(SiteType.Natural).country(england).build();
+    frenchAndSpanishMixedSite =
+        Site.builder().type(SiteType.Mixed).country(france).country(spain).build();
   }
 
   @Test
   public void test_constructor() {
-    final var sites = Sites.builder().site(frenchCulturalSite).site(englishNaturalSite).site(
-        frenchAndSpanishMixedSite).build();
+    final var sites =
+        Sites.builder()
+            .site(frenchCulturalSite)
+            .site(englishNaturalSite)
+            .site(frenchAndSpanishMixedSite)
+            .build();
     assertEquals(3, sites.getSites().size());
     assertEquals(frenchCulturalSite, sites.getSites().get(0));
     assertEquals(englishNaturalSite, sites.getSites().get(1));
@@ -111,9 +107,8 @@ public class SitesTest {
 
   @Test
   public void test_remove_site_such_that_country_has_other_site() {
-    final var sites = Sites.builder()
-        .site(frenchCulturalSite).site(frenchAndSpanishMixedSite)
-        .build();
+    final var sites =
+        Sites.builder().site(frenchCulturalSite).site(frenchAndSpanishMixedSite).build();
     sites.removeSite(frenchCulturalSite);
     final var frenchSites = sites.getSitesPerCountry().get(france);
     assertEquals(1, frenchSites.size());
@@ -126,5 +121,4 @@ public class SitesTest {
     sites.removeSite(frenchCulturalSite);
     assertFalse(sites.containsCountry(france));
   }
-
 }

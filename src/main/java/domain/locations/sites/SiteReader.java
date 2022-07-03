@@ -16,9 +16,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * This class is made to create a list of sites from a Unesco .xls document.
- */
+/** This class is made to create a list of sites from a Unesco .xls document. */
 public class SiteReader {
 
   private final Logger LOGGER = LoggerFactory.getLogger(SiteReader.class);
