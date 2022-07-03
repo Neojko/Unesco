@@ -73,6 +73,16 @@ public class Solution {
         tripDurationinSeconds);
   }
 
+  public boolean isBetterThan(final Solution other) {
+    if (!isFeasible) {
+      return false;
+    }
+    if (!other.isFeasible) {
+      return true;
+    }
+    return objectiveValues.compareTo(other.objectiveValues) < 0;
+  }
+
   public void apply(final VisitNewSiteMove move) {
     visitedSites.addSite(move.getSite(), move.getPosition());
     unvisitedSites.removeSite(move.getSite());
