@@ -128,14 +128,16 @@ public class Solution {
       if (visitedSites.isEmpty()) {
         return 0L;
       }
-      long result = TravelTimeComputer.convertToTime(
-          start.getCoordinates(), visitedSites.get(0).getCoordinates());
+      long result =
+          TravelTimeComputer.convertToTime(
+              start.getCoordinates(), visitedSites.get(0).getCoordinates());
       for (int i = 0; i < visitedSites.size() - 1; i++) {
         result += matrix.time(visitedSites.get(i), visitedSites.get(i + 1));
       }
       final var lastVisitedSite = visitedSites.get(visitedSites.size() - 1);
-      result += TravelTimeComputer.convertToTime(
-          lastVisitedSite.getCoordinates(), start.getCoordinates());
+      result +=
+          TravelTimeComputer.convertToTime(
+              lastVisitedSite.getCoordinates(), start.getCoordinates());
       result += visitedSites.size() * timePerSite;
       return result;
     }

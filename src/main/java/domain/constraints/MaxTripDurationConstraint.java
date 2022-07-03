@@ -25,17 +25,18 @@ public class MaxTripDurationConstraint implements Constraint, VisitNewSiteConstr
     final var previous = getPreviousLocation(solution, position);
     final var next = getNextLocation(solution, position);
     return solution.getDurationInSeconds()
-        + Solution.timePerSite
-        + matrix.time(previous, site)
-        + matrix.time(site, next)
-        - matrix.time(previous, next) <= maxDurationInSeconds;
+            + Solution.timePerSite
+            + matrix.time(previous, site)
+            + matrix.time(site, next)
+            - matrix.time(previous, next)
+        <= maxDurationInSeconds;
   }
 
   private Location getPreviousLocation(final Solution solution, final int position) {
     if (position == 0) {
       return solution.getStart();
     }
-    return solution.getVisitedSites().get(position);
+    return solution.getVisitedSites().get(position - 1);
   }
 
   private Location getNextLocation(final Solution solution, final int position) {

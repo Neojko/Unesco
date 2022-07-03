@@ -57,10 +57,7 @@ public class SiteTypeParityObjectiveTest {
     final var start = TravelStartLocation.builder().coordinates(new Coordinates(0, 0)).build();
     final var matrix = new TravelMatrix(sites, start);
     final var solution =
-        new SolutionBuilder()
-            .start(start)
-            .visitedSite(sites.get(siteIndexToVisit))
-            .build(matrix);
+        new SolutionBuilder().start(start).visitedSite(sites.get(siteIndexToVisit)).build(matrix);
     assertEquals(expectedResult, objective.computeObjectiveValue(solution).getValue());
   }
 }

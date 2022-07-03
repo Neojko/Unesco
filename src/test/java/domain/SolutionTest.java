@@ -12,7 +12,6 @@ import domain.locations.sites.Country;
 import domain.locations.sites.Site;
 import domain.locations.sites.SiteType;
 import domain.matrix.TravelMatrix;
-import domain.matrix.computers.TravelTimeComputer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -64,7 +63,8 @@ public class SolutionTest {
             .country(germany)
             .type(SiteType.Natural)
             .build();
-    final List<Location> locations = new ArrayList<>(Arrays.asList(site1, site2, site3, site4, start));
+    final List<Location> locations =
+        new ArrayList<>(Arrays.asList(site1, site2, site3, site4, start));
     matrix = new TravelMatrix(locations);
     solution =
         new SolutionBuilder()
@@ -110,10 +110,10 @@ public class SolutionTest {
     assertFalse(solution.getVisitedCountries().containsKey(germany));
     // Trip time
     final var expectedTripDuration =
-        TravelTimeComputer.convertToTime(start.getCoordinates(), site1.getCoordinates())
+        matrix.time(start, site1)
             + matrix.time(site1, site2)
             + matrix.time(site2, site3)
-            + TravelTimeComputer.convertToTime(site3.getCoordinates(), start.getCoordinates())
+            + matrix.time(site3, start)
             + 3 * Solution.timePerSite;
     assertEquals(expectedTripDuration, solution.getDurationInSeconds());
     // Cultural sites

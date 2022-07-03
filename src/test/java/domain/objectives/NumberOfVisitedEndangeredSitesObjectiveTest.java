@@ -42,10 +42,7 @@ public class NumberOfVisitedEndangeredSitesObjectiveTest {
     final var matrix = new TravelMatrix(sites, start);
     final var endangeredSite = sites.get(0);
     final var solution =
-        new SolutionBuilder()
-            .start(start)
-            .visitedSite(endangeredSite)
-            .build(matrix);
+        new SolutionBuilder().start(start).visitedSite(endangeredSite).build(matrix);
     assertEquals(1L, objective.computeObjectiveValue(solution).getValue());
   }
 

@@ -60,10 +60,7 @@ public class NumberOfVisitedCountriesObjectiveTest {
     final var matrix = new TravelMatrix(sites, start);
     final var twoCountriesSite = sites.get(2);
     final var solution =
-        new SolutionBuilder()
-            .start(start)
-            .visitedSite(twoCountriesSite)
-            .build(matrix);
+        new SolutionBuilder().start(start).visitedSite(twoCountriesSite).build(matrix);
     assertEquals(2L, objective.computeObjectiveValue(solution).getValue());
   }
 }

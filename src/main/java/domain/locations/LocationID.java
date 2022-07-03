@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-/**
- * Location unique ID
- */
-
+/** Location unique ID */
 @Getter
 @EqualsAndHashCode
 @Immutable

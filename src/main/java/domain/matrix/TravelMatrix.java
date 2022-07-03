@@ -28,7 +28,9 @@ public class TravelMatrix {
   private final Map<LocationID, Integer> indices;
   private final long[][] travelTimeInSeconds;
 
-  /** Creates TravelMatrix by computing time to travel Haversine distance for all pairs of locations */
+  /**
+   * Creates TravelMatrix by computing time to travel Haversine distance for all pairs of locations
+   */
   public TravelMatrix(final List<Location> locations) {
     indices = initIndices(locations);
     travelTimeInSeconds = new long[locations.size()][locations.size()];
@@ -37,7 +39,9 @@ public class TravelMatrix {
     }
   }
 
-  /** Creates TravelMatrix by computing time to travel Haversine distance for all pairs of locations */
+  /**
+   * Creates TravelMatrix by computing time to travel Haversine distance for all pairs of locations
+   */
   public TravelMatrix(final List<Site> sites, final TravelStartLocation start) {
     final List<Location> locations = new ArrayList<>(sites);
     locations.add(start);
@@ -50,6 +54,7 @@ public class TravelMatrix {
 
   /**
    * Creates matrix with entries that are already computed apart from the travelStartLocation ones
+   *
    * @param sites: contains all sites whose locationIDs belong to csv file
    * @param inputCSVFileName: contains time for all pairs of locationIDs with time(i,j) = time(j,i)
    * @param travelStartLocation: new Location to add in the matrix
@@ -58,8 +63,8 @@ public class TravelMatrix {
   public TravelMatrix(
       final List<Site> sites,
       final String inputCSVFileName,
-      final TravelStartLocation travelStartLocation
-  ) throws IOException {
+      final TravelStartLocation travelStartLocation)
+      throws IOException {
     final List<Location> locations = new ArrayList<>(sites);
     locations.add(travelStartLocation);
     indices = initIndices(locations);
@@ -95,8 +100,8 @@ public class TravelMatrix {
   }
 
   private Map<LocationID, Integer> initIndices(final List<Location> locations) {
-    final var locationIDs = locations.stream()
-        .map(Location::getLocationID).collect(Collectors.toList());
+    final var locationIDs =
+        locations.stream().map(Location::getLocationID).collect(Collectors.toList());
     return IntStream.range(0, locationIDs.size())
         .boxed()
         .collect(Collectors.toMap(locationIDs::get, i -> i));
@@ -115,9 +120,7 @@ public class TravelMatrix {
     travelTimeInSeconds[indices.get(secondLocationID)][indices.get(firstLocationID)] = travelTime;
   }
 
-  /**
-   * Computes and adds all entries related to location in the matrix
-   */
+  /** Computes and adds all entries related to location in the matrix */
   private void computeMatrixEntries(final List<Location> locations, final Location location) {
     final var locationIndex = indices.get(location.getLocationID());
     travelTimeInSeconds[locationIndex][locationIndex] = 0;

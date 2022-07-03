@@ -8,7 +8,7 @@ import lombok.Builder;
 public class TravelStartLocation implements Location {
 
   // Using value -1 because no Unesco site will have this LocationID
-  private final static LocationID locationID = new LocationID(-1);
+  private static final LocationID locationID = new LocationID(-1);
 
   private final Coordinates coordinates;
 
@@ -27,6 +27,7 @@ public class TravelStartLocation implements Location {
       coordinates = new Coordinates(latitude, longitude);
       return this;
     }
+
     public TravelStartLocationBuilder coordinates(final Coordinates coordinates) {
       this.coordinates = coordinates;
       return this;
