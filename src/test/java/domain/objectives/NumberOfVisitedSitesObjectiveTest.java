@@ -64,27 +64,15 @@ public class NumberOfVisitedSitesObjectiveTest {
   @Test
   public void test_get_objective_value_when_list_of_visited_sites_contains_at_least_one_site() {
     final var solution =
-        new SolutionBuilder()
-            .start(start)
-            .visitedSite(site1).visitedSite(site2)
-            .build(matrix);
+        new SolutionBuilder().start(start).visitedSite(site1).visitedSite(site2).build(matrix);
     assertEquals(2L, objective.computeObjectiveValue(solution).getValue());
   }
 
   @Test
   public void test_get_objective_values_delta_when_visiting_new_site() {
-    final var solution =
-        new SolutionBuilder()
-            .start(start)
-            .unvisitedSite(site1)
-            .build(matrix);
-    final var expectedResult = ObjectiveValue.builder()
-        .sense(ObjectiveSense.MAXIMIZE)
-        .value(1L)
-        .build();
-    assertEquals(
-        expectedResult,
-        objective.getVisitNewSiteObjectiveValueDelta(solution, site1)
-    );
+    final var solution = new SolutionBuilder().start(start).unvisitedSite(site1).build(matrix);
+    final var expectedResult =
+        ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(1L).build();
+    assertEquals(expectedResult, objective.getVisitNewSiteObjectiveValueDelta(solution, site1));
   }
 }
