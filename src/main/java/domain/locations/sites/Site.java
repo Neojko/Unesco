@@ -1,6 +1,9 @@
-package domain.site;
+package domain.locations.sites;
 
 import com.google.errorprone.annotations.Immutable;
+import domain.locations.Coordinates;
+import domain.locations.Location;
+import domain.locations.LocationID;
 import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -11,10 +14,10 @@ import lombok.Singular;
 @Getter
 @Immutable
 @EqualsAndHashCode
-public class Site {
+public class Site implements Location {
 
   private final String name;
-  private final SiteNumber uniqueNumber;
+  private final LocationID locationID;
   private final Coordinates coordinates;
   @Singular private final List<Country> countries;
   private final SiteType type;
@@ -29,8 +32,8 @@ public class Site {
   }
 
   public static class SiteBuilder {
-    public SiteBuilder uniqueNumber(final int uniqueNumber) {
-      this.uniqueNumber = new SiteNumber(uniqueNumber);
+    public SiteBuilder locationID(final int locationID) {
+      this.locationID = new LocationID(locationID);
       return this;
     }
 

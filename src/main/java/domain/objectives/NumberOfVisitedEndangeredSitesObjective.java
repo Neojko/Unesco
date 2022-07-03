@@ -1,10 +1,10 @@
 package domain.objectives;
 
 import domain.Solution;
-import domain.objectives.components.Objective;
+import domain.locations.sites.Site;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
-import domain.site.Site;
+import domain.objectives.interfaces.Objective;
 import lombok.var;
 
 public class NumberOfVisitedEndangeredSitesObjective implements Objective {

@@ -1,14 +1,20 @@
-package domain.site;
+package domain.locations.sites;
 
 import com.google.errorprone.annotations.Immutable;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+@AllArgsConstructor
 @Getter
 @EqualsAndHashCode
 @Immutable
-@AllArgsConstructor
-public class SiteNumber {
-  private final int value;
+public class Country {
+
+  private final String name;
+
+  @Override
+  public String toString() {
+    return name;
+  }
 }

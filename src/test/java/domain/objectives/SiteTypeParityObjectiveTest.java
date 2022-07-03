@@ -3,12 +3,13 @@ package domain.objectives;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import domain.Solution.SolutionBuilder;
+import domain.locations.Coordinates;
+import domain.locations.TravelStartLocation;
+import domain.locations.sites.SiteReader;
+import domain.locations.sites.SiteReaderTest;
 import domain.matrix.TravelMatrix;
-import domain.objectives.components.Objective;
 import domain.objectives.components.ObjectiveSense;
-import domain.site.Coordinates;
-import domain.site.SiteReader;
-import domain.site.SiteReaderTest;
+import domain.objectives.interfaces.Objective;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 import lombok.var;
@@ -53,12 +54,10 @@ public class SiteTypeParityObjectiveTest {
   public void test_get_objective_value_when_list_of_visited_sites_contains_at_least_one_site(
       final int siteIndexToVisit, final int expectedResult) {
     final var sites = new SiteReader().createSites(SiteReaderTest.testFile);
-    final var matrix = new TravelMatrix(sites);
+    final var start = TravelStartLocation.builder().coordinates(new Coordinates(0, 0)).build();
+    final var matrix = new TravelMatrix(sites, start);
     final var solution =
-        new SolutionBuilder()
-            .start(new Coordinates(0, 0))
-            .visitedSite(sites.get(siteIndexToVisit))
-            .build(matrix);
+        new SolutionBuilder().start(start).visitedSite(sites.get(siteIndexToVisit)).build(matrix);
     assertEquals(expectedResult, objective.computeObjectiveValue(solution).getValue());
   }
 }

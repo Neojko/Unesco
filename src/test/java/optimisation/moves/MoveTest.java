@@ -1,4 +1,4 @@
-package optimisation;
+package optimisation.moves;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import domain.objectives.components.ObjectiveValues;
 import java.util.stream.Stream;
 import lombok.var;
-import optimisation.moves.Move;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

@@ -1,4 +1,4 @@
-package domain.site;
+package domain.locations.sites;
 
 public enum SiteType {
   Cultural,

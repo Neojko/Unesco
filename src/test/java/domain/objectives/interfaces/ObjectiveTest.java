@@ -1,10 +1,9 @@
-package domain.objectives;
+package domain.objectives.interfaces;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import domain.objectives.components.Objective;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
 import org.junit.jupiter.api.Test;

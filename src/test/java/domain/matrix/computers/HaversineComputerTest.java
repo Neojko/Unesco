@@ -1,6 +1,6 @@
 package domain.matrix.computers;
 
-import domain.site.Coordinates;
+import domain.locations.Coordinates;
 import lombok.var;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

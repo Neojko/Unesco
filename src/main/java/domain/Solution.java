@@ -1,10 +1,12 @@
 package domain;
 
+import domain.locations.TravelStartLocation;
+import domain.locations.sites.Country;
+import domain.locations.sites.Site;
 import domain.matrix.TravelMatrix;
 import domain.matrix.computers.TravelTimeComputer;
-import domain.site.Coordinates;
-import domain.site.Country;
-import domain.site.Site;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,29 +19,35 @@ import lombok.var;
 @Getter
 public class Solution {
 
-  private final Coordinates start;
+  public static final long timePerSite = Duration.of(6, ChronoUnit.HOURS).getSeconds();
+
+  private final TravelStartLocation start;
   private final List<Site> visitedSites;
   private final List<Site> unvisitedSites;
   private final Map<Country, List<Site>> visitedCountries;
-  private final long tripTime;
+  private final long durationInSeconds;
   private final int numberOfCulturalVisitedSites;
   private final int numberOfNaturalVisitedSites;
 
   private Solution(
-      final Coordinates start,
+      final TravelStartLocation start,
       final List<Site> visitedSites,
       final List<Site> unvisitedSites,
       final Map<Country, List<Site>> visitedCountries,
-      final long tripTime,
+      final long durationInSeconds,
       final int numberOfCulturalVisitedSites,
       final int numberOfNaturalVisitedSites) {
     this.start = start;
     this.visitedSites = visitedSites;
     this.unvisitedSites = unvisitedSites;
     this.visitedCountries = visitedCountries;
-    this.tripTime = tripTime;
+    this.durationInSeconds = durationInSeconds;
     this.numberOfCulturalVisitedSites = numberOfCulturalVisitedSites;
     this.numberOfNaturalVisitedSites = numberOfNaturalVisitedSites;
+  }
+
+  public static SolutionBuilder builder() {
+    return new SolutionBuilder();
   }
 
   public boolean isVisitingSite(final Site site) {
@@ -59,13 +67,13 @@ public class Solution {
         visitedSites,
         unvisitedSites,
         visitedCountries,
-        tripTime,
+        durationInSeconds,
         numberOfCulturalVisitedSites,
         numberOfNaturalVisitedSites);
   }
 
   public static class SolutionBuilder {
-    private Coordinates start;
+    private TravelStartLocation start;
     private final List<Site> visitedSites;
     private final List<Site> unvisitedSites;
     private final Map<Country, List<Site>> visitedCountries;
@@ -76,7 +84,7 @@ public class Solution {
       visitedCountries = new HashMap<>();
     }
 
-    public SolutionBuilder start(final Coordinates start) {
+    public SolutionBuilder start(final TravelStartLocation start) {
       this.start = start;
       return this;
     }
@@ -111,21 +119,26 @@ public class Solution {
           visitedSites,
           unvisitedSites,
           visitedCountries,
-          computeTripTime(matrix),
+          computeTripDuration(matrix),
           computeNumberOfCulturalVisitedSites(),
           computeNumberOfNaturalVisitedSites());
     }
 
-    private long computeTripTime(final TravelMatrix matrix) {
+    private long computeTripDuration(final TravelMatrix matrix) {
       if (visitedSites.isEmpty()) {
         return 0L;
       }
-      long result = TravelTimeComputer.convertToTime(start, visitedSites.get(0).getCoordinates());
+      long result =
+          TravelTimeComputer.convertToTime(
+              start.getCoordinates(), visitedSites.get(0).getCoordinates());
       for (int i = 0; i < visitedSites.size() - 1; i++) {
         result += matrix.time(visitedSites.get(i), visitedSites.get(i + 1));
       }
       final var lastVisitedSite = visitedSites.get(visitedSites.size() - 1);
-      result += TravelTimeComputer.convertToTime(lastVisitedSite.getCoordinates(), start);
+      result +=
+          TravelTimeComputer.convertToTime(
+              lastVisitedSite.getCoordinates(), start.getCoordinates());
+      result += visitedSites.size() * timePerSite;
       return result;
     }
 

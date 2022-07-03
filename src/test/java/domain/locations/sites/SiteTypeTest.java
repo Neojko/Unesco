@@ -1,8 +1,8 @@
-package domain.site;
+package domain.locations.sites;
 
-import static domain.site.SiteType.Cultural;
-import static domain.site.SiteType.Mixed;
-import static domain.site.SiteType.Natural;
+import static domain.locations.sites.SiteType.Cultural;
+import static domain.locations.sites.SiteType.Mixed;
+import static domain.locations.sites.SiteType.Natural;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

@@ -1,9 +1,9 @@
 package domain.objectives;
 
 import domain.Solution;
-import domain.objectives.components.Objective;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
+import domain.objectives.interfaces.Objective;
 
 public class NumberOfVisitedCountriesObjective implements Objective {
 
