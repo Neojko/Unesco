@@ -64,13 +64,11 @@ public class MaxTripDurationConstraintTest {
   public void test_can_visit_new_site_in_empty_solution(
       final long delta, final boolean expectedResult) {
     final var solution = Solution.builder().start(start).unvisitedSite(site1).build(matrix);
-    final var increase = matrix.time(start, site1)
-        + SolutionTripDurationComputer.timePerSite
-        + matrix.time(site1, start);
-    final long maxDuration =
-        solution.getTripDurationinSeconds()
-            + increase
-            + delta;
+    final var increase =
+        matrix.time(start, site1)
+            + SolutionTripDurationComputer.timePerSite
+            + matrix.time(site1, start);
+    final long maxDuration = solution.getTripDurationinSeconds() + increase + delta;
     final var constraint = new MaxTripDurationConstraint(maxDuration);
     final var result = constraint.canVisitNewSite(solution, site1, 0, increase);
     assertEquals(expectedResult, result);
@@ -101,13 +99,11 @@ public class MaxTripDurationConstraintTest {
             .visitedSite(site2)
             .unvisitedSite(site3)
             .build(matrix);
-    final var increase = matrix.time(start, site1)
-        + SolutionTripDurationComputer.timePerSite
-        + matrix.time(site1, start);
-    final long maxDuration =
-        solution.getTripDurationinSeconds()
-            + increase
-            + delta;
+    final var increase =
+        matrix.time(start, site1)
+            + SolutionTripDurationComputer.timePerSite
+            + matrix.time(site1, start);
+    final long maxDuration = solution.getTripDurationinSeconds() + increase + delta;
     final var constraint = new MaxTripDurationConstraint(maxDuration);
     final var result = constraint.canVisitNewSite(solution, site3, getPosition(position), increase);
     assertEquals(expectedResult, result);

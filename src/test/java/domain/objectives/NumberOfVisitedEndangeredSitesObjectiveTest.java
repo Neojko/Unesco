@@ -87,7 +87,8 @@ public class NumberOfVisitedEndangeredSitesObjectiveTest {
         new SolutionBuilder().start(start).unvisitedSite(endangeredSite).build(matrix);
     final var expectedResult =
         ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(1L).build();
-    assertEquals(expectedResult,
+    assertEquals(
+        expectedResult,
         objective.getVisitNewSiteObjectiveValueDelta(solution, endangeredSite, tripDurationDelta));
   }
 
@@ -97,7 +98,8 @@ public class NumberOfVisitedEndangeredSitesObjectiveTest {
         new SolutionBuilder().start(start).unvisitedSite(notEndangeredSite).build(matrix);
     final var expectedResult =
         ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(0L).build();
-    assertEquals(expectedResult,
+    assertEquals(
+        expectedResult,
         objective.getVisitNewSiteObjectiveValueDelta(
             solution, notEndangeredSite, tripDurationDelta));
   }

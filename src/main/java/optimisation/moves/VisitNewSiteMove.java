@@ -29,10 +29,11 @@ public class VisitNewSiteMove implements Move {
     this.solution = solution;
     this.site = site;
     this.position = position;
-    this.tripDurationDelta = SolutionTripDurationComputer
-        .computeTripDurationDeltaToVisitNewSite(solution, site, position, matrix);
+    this.tripDurationDelta =
+        SolutionTripDurationComputer.computeTripDurationDeltaToVisitNewSite(
+            solution, site, position, matrix);
     isFeasible = constraintManager.canVisitNewSite(solution, site, position, tripDurationDelta);
-    objectiveValuesDelta = objectiveManager
-        .computeVisitNewSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
+    objectiveValuesDelta =
+        objectiveManager.computeVisitNewSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
   }
 }

@@ -74,7 +74,8 @@ public class NumberOfSitesObjectiveTest {
     final var tripDurationDelta = 1L;
     final var expectedResult =
         ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(1L).build();
-    assertEquals(expectedResult,
+    assertEquals(
+        expectedResult,
         objective.getVisitNewSiteObjectiveValueDelta(solution, site1, tripDurationDelta));
   }
 }

@@ -63,13 +63,13 @@ public class ObjectiveManagerTest {
     final var objective1AsVisitNewSiteObjective = (VisitNewSiteObjective) objective1;
     final var objectiveValue1 = ObjectiveValue.WORST_MAX_OBJECTIVE_VALUE;
     final long tripDurationDelta = 1L;
-    when(objective1AsVisitNewSiteObjective
-        .getVisitNewSiteObjectiveValueDelta(solution, site, tripDurationDelta)
-    ).thenReturn(objectiveValue1);
+    when(objective1AsVisitNewSiteObjective.getVisitNewSiteObjectiveValueDelta(
+            solution, site, tripDurationDelta))
+        .thenReturn(objectiveValue1);
     final var expectedObjectiveValues =
         ObjectiveValues.builder().value(objective1, objectiveValue1).build();
-    final var result = objectiveManager
-        .computeVisitNewSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
+    final var result =
+        objectiveManager.computeVisitNewSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
     assertEquals(expectedObjectiveValues, result);
   }
 }

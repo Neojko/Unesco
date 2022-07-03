@@ -45,8 +45,6 @@ public class ConstraintManager implements Constraint, VisitNewSiteConstraint {
     return true;
   }
 
-
-
   public static class ConstraintManagerBuilder {
     final List<Constraint> constraints;
     final List<VisitNewSiteConstraint> visitNewSiteConstraints;

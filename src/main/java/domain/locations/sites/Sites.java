@@ -17,15 +17,20 @@ public class Sites {
   private int numberOfCulturalSites;
   private int numberOfNaturalSites;
 
-  private Sites(final List<Site> sites, final Map<Country, List<Site>> sitesPerCountry,
-      final int numberOfCulturalSites, final int numberOfNaturalSites) {
+  private Sites(
+      final List<Site> sites,
+      final Map<Country, List<Site>> sitesPerCountry,
+      final int numberOfCulturalSites,
+      final int numberOfNaturalSites) {
     this.sites = sites;
     this.sitesPerCountry = sitesPerCountry;
     this.numberOfCulturalSites = numberOfCulturalSites;
     this.numberOfNaturalSites = numberOfNaturalSites;
   }
 
-  public static SitesBuilder builder() { return new SitesBuilder(); }
+  public static SitesBuilder builder() {
+    return new SitesBuilder();
+  }
 
   public boolean containsSite(final Site site) {
     return sites.contains(site);
@@ -86,8 +91,7 @@ public class Sites {
         new ArrayList<>(this.sites),
         new HashMap<>(this.sitesPerCountry),
         numberOfCulturalSites,
-        numberOfNaturalSites
-    );
+        numberOfNaturalSites);
   }
 
   public static class SitesBuilder {
@@ -114,10 +118,7 @@ public class Sites {
 
     public Sites build() {
       return new Sites(
-          sites,
-          countries,
-          computeNumberOfCulturalSites(),
-          computeNumberOfNaturalSites());
+          sites, countries, computeNumberOfCulturalSites(), computeNumberOfNaturalSites());
     }
 
     private int computeNumberOfCulturalSites() {
@@ -128,5 +129,4 @@ public class Sites {
       return (int) sites.stream().filter(Site::isNatural).count();
     }
   }
-
 }

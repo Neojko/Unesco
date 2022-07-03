@@ -34,8 +34,7 @@ public class Solution {
       final Sites unvisitedSites,
       final ConstraintManager constraintManager,
       final ObjectiveManager objectiveManager,
-      final TravelMatrix matrix
-      ) {
+      final TravelMatrix matrix) {
     this.start = start;
     this.visitedSites = visitedSites;
     this.unvisitedSites = unvisitedSites;
@@ -51,8 +50,7 @@ public class Solution {
       final Sites unvisitedSites,
       final boolean isFeasible,
       final ObjectiveValues objectiveValues,
-      final long tripDurationinSeconds
-  ) {
+      final long tripDurationinSeconds) {
     this.start = start;
     this.visitedSites = visitedSites;
     this.unvisitedSites = unvisitedSites;

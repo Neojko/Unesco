@@ -27,11 +27,7 @@ public class SolutionTripDurationComputer {
   }
 
   public static long computeTripDurationDeltaToVisitNewSite(
-      final Solution solution,
-      final Site site,
-      final int position,
-      final TravelMatrix matrix
-  ) {
+      final Solution solution, final Site site, final int position, final TravelMatrix matrix) {
     final var previous = getPreviousLocation(solution, position);
     final var next = getNextLocation(solution, position);
     return solution.getTripDurationinSeconds()
@@ -54,5 +50,4 @@ public class SolutionTripDurationComputer {
     }
     return solution.getVisitedSites().getSites().get(position);
   }
-
 }

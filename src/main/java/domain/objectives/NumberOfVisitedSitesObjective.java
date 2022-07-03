@@ -22,7 +22,10 @@ public class NumberOfVisitedSitesObjective implements Objective, VisitNewSiteObj
 
   @Override
   public ObjectiveValue computeObjectiveValue(final Solution solution) {
-    return ObjectiveValue.builder().sense(sense).value(solution.getVisitedSites().getSites().size()).build();
+    return ObjectiveValue.builder()
+        .sense(sense)
+        .value(solution.getVisitedSites().getSites().size())
+        .build();
   }
 
   @Override

@@ -23,8 +23,8 @@ public class NumberOfVisitedEndangeredSitesObjective implements Objective, Visit
 
   @Override
   public ObjectiveValue computeObjectiveValue(final Solution solution) {
-    final var value = solution.getVisitedSites().getSites().stream()
-        .filter(Site::isEndangered).count();
+    final var value =
+        solution.getVisitedSites().getSites().stream().filter(Site::isEndangered).count();
     return ObjectiveValue.builder().sense(sense).value(value).build();
   }
 
