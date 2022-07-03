@@ -13,5 +13,4 @@ public class RandomNumberGenerator {
   public int nextInt(final int bound) {
     return random.nextInt(bound);
   }
-
 }

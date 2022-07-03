@@ -32,5 +32,4 @@ public class CulturalSiteFilterTest {
   public void site_has_interest_returns_false() {
     Assertions.assertFalse(filter.siteHasInterest(solution, natural));
   }
-
 }

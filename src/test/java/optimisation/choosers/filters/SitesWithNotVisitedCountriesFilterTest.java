@@ -27,33 +27,37 @@ public class SitesWithNotVisitedCountriesFilterTest {
     final var start = TravelStartLocation.builder().coordinates(coordinates).build();
     final var france = new Country("France");
     final var england = new Country("England");
-    final Site frenchSite = Site.builder()
-        .locationID(1)
-        .coordinates(coordinates)
-        .country(france)
-        .type(SiteType.Natural)
-        .build();
-    otherFrenchSite = Site.builder()
-        .locationID(2)
-        .coordinates(coordinates)
-        .country(france)
-        .type(SiteType.Natural)
-        .build();
-    frenchAndEnglishSite = Site.builder()
-        .locationID(3)
-        .coordinates(coordinates)
-        .country(france)
-        .country(england)
-        .type(SiteType.Natural)
-        .build();
+    final Site frenchSite =
+        Site.builder()
+            .locationID(1)
+            .coordinates(coordinates)
+            .country(france)
+            .type(SiteType.Natural)
+            .build();
+    otherFrenchSite =
+        Site.builder()
+            .locationID(2)
+            .coordinates(coordinates)
+            .country(france)
+            .type(SiteType.Natural)
+            .build();
+    frenchAndEnglishSite =
+        Site.builder()
+            .locationID(3)
+            .coordinates(coordinates)
+            .country(france)
+            .country(england)
+            .type(SiteType.Natural)
+            .build();
     final var locations = Arrays.asList(start, frenchSite, otherFrenchSite, frenchAndEnglishSite);
     final var matrix = new TravelMatrix(locations);
-    solution = Solution.builder()
-        .start(start)
-        .visitedSite(frenchSite)
-        .unvisitedSite(otherFrenchSite)
-        .unvisitedSite(frenchAndEnglishSite)
-        .build(matrix);
+    solution =
+        Solution.builder()
+            .start(start)
+            .visitedSite(frenchSite)
+            .unvisitedSite(otherFrenchSite)
+            .unvisitedSite(frenchAndEnglishSite)
+            .build(matrix);
   }
 
   @Test
@@ -65,5 +69,4 @@ public class SitesWithNotVisitedCountriesFilterTest {
   public void site_has_interest_returns_false() {
     Assertions.assertFalse(filter.siteHasInterest(solution, otherFrenchSite));
   }
-
 }

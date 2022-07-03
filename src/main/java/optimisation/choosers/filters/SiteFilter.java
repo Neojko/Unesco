@@ -14,5 +14,4 @@ public interface SiteFilter {
         .filter(site -> siteHasInterest(solution, site))
         .collect(Collectors.toList());
   }
-
 }

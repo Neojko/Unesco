@@ -32,6 +32,4 @@ public class RandomSiteSelectorTest {
   public void test_select() {
     Assertions.assertEquals(site1, selector.select(sites));
   }
-
-
 }

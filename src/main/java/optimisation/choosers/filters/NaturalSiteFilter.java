@@ -9,5 +9,4 @@ public class NaturalSiteFilter implements SiteFilter {
   public boolean siteHasInterest(final Solution solution, final Site site) {
     return site.isNatural();
   }
-
 }

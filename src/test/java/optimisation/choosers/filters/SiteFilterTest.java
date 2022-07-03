@@ -26,5 +26,4 @@ public class SiteFilterTest {
     final var expectedResult = Collections.singletonList(site1);
     Assertions.assertEquals(expectedResult, filter.filter(solution, sites));
   }
-
 }

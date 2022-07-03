@@ -8,7 +8,5 @@ import domain.solution.Solution;
  */
 public interface Repairer {
 
-
-
   void repair(final Solution solution);
 }
