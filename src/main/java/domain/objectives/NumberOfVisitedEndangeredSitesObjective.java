@@ -5,9 +5,10 @@ import domain.locations.sites.Site;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
 import domain.objectives.interfaces.Objective;
+import domain.objectives.interfaces.VisitNewSiteObjective;
 import lombok.var;
 
-public class NumberOfVisitedEndangeredSitesObjective implements Objective {
+public class NumberOfVisitedEndangeredSitesObjective implements Objective, VisitNewSiteObjective {
 
   private final ObjectiveSense sense;
 
@@ -24,5 +25,15 @@ public class NumberOfVisitedEndangeredSitesObjective implements Objective {
   public ObjectiveValue computeObjectiveValue(final Solution solution) {
     final var value = solution.getVisitedSites().stream().filter(Site::isEndangered).count();
     return ObjectiveValue.builder().sense(sense).value(value).build();
+  }
+
+  @Override
+  public ObjectiveValue getVisitNewSiteObjectiveValueDelta(
+      final Solution solution,
+      final Site site) {
+    return ObjectiveValue.builder()
+        .sense(sense)
+        .value(site.isEndangered() ? 1L : 0L)
+        .build();
   }
 }
