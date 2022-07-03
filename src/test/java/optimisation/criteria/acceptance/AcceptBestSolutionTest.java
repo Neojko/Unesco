@@ -32,5 +32,4 @@ public class AcceptBestSolutionTest {
     when(solution1.isBetterThan(solution2)).thenReturn(false);
     assertFalse(acceptBestSolution.accept(solution1, solution2));
   }
-
 }

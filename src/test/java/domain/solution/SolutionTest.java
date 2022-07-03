@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import domain.constraints.ConstraintManager;
 import domain.locations.Coordinates;
@@ -16,6 +18,7 @@ import domain.matrix.TravelMatrix;
 import domain.objectives.NumberOfVisitedEndangeredSitesObjective;
 import domain.objectives.NumberOfVisitedSitesObjective;
 import domain.objectives.ObjectiveManager;
+import domain.objectives.components.ObjectiveValues;
 import domain.objectives.interfaces.Objective;
 import domain.solution.Solution.SolutionBuilder;
 import java.util.ArrayList;
@@ -25,6 +28,8 @@ import lombok.var;
 import optimisation.moves.VisitNewSiteMove;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class SolutionTest {
 
@@ -138,6 +143,37 @@ public class SolutionTest {
     assertEquals(2, solution.getVisitedSites().getNumberOfCulturalSites()); // site1 and site2
     // Natural sites
     assertEquals(2, solution.getVisitedSites().getNumberOfNaturalSites()); // site2 and site3
+  }
+
+  @ParameterizedTest(
+      name =
+          "solution1IsFeasible = {0}, "
+              + "solution2IsFeasible = {1}, "
+              + "solution1CompareToSolution2 = {2}, "
+              + "expectedResult = {3}")
+  @CsvSource({
+    "false, false, -1, false",
+    "true, false, 1, true",
+    "true, true, -1, true",
+    "true, true, 0, false",
+    "true, true, 1, false",
+  })
+  public void test_is_better_than(
+      final boolean solution1IsFeasible,
+      final boolean solution2IsFeasible,
+      final int solution1CompareToSolution2,
+      final boolean expectedResult) {
+    final var solution1 = mock(Solution.class);
+    final var solution2 = mock(Solution.class);
+    when(solution1.isFeasible()).thenReturn(solution1IsFeasible);
+    when(solution2.isFeasible()).thenReturn(solution2IsFeasible);
+    final var objectiveValues1 = mock(ObjectiveValues.class);
+    final var objectiveValues2 = mock(ObjectiveValues.class);
+    when(solution1.getObjectiveValues()).thenReturn(objectiveValues1);
+    when(solution2.getObjectiveValues()).thenReturn(objectiveValues2);
+    when(objectiveValues1.compareTo(objectiveValues2)).thenReturn(solution1CompareToSolution2);
+    when(solution1.isBetterThan(solution2)).thenCallRealMethod();
+    assertEquals(expectedResult, solution1.isBetterThan(solution2));
   }
 
   @Test

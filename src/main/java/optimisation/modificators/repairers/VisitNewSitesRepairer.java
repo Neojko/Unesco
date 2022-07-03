@@ -10,7 +10,5 @@ public class VisitNewSitesRepairer implements Repairer {
   private final SiteFilter filter;
 
   @Override
-  public void repair(final Solution solution) {
-
-  }
+  public void repair(final Solution solution) {}
 }

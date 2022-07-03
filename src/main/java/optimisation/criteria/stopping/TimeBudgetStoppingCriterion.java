@@ -6,8 +6,7 @@ import lombok.Getter;
 
 public class TimeBudgetStoppingCriterion implements StoppingCriterion {
 
-  @Getter
-  private final long timeBudgetInMilliSeconds;
+  @Getter private final long timeBudgetInMilliSeconds;
   private long startTime;
 
   public TimeBudgetStoppingCriterion(final long timeBudgetInMilliSeconds) {
@@ -28,5 +27,4 @@ public class TimeBudgetStoppingCriterion implements StoppingCriterion {
   public boolean isMet() {
     return currentTimeMillis() - startTime >= timeBudgetInMilliSeconds;
   }
-
 }

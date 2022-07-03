@@ -24,5 +24,4 @@ public class NumberOfIterationsStoppingCriterionTest {
     }
     assertEquals(expectedResult, criterion.isMet());
   }
-
 }

@@ -8,5 +8,4 @@ public class AcceptBestSolution implements SolutionAcceptanceCriterion {
   public boolean accept(final Solution newSolution, final Solution currentSolution) {
     return newSolution.isBetterThan(currentSolution);
   }
-
 }

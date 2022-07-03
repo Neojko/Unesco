@@ -7,5 +7,4 @@ public interface StoppingCriterion {
   void update();
 
   boolean isMet();
-
 }

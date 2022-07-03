@@ -26,5 +26,4 @@ public class StoppingCriteria implements StoppingCriterion {
   public boolean isMet() {
     return stoppingCriterions.stream().anyMatch(StoppingCriterion::isMet);
   }
-
 }

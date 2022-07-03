@@ -74,13 +74,13 @@ public class Solution {
   }
 
   public boolean isBetterThan(final Solution other) {
-    if (!isFeasible) {
+    if (!isFeasible()) {
       return false;
     }
-    if (!other.isFeasible) {
+    if (!other.isFeasible()) {
       return true;
     }
-    return objectiveValues.compareTo(other.objectiveValues) < 0;
+    return getObjectiveValues().compareTo(other.getObjectiveValues()) < 0;
   }
 
   public void apply(final VisitNewSiteMove move) {

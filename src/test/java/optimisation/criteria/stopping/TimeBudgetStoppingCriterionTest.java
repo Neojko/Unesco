@@ -18,5 +18,4 @@ public class TimeBudgetStoppingCriterionTest {
     }
     Assertions.assertTrue(criterion.isMet());
   }
-
 }

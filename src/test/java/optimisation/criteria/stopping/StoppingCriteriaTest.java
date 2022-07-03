@@ -66,5 +66,4 @@ public class StoppingCriteriaTest {
     verify(stoppingCriterion2, times(1)).isMet();
     verify(stoppingCriterion3, times(1)).isMet();
   }
-
 }

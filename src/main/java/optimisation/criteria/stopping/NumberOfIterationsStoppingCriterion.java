@@ -4,8 +4,7 @@ import lombok.Getter;
 
 public class NumberOfIterationsStoppingCriterion implements StoppingCriterion {
 
-  @Getter
-  private final int maxNumberOfIterations;
+  @Getter private final int maxNumberOfIterations;
   private int currentNumberOfIterations;
 
   public NumberOfIterationsStoppingCriterion(final int maxNumberOfIterations) {
@@ -26,5 +25,4 @@ public class NumberOfIterationsStoppingCriterion implements StoppingCriterion {
   public boolean isMet() {
     return currentNumberOfIterations >= maxNumberOfIterations;
   }
-
 }
