@@ -1,9 +1,11 @@
-package domain;
+package domain.solution;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import domain.constraints.ConstraintManager;
 import domain.locations.Coordinates;
 import domain.locations.Location;
 import domain.locations.TravelStartLocation;
@@ -11,13 +13,16 @@ import domain.locations.sites.Country;
 import domain.locations.sites.Site;
 import domain.locations.sites.SiteType;
 import domain.matrix.TravelMatrix;
-import domain.solution.Solution;
+import domain.objectives.NumberOfVisitedEndangeredSitesObjective;
+import domain.objectives.NumberOfVisitedSitesObjective;
+import domain.objectives.ObjectiveManager;
+import domain.objectives.interfaces.Objective;
 import domain.solution.Solution.SolutionBuilder;
-import domain.solution.SolutionTripDurationComputer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import lombok.var;
+import optimisation.moves.VisitNewSiteMove;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +33,8 @@ public class SolutionTest {
   private Site site1, site2, site3, site4;
   private TravelMatrix matrix;
   private Solution solution;
+  private ConstraintManager constraintManager;
+  private ObjectiveManager objectiveManager;
 
   @BeforeEach
   public void setUp() {
@@ -68,14 +75,20 @@ public class SolutionTest {
     final List<Location> locations =
         new ArrayList<>(Arrays.asList(site1, site2, site3, site4, start));
     matrix = new TravelMatrix(locations);
-    solution =
+    final Objective visitNewSitesObjective = new NumberOfVisitedSitesObjective();
+    final Objective visitEndangeredSitesObjective = new NumberOfVisitedEndangeredSitesObjective();
+    final var solutionBuilder =
         new SolutionBuilder()
             .start(start)
             .visitedSite(site1)
             .visitedSite(site2)
             .visitedSite(site3)
             .unvisitedSite(site4)
-            .build(matrix);
+            .objective(visitNewSitesObjective)
+            .objective(visitEndangeredSitesObjective);
+    constraintManager = solutionBuilder.getConstraintManager();
+    objectiveManager = solutionBuilder.getObjectiveManager();
+    solution = solutionBuilder.build(matrix);
   }
 
   @Test
@@ -128,30 +141,33 @@ public class SolutionTest {
   }
 
   @Test
-  public void test_is_visiting_site_returns_true() {
-    assertTrue(solution.getVisitedSites().containsSite(site1));
-  }
-
-  @Test
-  public void test_is_visiting_site_returns_false() {
-    assertFalse(solution.getVisitedSites().containsSite(site4));
-  }
-
-  @Test
-  public void test_is_visiting_country_returns_true() {
-    assertTrue(solution.getVisitedSites().containsCountry(france));
-  }
-
-  @Test
-  public void test_is_visiting_country_returns_false() {
-    assertFalse(solution.getVisitedSites().containsCountry(germany));
-  }
-
-  @Test
   public void test_copy() {
     final var otherSolution = solution.copy();
     assertEquals(solution, otherSolution);
+    final var move =
+        new VisitNewSiteMove(solution, site4, 0, matrix, constraintManager, objectiveManager);
+    solution.apply(move);
+    assertNotEquals(solution, otherSolution);
+    assertNotEquals(solution.getVisitedSites(), otherSolution.getVisitedSites());
+    assertNotEquals(solution.getUnvisitedSites(), otherSolution.getUnvisitedSites());
+    assertNotEquals(solution.getTripDurationinSeconds(), otherSolution.getTripDurationinSeconds());
+    assertNotEquals(solution.getObjectiveValues(), otherSolution.getObjectiveValues());
   }
 
-  // TODO add new copy() tests when able to modify visited sites / countries / endangered sites
+  @Test
+  public void test_apply_visit_new_site_move() {
+    final var move =
+        new VisitNewSiteMove(solution, site4, 0, matrix, constraintManager, objectiveManager);
+    assertTrue(move.isFeasible());
+    final var oldTripDuration = solution.getTripDurationinSeconds();
+    final var oldObjectiveValues = solution.getObjectiveValues().copy();
+    solution.apply(move);
+    assertTrue(solution.getVisitedSites().containsSite(site4));
+    assertFalse(solution.getUnvisitedSites().containsSite(site4));
+    assertEquals(
+        oldTripDuration + move.getTripDurationDelta(), solution.getTripDurationinSeconds());
+    oldObjectiveValues.add(move.getObjectiveValuesDelta());
+    ;
+    assertEquals(oldObjectiveValues, solution.getObjectiveValues());
+  }
 }

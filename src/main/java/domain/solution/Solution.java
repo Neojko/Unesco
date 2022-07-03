@@ -119,6 +119,14 @@ public class Solution {
       return this;
     }
 
+    public ConstraintManager getConstraintManager() {
+      return constraintManagerBuilder.build();
+    }
+
+    public ObjectiveManager getObjectiveManager() {
+      return objectiveManagerBuilder.build();
+    }
+
     public Solution build(final TravelMatrix matrix) {
       return new Solution(
           start,
