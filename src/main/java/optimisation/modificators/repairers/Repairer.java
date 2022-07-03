@@ -1,4 +1,4 @@
-package optimisation.repairers;
+package optimisation.modificators.repairers;
 
 import domain.solution.Solution;
 
