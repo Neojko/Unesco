@@ -1,10 +1,9 @@
 package domain.constraints;
 
-import domain.Solution;
 import domain.constraints.interfaces.Constraint;
 import domain.constraints.interfaces.VisitNewSiteConstraint;
 import domain.locations.sites.Site;
-import domain.matrix.TravelMatrix;
+import domain.solution.Solution;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -34,14 +33,19 @@ public class ConstraintManager implements Constraint, VisitNewSiteConstraint {
 
   @Override
   public boolean canVisitNewSite(
-      final Solution solution, final Site site, final int position, final TravelMatrix matrix) {
+      final Solution solution,
+      final Site site,
+      final int position,
+      final long tripDurationIncrease) {
     for (final var constraint : visitNewSiteConstraints) {
-      if (!constraint.canVisitNewSite(solution, site, position, matrix)) {
+      if (!constraint.canVisitNewSite(solution, site, position, tripDurationIncrease)) {
         return false;
       }
     }
     return true;
   }
+
+
 
   public static class ConstraintManagerBuilder {
     final List<Constraint> constraints;

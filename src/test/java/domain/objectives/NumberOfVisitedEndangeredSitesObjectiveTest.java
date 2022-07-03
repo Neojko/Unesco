@@ -2,7 +2,6 @@ package domain.objectives;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import domain.Solution.SolutionBuilder;
 import domain.locations.Coordinates;
 import domain.locations.TravelStartLocation;
 import domain.locations.sites.Country;
@@ -11,6 +10,7 @@ import domain.locations.sites.SiteType;
 import domain.matrix.TravelMatrix;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
+import domain.solution.Solution.SolutionBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,6 +24,7 @@ public class NumberOfVisitedEndangeredSitesObjectiveTest {
   private Site endangeredSite, notEndangeredSite;
   private TravelStartLocation start;
   TravelMatrix matrix;
+  long tripDurationDelta;
 
   @BeforeEach
   public void setUp() {
@@ -48,6 +49,7 @@ public class NumberOfVisitedEndangeredSitesObjectiveTest {
     final var sites = new ArrayList<>(Arrays.asList(endangeredSite, notEndangeredSite));
     start = TravelStartLocation.builder().coordinates(0, 0).build();
     matrix = new TravelMatrix(sites, start);
+    tripDurationDelta = 1L;
   }
 
   @Test
@@ -85,8 +87,8 @@ public class NumberOfVisitedEndangeredSitesObjectiveTest {
         new SolutionBuilder().start(start).unvisitedSite(endangeredSite).build(matrix);
     final var expectedResult =
         ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(1L).build();
-    assertEquals(
-        expectedResult, objective.getVisitNewSiteObjectiveValueDelta(solution, endangeredSite));
+    assertEquals(expectedResult,
+        objective.getVisitNewSiteObjectiveValueDelta(solution, endangeredSite, tripDurationDelta));
   }
 
   @Test
@@ -95,7 +97,8 @@ public class NumberOfVisitedEndangeredSitesObjectiveTest {
         new SolutionBuilder().start(start).unvisitedSite(notEndangeredSite).build(matrix);
     final var expectedResult =
         ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(0L).build();
-    assertEquals(
-        expectedResult, objective.getVisitNewSiteObjectiveValueDelta(solution, notEndangeredSite));
+    assertEquals(expectedResult,
+        objective.getVisitNewSiteObjectiveValueDelta(
+            solution, notEndangeredSite, tripDurationDelta));
   }
 }

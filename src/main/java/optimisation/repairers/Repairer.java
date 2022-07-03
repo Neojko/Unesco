@@ -1,6 +1,6 @@
 package optimisation.repairers;
 
-import domain.Solution;
+import domain.solution.Solution;
 
 /**
  * A Repairer is in charge of constructing a Solution. For the Unesco problem, it will try to add

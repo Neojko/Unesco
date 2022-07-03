@@ -6,12 +6,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
 
-import domain.Solution;
 import domain.locations.sites.Site;
 import domain.objectives.components.ObjectiveValue;
 import domain.objectives.components.ObjectiveValues;
 import domain.objectives.interfaces.Objective;
 import domain.objectives.interfaces.VisitNewSiteObjective;
+import domain.solution.Solution;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,11 +62,14 @@ public class ObjectiveManagerTest {
     final var site = mock(Site.class);
     final var objective1AsVisitNewSiteObjective = (VisitNewSiteObjective) objective1;
     final var objectiveValue1 = ObjectiveValue.WORST_MAX_OBJECTIVE_VALUE;
-    when(objective1AsVisitNewSiteObjective.getVisitNewSiteObjectiveValueDelta(solution, site))
-        .thenReturn(objectiveValue1);
+    final long tripDurationDelta = 1L;
+    when(objective1AsVisitNewSiteObjective
+        .getVisitNewSiteObjectiveValueDelta(solution, site, tripDurationDelta)
+    ).thenReturn(objectiveValue1);
     final var expectedObjectiveValues =
         ObjectiveValues.builder().value(objective1, objectiveValue1).build();
-    final var result = objectiveManager.computeVisitNewSiteObjectiveValuesDelta(solution, site);
+    final var result = objectiveManager
+        .computeVisitNewSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
     assertEquals(expectedObjectiveValues, result);
   }
 }

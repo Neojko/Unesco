@@ -1,11 +1,11 @@
 package domain.objectives;
 
-import domain.Solution;
 import domain.locations.sites.Site;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
 import domain.objectives.interfaces.Objective;
 import domain.objectives.interfaces.VisitNewSiteObjective;
+import domain.solution.Solution;
 
 public class NumberOfVisitedSitesObjective implements Objective, VisitNewSiteObjective {
 
@@ -22,12 +22,12 @@ public class NumberOfVisitedSitesObjective implements Objective, VisitNewSiteObj
 
   @Override
   public ObjectiveValue computeObjectiveValue(final Solution solution) {
-    return ObjectiveValue.builder().sense(sense).value(solution.getVisitedSites().size()).build();
+    return ObjectiveValue.builder().sense(sense).value(solution.getVisitedSites().getSites().size()).build();
   }
 
   @Override
   public ObjectiveValue getVisitNewSiteObjectiveValueDelta(
-      final Solution solution, final Site site) {
+      final Solution solution, final Site site, final long tripDurationDelta) {
     return ObjectiveValue.builder().sense(sense).value(1L).build();
   }
 }

@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import domain.Solution.SolutionBuilder;
 import domain.locations.Coordinates;
 import domain.locations.Location;
 import domain.locations.TravelStartLocation;
@@ -12,6 +11,9 @@ import domain.locations.sites.Country;
 import domain.locations.sites.Site;
 import domain.locations.sites.SiteType;
 import domain.matrix.TravelMatrix;
+import domain.solution.Solution;
+import domain.solution.Solution.SolutionBuilder;
+import domain.solution.SolutionTripDurationComputer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -79,67 +81,70 @@ public class SolutionTest {
   @Test
   public void test_builder() {
     // Visited sites
-    assertEquals(3, solution.getVisitedSites().size());
-    assertTrue(solution.getVisitedSites().contains(site1));
-    assertTrue(solution.getVisitedSites().contains(site2));
-    assertTrue(solution.getVisitedSites().contains(site3));
+    final var visitedSites = solution.getVisitedSites().getSites();
+    assertEquals(3, visitedSites.size());
+    assertTrue(visitedSites.contains(site1));
+    assertTrue(visitedSites.contains(site2));
+    assertTrue(visitedSites.contains(site3));
     // Unvisited sites
-    assertEquals(1, solution.getUnvisitedSites().size());
-    assertTrue(solution.getUnvisitedSites().contains(site4));
+    final var unvisitedSites = solution.getUnvisitedSites().getSites();
+    assertEquals(1, unvisitedSites.size());
+    assertTrue(unvisitedSites.contains(site4));
     // Visited countries -- general
-    assertEquals(3, solution.getVisitedCountries().size());
-    assertTrue(solution.getVisitedCountries().containsKey(france));
-    assertTrue(solution.getVisitedCountries().containsKey(england));
-    assertTrue(solution.getVisitedCountries().containsKey(spain));
-    assertFalse(solution.getVisitedCountries().containsKey(germany));
+    final var countrySites = solution.getVisitedSites().getSitesPerCountry();
+    assertEquals(3, countrySites.size());
+    assertTrue(countrySites.containsKey(france));
+    assertTrue(countrySites.containsKey(england));
+    assertTrue(countrySites.containsKey(spain));
+    assertFalse(countrySites.containsKey(germany));
     // Visited countries -- France
-    final var frenchSites = solution.getVisitedCountries().get(france);
+    final var frenchSites = countrySites.get(france);
     assertEquals(1, frenchSites.size());
     assertTrue(frenchSites.contains(site1));
     // Visited countries -- England
-    final var englishSites = solution.getVisitedCountries().get(england);
+    final var englishSites = countrySites.get(england);
     assertEquals(2, englishSites.size());
     assertTrue(englishSites.contains(site1));
     assertTrue(englishSites.contains(site2));
     // Visited countries -- Spain
-    final var spanishSites = solution.getVisitedCountries().get(spain);
+    final var spanishSites = countrySites.get(spain);
     assertEquals(2, spanishSites.size());
     assertTrue(spanishSites.contains(site2));
     assertTrue(spanishSites.contains(site3));
     // Visited countries -- Germany
-    assertFalse(solution.getVisitedCountries().containsKey(germany));
+    assertFalse(countrySites.containsKey(germany));
     // Trip time
     final var expectedTripDuration =
         matrix.time(start, site1)
             + matrix.time(site1, site2)
             + matrix.time(site2, site3)
             + matrix.time(site3, start)
-            + 3 * Solution.timePerSite;
-    assertEquals(expectedTripDuration, solution.getDurationInSeconds());
+            + 3 * SolutionTripDurationComputer.timePerSite;
+    assertEquals(expectedTripDuration, solution.getTripDurationinSeconds());
     // Cultural sites
-    assertEquals(2, solution.getNumberOfCulturalVisitedSites()); // site1 and site2
+    assertEquals(2, solution.getVisitedSites().getNumberOfCulturalSites()); // site1 and site2
     // Natural sites
-    assertEquals(2, solution.getNumberOfNaturalVisitedSites()); // site2 and site3
+    assertEquals(2, solution.getVisitedSites().getNumberOfNaturalSites()); // site2 and site3
   }
 
   @Test
   public void test_is_visiting_site_returns_true() {
-    assertTrue(solution.isVisitingSite(site1));
+    assertTrue(solution.getVisitedSites().containsSite(site1));
   }
 
   @Test
   public void test_is_visiting_site_returns_false() {
-    assertFalse(solution.isVisitingSite(site4));
+    assertFalse(solution.getVisitedSites().containsSite(site4));
   }
 
   @Test
   public void test_is_visiting_country_returns_true() {
-    assertTrue(solution.isVisitingCountry(france));
+    assertTrue(solution.getVisitedSites().containsCountry(france));
   }
 
   @Test
   public void test_is_visiting_country_returns_false() {
-    assertFalse(solution.isVisitingCountry(germany));
+    assertFalse(solution.getVisitedSites().containsCountry(germany));
   }
 
   @Test

@@ -1,7 +1,7 @@
 package domain.objectives.components;
 
-import domain.Solution;
 import domain.objectives.interfaces.Objective;
+import domain.solution.Solution;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;

@@ -11,6 +11,8 @@ public interface Move {
 
   boolean isFeasible();
 
+  long getTripDurationDelta();
+
   ObjectiveValues getObjectiveValuesDelta();
 
   default boolean isBetterThan(final Move other) {
