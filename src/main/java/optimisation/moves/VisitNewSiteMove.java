@@ -25,6 +25,7 @@ public class VisitNewSiteMove implements Move {
 
   /**
    * Main constructor -- we need to compute the value of tripDurationDelta
+   *
    * @param solution: solution to simulate the move on
    * @param site: site to visit
    * @param position: position to insert site
@@ -49,6 +50,7 @@ public class VisitNewSiteMove implements Move {
 
   /**
    * Main constructor -- the value of tripDurationDelta is known
+   *
    * @param solution: solution to simulate the move on
    * @param site: site to visit
    * @param position: position to insert site
@@ -69,9 +71,7 @@ public class VisitNewSiteMove implements Move {
         objectiveManager.computeVisitNewSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
   }
 
-  /**
-   * Creates unfeasible move -- no field should never be accessed apart from isFeasible
-   */
+  /** Creates unfeasible move -- no field should never be accessed apart from isFeasible */
   private VisitNewSiteMove() {
     this.solution = null;
     this.site = null;

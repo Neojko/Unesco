@@ -11,7 +11,9 @@ public interface Move {
 
   boolean isFeasible();
 
-  default long getTripDurationDelta() { return 0; }
+  default long getTripDurationDelta() {
+    return 0;
+  }
 
   ObjectiveValues getObjectiveValuesDelta();
 

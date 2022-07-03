@@ -15,6 +15,5 @@ public interface Repairer {
       final ConstraintManager constraintManager,
       final ObjectiveManager objectiveManager,
       final TravelMatrix matrix,
-      final Solution solution
-  );
+      final Solution solution);
 }
