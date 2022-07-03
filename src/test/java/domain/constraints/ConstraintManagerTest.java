@@ -6,11 +6,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
 
-import domain.Solution;
 import domain.constraints.interfaces.Constraint;
 import domain.constraints.interfaces.VisitNewSiteConstraint;
 import domain.locations.sites.Site;
-import domain.matrix.TravelMatrix;
+import domain.solution.Solution;
 import java.util.stream.Stream;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
@@ -95,14 +94,14 @@ public class ConstraintManagerTest {
     final var solution = mock(Solution.class);
     final var site = mock(Site.class);
     final var position = 1;
-    final var matrix = mock(TravelMatrix.class);
     final var constraint1AsVisitNewSiteConstraint = (VisitNewSiteConstraint) constraint1;
     final var constraint2AsVisitNewSiteConstraint = (VisitNewSiteConstraint) constraint2;
-    when(constraint1AsVisitNewSiteConstraint.canVisitNewSite(solution, site, position, matrix))
+    final long increase = 1;
+    when(constraint1AsVisitNewSiteConstraint.canVisitNewSite(solution, site, position, increase))
         .thenReturn(constraint1IsFeasible);
-    when(constraint2AsVisitNewSiteConstraint.canVisitNewSite(solution, site, position, matrix))
+    when(constraint2AsVisitNewSiteConstraint.canVisitNewSite(solution, site, position, increase))
         .thenReturn(constraint2IsFeasible);
-    final var result = constraintManager.canVisitNewSite(solution, site, position, matrix);
+    final var result = constraintManager.canVisitNewSite(solution, site, position, increase);
     assertEquals(expectedResult, result);
   }
 }

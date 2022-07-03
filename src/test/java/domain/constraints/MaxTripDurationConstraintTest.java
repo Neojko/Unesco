@@ -2,12 +2,13 @@ package domain.constraints;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import domain.Solution;
 import domain.locations.TravelStartLocation;
 import domain.locations.sites.Site;
 import domain.locations.sites.SiteReader;
 import domain.locations.sites.SiteReaderTest;
 import domain.matrix.TravelMatrix;
+import domain.solution.Solution;
+import domain.solution.SolutionTripDurationComputer;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.var;
@@ -19,14 +20,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 public class MaxTripDurationConstraintTest {
 
   private TravelStartLocation start;
-  private List<Site> sites;
   private Site site1, site2, site3;
   private TravelMatrix matrix;
 
   @BeforeEach
   public void setUp() {
     start = TravelStartLocation.builder().coordinates(0, 0).build();
-    sites = new SiteReader().createSites(SiteReaderTest.testFile);
+    final List<Site> sites = new SiteReader().createSites(SiteReaderTest.testFile);
     site1 = sites.get(0);
     site2 = sites.get(1);
     site3 = sites.get(2);
@@ -45,7 +45,7 @@ public class MaxTripDurationConstraintTest {
   @MethodSource
   public void test_is_feasible(final long delta, final boolean expectedResult) {
     final var solution = Solution.builder().start(start).visitedSite(site1).build(matrix);
-    final long maxDuration = solution.getDurationInSeconds() + delta;
+    final long maxDuration = solution.getTripDurationinSeconds() + delta;
     final var constraint = new MaxTripDurationConstraint(maxDuration);
     assertEquals(expectedResult, constraint.isFeasible(solution));
   }
@@ -63,14 +63,13 @@ public class MaxTripDurationConstraintTest {
   public void test_can_visit_new_site_in_empty_solution(
       final long delta, final boolean expectedResult) {
     final var solution = Solution.builder().start(start).unvisitedSite(site1).build(matrix);
-    final long maxDuration =
-        solution.getDurationInSeconds()
-            + matrix.time(start, site1)
-            + Solution.timePerSite
-            + matrix.time(site1, start)
-            + delta;
+    final var increase =
+        matrix.time(start, site1)
+            + SolutionTripDurationComputer.timePerSite
+            + matrix.time(site1, start);
+    final long maxDuration = solution.getTripDurationinSeconds() + increase + delta;
     final var constraint = new MaxTripDurationConstraint(maxDuration);
-    final var result = constraint.canVisitNewSite(solution, site1, 0, matrix);
+    final var result = constraint.canVisitNewSite(solution, site1, 0, increase);
     assertEquals(expectedResult, result);
   }
 
@@ -99,10 +98,12 @@ public class MaxTripDurationConstraintTest {
             .visitedSite(site2)
             .unvisitedSite(site3)
             .build(matrix);
-    final long maxDuration =
-        solution.getDurationInSeconds() + getTripDurationIncrement(position) + delta;
+    final var increase =
+        SolutionTripDurationComputer.computeTripDurationDeltaToVisitNewSite(
+            solution, site3, getPosition(position), matrix);
+    final long maxDuration = solution.getTripDurationinSeconds() + increase + delta;
     final var constraint = new MaxTripDurationConstraint(maxDuration);
-    final var result = constraint.canVisitNewSite(solution, site3, getPosition(position), matrix);
+    final var result = constraint.canVisitNewSite(solution, site3, getPosition(position), increase);
     assertEquals(expectedResult, result);
   }
 
@@ -114,26 +115,6 @@ public class MaxTripDurationConstraintTest {
         return 1;
       default: // END
         return 2;
-    }
-  }
-
-  private long getTripDurationIncrement(final SitePosition sitePosition) {
-    switch (sitePosition) {
-      case START:
-        return matrix.time(start, site3)
-            + Solution.timePerSite
-            + matrix.time(site3, site1)
-            - matrix.time(start, site1);
-      case BETWEEN_TWO_SITES:
-        return matrix.time(site1, site3)
-            + Solution.timePerSite
-            + matrix.time(site3, site2)
-            - matrix.time(site1, site2);
-      default: // END
-        return matrix.time(site2, site3)
-            + Solution.timePerSite
-            + matrix.time(site3, start)
-            - matrix.time(site2, start);
     }
   }
 

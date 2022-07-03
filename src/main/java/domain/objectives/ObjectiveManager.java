@@ -1,10 +1,10 @@
 package domain.objectives;
 
-import domain.Solution;
 import domain.locations.sites.Site;
 import domain.objectives.components.ObjectiveValues;
 import domain.objectives.interfaces.Objective;
 import domain.objectives.interfaces.VisitNewSiteObjective;
+import domain.solution.Solution;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -39,11 +39,12 @@ public class ObjectiveManager {
   }
 
   public ObjectiveValues computeVisitNewSiteObjectiveValuesDelta(
-      final Solution solution, final Site site) {
+      final Solution solution, final Site site, final long tripDurationDelta) {
     final var objectiveValues = ObjectiveValues.builder().build();
     for (final var objective : visitNewSiteObjectives) {
       objectiveValues.set(
-          (Objective) objective, objective.getVisitNewSiteObjectiveValueDelta(solution, site));
+          (Objective) objective,
+          objective.getVisitNewSiteObjectiveValueDelta(solution, site, tripDurationDelta));
     }
     return objectiveValues;
   }
