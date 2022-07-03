@@ -30,9 +30,8 @@ public class SolutionTripDurationComputer {
       final Solution solution, final Site site, final int position, final TravelMatrix matrix) {
     final var previous = getPreviousLocation(solution, position);
     final var next = getNextLocation(solution, position);
-    return solution.getTripDurationinSeconds()
+    return matrix.time(previous, site)
         + timePerSite
-        + matrix.time(previous, site)
         + matrix.time(site, next)
         - matrix.time(previous, next);
   }

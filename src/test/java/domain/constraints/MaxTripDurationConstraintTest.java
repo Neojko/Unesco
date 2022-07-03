@@ -20,14 +20,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 public class MaxTripDurationConstraintTest {
 
   private TravelStartLocation start;
-  private List<Site> sites;
   private Site site1, site2, site3;
   private TravelMatrix matrix;
 
   @BeforeEach
   public void setUp() {
     start = TravelStartLocation.builder().coordinates(0, 0).build();
-    sites = new SiteReader().createSites(SiteReaderTest.testFile);
+    final List<Site> sites = new SiteReader().createSites(SiteReaderTest.testFile);
     site1 = sites.get(0);
     site2 = sites.get(1);
     site3 = sites.get(2);
@@ -39,7 +38,7 @@ public class MaxTripDurationConstraintTest {
         Arguments.of(-1L, false), // Max duration is 1s less than solution duration
         Arguments.of(0L, true), // Max duration is same as solution duration
         Arguments.of(1L, true) // Max duration is 1s more than solution duration
-        );
+    );
   }
 
   @ParameterizedTest
@@ -56,7 +55,7 @@ public class MaxTripDurationConstraintTest {
         Arguments.of(-1L, false), // Max duration is 1s less than solution duration
         Arguments.of(0L, true), // Max duration is same as solution duration
         Arguments.of(1L, true) // Max duration is 1s more than solution duration
-        );
+    );
   }
 
   @ParameterizedTest
@@ -85,7 +84,7 @@ public class MaxTripDurationConstraintTest {
         Arguments.of(SitePosition.END, -1L, false), // 1s less than max duration
         Arguments.of(SitePosition.END, 0L, true), // same as max duration
         Arguments.of(SitePosition.END, 1L, true) // 1s more than max duration
-        );
+    );
   }
 
   @ParameterizedTest
@@ -100,9 +99,8 @@ public class MaxTripDurationConstraintTest {
             .unvisitedSite(site3)
             .build(matrix);
     final var increase =
-        matrix.time(start, site1)
-            + SolutionTripDurationComputer.timePerSite
-            + matrix.time(site1, start);
+        SolutionTripDurationComputer.computeTripDurationDeltaToVisitNewSite(
+            solution, site3, getPosition(position), matrix);
     final long maxDuration = solution.getTripDurationinSeconds() + increase + delta;
     final var constraint = new MaxTripDurationConstraint(maxDuration);
     final var result = constraint.canVisitNewSite(solution, site3, getPosition(position), increase);
@@ -117,26 +115,6 @@ public class MaxTripDurationConstraintTest {
         return 1;
       default: // END
         return 2;
-    }
-  }
-
-  private long getTripDurationIncrement(final SitePosition sitePosition) {
-    switch (sitePosition) {
-      case START:
-        return matrix.time(start, site3)
-            + SolutionTripDurationComputer.timePerSite
-            + matrix.time(site3, site1)
-            - matrix.time(start, site1);
-      case BETWEEN_TWO_SITES:
-        return matrix.time(site1, site3)
-            + SolutionTripDurationComputer.timePerSite
-            + matrix.time(site3, site2)
-            - matrix.time(site1, site2);
-      default: // END
-        return matrix.time(site2, site3)
-            + SolutionTripDurationComputer.timePerSite
-            + matrix.time(site3, start)
-            - matrix.time(site2, start);
     }
   }
 
