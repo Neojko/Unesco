@@ -51,8 +51,7 @@ public class NumberOfVisitedCountriesObjectiveTest {
             .locationID(3)
             .coordinates(new Coordinates(-17.92453, 25.85539))
             .countries(
-                new ArrayList<>(Arrays.asList(
-                    new Country("Afghanistan"), new Country("Algeria"))))
+                new ArrayList<>(Arrays.asList(new Country("Afghanistan"), new Country("Algeria"))))
             .type(SiteType.Natural)
             .build();
     afghanAlgerianAndEnglishSite =
@@ -60,15 +59,18 @@ public class NumberOfVisitedCountriesObjectiveTest {
             .name("Some site that exists for sure as well")
             .locationID(4)
             .coordinates(new Coordinates(-17.92453, 25.85539))
-            .countries(new ArrayList<>(Arrays.asList(
-                new Country("Afghanistan"),
-                new Country("Algeria"),
-                new Country("England"))
-            ))
+            .countries(
+                new ArrayList<>(
+                    Arrays.asList(
+                        new Country("Afghanistan"),
+                        new Country("Algeria"),
+                        new Country("England"))))
             .type(SiteType.Natural)
             .build();
-    final var sites = new ArrayList<>(Arrays.asList(
-        afghanSite, algerianSite, afghanAndAlgerianSite, afghanAlgerianAndEnglishSite));
+    final var sites =
+        new ArrayList<>(
+            Arrays.asList(
+                afghanSite, algerianSite, afghanAndAlgerianSite, afghanAlgerianAndEnglishSite));
     start = TravelStartLocation.builder().coordinates(0, 0).build();
     matrix = new TravelMatrix(sites, start);
   }
@@ -106,51 +108,42 @@ public class NumberOfVisitedCountriesObjectiveTest {
 
   @Test
   public void get_objectives_value_delta_when_adding_site_with_unvisited_country() {
-    final var solution = new SolutionBuilder()
-        .start(start)
-        .unvisitedSite(afghanAndAlgerianSite)
-        .build(matrix);
-    final var expectedResult = ObjectiveValue.builder()
-        .sense(ObjectiveSense.MAXIMIZE)
-        .value(2L)
-        .build();
+    final var solution =
+        new SolutionBuilder().start(start).unvisitedSite(afghanAndAlgerianSite).build(matrix);
+    final var expectedResult =
+        ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(2L).build();
     assertEquals(
         expectedResult,
-        objective.getVisitNewSiteObjectiveValueDelta(solution, afghanAndAlgerianSite)
-    );
+        objective.getVisitNewSiteObjectiveValueDelta(solution, afghanAndAlgerianSite));
   }
 
   @Test
   public void get_objectives_value_delta_when_adding_site_with_already_visited_country() {
-    final var solution = new SolutionBuilder()
-        .start(start)
-        .visitedSite(afghanAndAlgerianSite)
-        .unvisitedSite(afghanSite)
-        .build(matrix);
-    final var expectedResult = ObjectiveValue.builder()
-        .sense(ObjectiveSense.MAXIMIZE)
-        .value(0L)
-        .build();
+    final var solution =
+        new SolutionBuilder()
+            .start(start)
+            .visitedSite(afghanAndAlgerianSite)
+            .unvisitedSite(afghanSite)
+            .build(matrix);
+    final var expectedResult =
+        ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(0L).build();
     assertEquals(
-        expectedResult,
-        objective.getVisitNewSiteObjectiveValueDelta(solution, afghanSite)
-    );
+        expectedResult, objective.getVisitNewSiteObjectiveValueDelta(solution, afghanSite));
   }
 
   @Test
-  public void get_objectives_value_delta_when_adding_site_with_some_visited_and_unvisited_countries() {
-    final var solution = new SolutionBuilder()
-        .start(start)
-        .visitedSite(afghanAndAlgerianSite)
-        .unvisitedSite(afghanAlgerianAndEnglishSite)
-        .build(matrix);
-    final var expectedResult = ObjectiveValue.builder()
-        .sense(ObjectiveSense.MAXIMIZE)
-        .value(1L)
-        .build();
+  public void
+      get_objectives_value_delta_when_adding_site_with_some_visited_and_unvisited_countries() {
+    final var solution =
+        new SolutionBuilder()
+            .start(start)
+            .visitedSite(afghanAndAlgerianSite)
+            .unvisitedSite(afghanAlgerianAndEnglishSite)
+            .build(matrix);
+    final var expectedResult =
+        ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(1L).build();
     assertEquals(
         expectedResult,
-        objective.getVisitNewSiteObjectiveValueDelta(solution, afghanAlgerianAndEnglishSite)
-    );
+        objective.getVisitNewSiteObjectiveValueDelta(solution, afghanAlgerianAndEnglishSite));
   }
 }
