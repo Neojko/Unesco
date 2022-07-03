@@ -17,8 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class is made to read Unesco .xls document, and translate it to i) a .csv file containing
- * all travel times between pairs of coordinates and ii) create a .json file containing all sites.
+ * This class is made to create a list of sites from a Unesco .xls document.
  */
 public class SiteReader {
 
