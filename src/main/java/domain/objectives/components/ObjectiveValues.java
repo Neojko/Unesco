@@ -2,6 +2,7 @@ package domain.objectives.components;
 
 import domain.objectives.interfaces.Objective;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -19,19 +20,18 @@ public class ObjectiveValues implements Comparable<ObjectiveValues> {
   private final ObjectiveRanking objectiveRanking;
 
   /** Initialises the lexicographic list of objectives and give them all a value 0 */
-  public static ObjectiveValues createZeroObjectiveValues(final ObjectiveRanking objectiveRanking) {
+  public static ObjectiveValues createZeroObjectiveValues(final List<Objective> objectives) {
     final var objectiveValues = ObjectiveValues.builder().build();
-    for (final Objective objective : objectiveRanking.getObjectives()) {
+    for (final Objective objective : objectives) {
       objectiveValues.set(objective, objective.getZeroObjectiveValue());
     }
     return objectiveValues;
   }
 
   /** Initialises the lexicographic list of objectives and give them all the worst possible value */
-  public static ObjectiveValues createWorstObjectiveValues(
-      final ObjectiveRanking objectiveRanking) {
+  public static ObjectiveValues createWorstObjectiveValues(final List<Objective> objectives) {
     final var objectiveValues = ObjectiveValues.builder().build();
-    for (final Objective objective : objectiveRanking.getObjectives()) {
+    for (final Objective objective : objectives) {
       objectiveValues.set(objective, objective.getWorstObjectiveValue());
     }
     return objectiveValues;
