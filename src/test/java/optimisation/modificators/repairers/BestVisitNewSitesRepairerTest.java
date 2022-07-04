@@ -27,7 +27,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class VisitNewSiteRepairerTest {
+public class BestVisitNewSitesRepairerTest {
 
   private TravelStartLocation start;
   private Site interestingSite, lessInterestingSite;
@@ -78,7 +78,7 @@ public class VisitNewSiteRepairerTest {
             .objective(new NumberOfVisitedEndangeredSitesObjective())
             .build(matrix);
     final var repairer =
-        VisitNewSitesRepairer.builder()
+        BestVisitNewSitesRepairer.builder()
             .filter(new AcceptAllFilter())
             .stoppingCriterion(new NumberOfIterationsStoppingCriterion(1))
             .build();
@@ -101,7 +101,7 @@ public class VisitNewSiteRepairerTest {
       final boolean isStoppingCriterionMet) {
     final var stoppingCriterion = new NumberOfIterationsStoppingCriterion(maxIterations);
     final var repairer =
-        VisitNewSitesRepairer.builder()
+        BestVisitNewSitesRepairer.builder()
             .filter(new AcceptAllFilter())
             .stoppingCriterion(stoppingCriterion)
             .build();
