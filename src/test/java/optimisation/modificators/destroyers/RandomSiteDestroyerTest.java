@@ -58,10 +58,7 @@ public class RandomSiteDestroyerTest {
     final var locations = Arrays.asList(start, site1, site2);
     matrix = new TravelMatrix(locations);
     final var solutionBuilder =
-        Solution.builder()
-            .start(start)
-            .visitedSite(site1)
-            .visitedSite(site2);
+        Solution.builder().start(start).visitedSite(site1).visitedSite(site2);
     objectiveManager = solutionBuilder.getObjectiveManager();
     solution = solutionBuilder.build(matrix);
     filter = new AcceptAllFilter();
@@ -75,18 +72,18 @@ public class RandomSiteDestroyerTest {
         Arguments.of(0.25001),
         Arguments.of(0.50),
         Arguments.of(.74999),
-        Arguments.of(.75)
-    );
+        Arguments.of(.75));
   }
 
   @ParameterizedTest
   @MethodSource
   public void test_destroy(final double percentage) {
-    final var randomDestroyer = RandomSiteDestroyer.builder()
-        .percentage(percentage)
-        .selector(selector)
-        .filter(filter)
-        .build();
+    final var randomDestroyer =
+        RandomSiteDestroyer.builder()
+            .percentage(percentage)
+            .selector(selector)
+            .filter(filter)
+            .build();
     when(selector.select(any())).thenReturn(site1).thenReturn(site2);
     randomDestroyer.destroy(objectiveManager, matrix, solution);
     final var expectedSolution = getExpectedSolution(percentage);
@@ -98,17 +95,8 @@ public class RandomSiteDestroyerTest {
       return solution.copy();
     }
     if (percentage < 0.75) {
-      return Solution.builder()
-          .start(start)
-          .visitedSite(site2)
-          .unvisitedSite(site1)
-          .build(matrix);
+      return Solution.builder().start(start).visitedSite(site2).unvisitedSite(site1).build(matrix);
     }
-    return Solution.builder()
-        .start(start)
-        .unvisitedSite(site1)
-        .unvisitedSite(site2)
-        .build(matrix);
+    return Solution.builder().start(start).unvisitedSite(site1).unvisitedSite(site2).build(matrix);
   }
-
 }

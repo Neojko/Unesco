@@ -11,7 +11,5 @@ import domain.solution.Solution;
 public interface Destroyer {
 
   void destroy(
-      final ObjectiveManager objectiveManager,
-      final TravelMatrix matrix,
-      final Solution solution);
+      final ObjectiveManager objectiveManager, final TravelMatrix matrix, final Solution solution);
 }

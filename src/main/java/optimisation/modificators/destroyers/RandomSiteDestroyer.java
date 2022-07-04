@@ -18,12 +18,9 @@ public class RandomSiteDestroyer implements Destroyer {
   private final SiteFilter filter;
   private final SiteSelector selector;
 
-
   @Override
   public void destroy(
-      final ObjectiveManager objectiveManager,
-      final TravelMatrix matrix,
-      final Solution solution) {
+      final ObjectiveManager objectiveManager, final TravelMatrix matrix, final Solution solution) {
     final var unvisitableSites = filter.filter(solution, solution.getVisitedSites().getSites());
     final int numberOfSitesToUnvisit = computeNumberOfSitesToUnvisit(unvisitableSites.size());
     int currentNumberOfUnvisitedSites = 0;
