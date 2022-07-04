@@ -45,7 +45,7 @@ public class VisitNewSiteRepairerTest {
     start = TravelStartLocation.builder().coordinates(0,0).build();
     interestingSite = Site.builder()
         .locationID(1)
-        .name("closestSite")
+        .name("interestingSite")
         .country(country)
         .coordinates(new Coordinates(0, 1))
         .type(SiteType.Natural)
@@ -53,7 +53,7 @@ public class VisitNewSiteRepairerTest {
         .build();
     lessInterestingSite = Site.builder()
         .locationID(2)
-        .name("farthestSite")
+        .name("lessInterestingSite")
         .country(country)
         .coordinates(new Coordinates(0, 10))
         .type(SiteType.Natural)
@@ -86,8 +86,8 @@ public class VisitNewSiteRepairerTest {
   private static Stream<Arguments> test_repair() {
     return Stream.of(
         Arguments.of(1, Collections.singletonList(SiteName.INTERESTING), true),
-        Arguments.of(2, Arrays.asList(SiteName.INTERESTING, SiteName.LESS_INTERESTING), true),
-        Arguments.of(3, Arrays.asList(SiteName.INTERESTING, SiteName.LESS_INTERESTING), false)
+        Arguments.of(2, Arrays.asList(SiteName.LESS_INTERESTING, SiteName.INTERESTING), true),
+        Arguments.of(3, Arrays.asList(SiteName.LESS_INTERESTING, SiteName.INTERESTING), false)
     );
   }
 
