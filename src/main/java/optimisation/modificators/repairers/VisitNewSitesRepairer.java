@@ -11,13 +11,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.var;
 import optimisation.choosers.filters.SiteFilter;
-import optimisation.criteria.stopping.StoppingCriteria;
+import optimisation.criteria.stopping.StoppingCriterion;
 import optimisation.moves.VisitNewSiteMove;
 
 @Builder
 public class VisitNewSitesRepairer implements Repairer {
 
-  private final StoppingCriteria stoppingCriteria;
+  private final StoppingCriterion stoppingCriterion;
   private final SiteFilter filter;
 
   @Override
@@ -26,12 +26,12 @@ public class VisitNewSitesRepairer implements Repairer {
       final ObjectiveManager objectiveManager,
       final TravelMatrix matrix,
       final Solution solution) {
-    stoppingCriteria.initialise();
-    while (!stoppingCriteria.isMet()) {
+    stoppingCriterion.initialise();
+    while (!stoppingCriterion.isMet()) {
       final var bestMove = findBestMove(constraintManager, objectiveManager, matrix, solution);
       if (bestMove.isFeasible()) {
         solution.apply(bestMove);
-        stoppingCriteria.update();
+        stoppingCriterion.update();
       } else {
         break;
       }
