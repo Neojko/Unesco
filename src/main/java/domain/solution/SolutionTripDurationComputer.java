@@ -55,7 +55,7 @@ public class SolutionTripDurationComputer {
   }
 
   private static Location getNextLocation(final Solution solution, final int position) {
-    if (position == solution.getVisitedSites().getSites().size()) {
+    if (position == solution.getVisitedSites().getSites().size()-1) {
       return solution.getStart();
     }
     return solution.getVisitedSites().getSites().get(position+1);
