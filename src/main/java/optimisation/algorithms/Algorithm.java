@@ -12,5 +12,4 @@ public interface Algorithm {
       final ObjectiveManager objectiveManager,
       final TravelMatrix matrix,
       final Solution solution);
-
 }

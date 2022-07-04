@@ -14,10 +14,7 @@ import optimisation.choosers.filters.SiteFilter;
 import optimisation.criteria.stopping.StoppingCriterion;
 import optimisation.moves.VisitNewSiteMove;
 
-/**
- * Aims to add the most interesting site to the list of visited sites at each iteration
- */
-
+/** Aims to add the most interesting site to the list of visited sites at each iteration */
 @Builder
 public class BestVisitNewSitesRepairer implements Repairer {
 

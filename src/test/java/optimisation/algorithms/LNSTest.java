@@ -1,7 +1,3 @@
 package optimisation.algorithms;
 
-public class LNSTest {
-
-  
-
-}
+public class LNSTest {}

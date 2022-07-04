@@ -57,10 +57,8 @@ public class RandomSiteDestroyerTest {
             .build();
     final var locations = Arrays.asList(start, site1, site2);
     matrix = new TravelMatrix(locations);
-    final var solutionBuilder =
-        Solution.builder().start(start).visitedSite(site1).visitedSite(site2);
-    objectiveManager = solutionBuilder.getObjectiveManager();
-    solution = solutionBuilder.build(matrix);
+    objectiveManager = ObjectiveManager.builder().build();
+    solution = Solution.builder().start(start).visitedSite(site1).visitedSite(site2).build(matrix);
     filter = new AcceptAllFilter();
     selector = mock(SiteSelector.class);
   }

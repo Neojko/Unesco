@@ -1,17 +1,13 @@
 package domain.solution;
 
 import domain.constraints.ConstraintManager;
-import domain.constraints.ConstraintManager.ConstraintManagerBuilder;
-import domain.constraints.interfaces.Constraint;
 import domain.locations.TravelStartLocation;
 import domain.locations.sites.Site;
 import domain.locations.sites.Sites;
 import domain.locations.sites.Sites.SitesBuilder;
 import domain.matrix.TravelMatrix;
 import domain.objectives.ObjectiveManager;
-import domain.objectives.ObjectiveManager.ObjectiveManagerBuilder;
 import domain.objectives.components.ObjectiveValues;
-import domain.objectives.interfaces.Objective;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import optimisation.moves.UnvisitSiteMove;
@@ -102,14 +98,10 @@ public class Solution {
     private TravelStartLocation start;
     private SitesBuilder visitedSitesBuilder;
     private SitesBuilder unvisitedSitesBuilder;
-    private ConstraintManagerBuilder constraintManagerBuilder;
-    private ObjectiveManagerBuilder objectiveManagerBuilder;
 
     public SolutionBuilder() {
       visitedSitesBuilder = Sites.builder();
       unvisitedSitesBuilder = Sites.builder();
-      constraintManagerBuilder = ConstraintManager.builder();
-      objectiveManagerBuilder = ObjectiveManager.builder();
     }
 
     public SolutionBuilder start(final TravelStartLocation start) {
@@ -127,22 +119,17 @@ public class Solution {
       return this;
     }
 
-    public SolutionBuilder constraint(final Constraint constraint) {
-      constraintManagerBuilder = constraintManagerBuilder.constraint(constraint);
-      return this;
-    }
-
-    public SolutionBuilder objective(final Objective objective) {
-      objectiveManagerBuilder = objectiveManagerBuilder.objective(objective);
-      return this;
-    }
-
-    public ConstraintManager getConstraintManager() {
-      return constraintManagerBuilder.build();
-    }
-
-    public ObjectiveManager getObjectiveManager() {
-      return objectiveManagerBuilder.build();
+    public Solution build(
+        final ConstraintManager constraintManager,
+        final ObjectiveManager objectiveManager,
+        final TravelMatrix matrix) {
+      return new Solution(
+          start,
+          visitedSitesBuilder.build(),
+          unvisitedSitesBuilder.build(),
+          constraintManager,
+          objectiveManager,
+          matrix);
     }
 
     public Solution build(final TravelMatrix matrix) {
@@ -150,8 +137,8 @@ public class Solution {
           start,
           visitedSitesBuilder.build(),
           unvisitedSitesBuilder.build(),
-          constraintManagerBuilder.build(),
-          objectiveManagerBuilder.build(),
+          ConstraintManager.builder().build(),
+          ObjectiveManager.builder().build(),
           matrix);
     }
   }

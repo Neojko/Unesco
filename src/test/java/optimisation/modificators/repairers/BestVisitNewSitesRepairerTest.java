@@ -59,24 +59,21 @@ public class BestVisitNewSitesRepairerTest {
             .build();
     final var locations = Arrays.asList(start, interestingSite, lessInterestingSite);
     matrix = new TravelMatrix(locations);
-    final var solutionBuilder =
+    constraintManager = ConstraintManager.builder().build();
+    objectiveManager =
+        ObjectiveManager.builder().objective(new NumberOfVisitedEndangeredSitesObjective()).build();
+    solution =
         Solution.builder()
             .start(start)
             .unvisitedSite(interestingSite)
             .unvisitedSite(lessInterestingSite)
-            .objective(new NumberOfVisitedEndangeredSitesObjective());
-    constraintManager = solutionBuilder.getConstraintManager();
-    objectiveManager = solutionBuilder.getObjectiveManager();
-    solution = solutionBuilder.build(matrix);
+            .build(constraintManager, objectiveManager, matrix);
   }
 
   @Test
   public void test_repair_on_empty_solution() {
     final var emptySolution =
-        Solution.builder()
-            .start(start)
-            .objective(new NumberOfVisitedEndangeredSitesObjective())
-            .build(matrix);
+        Solution.builder().start(start).build(constraintManager, objectiveManager, matrix);
     final var repairer =
         BestVisitNewSitesRepairer.builder()
             .filter(new AcceptAllFilter())
