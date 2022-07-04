@@ -83,18 +83,20 @@ public class SolutionTest {
     matrix = new TravelMatrix(locations);
     final Objective visitNewSitesObjective = new NumberOfVisitedSitesObjective();
     final Objective visitEndangeredSitesObjective = new NumberOfVisitedEndangeredSitesObjective();
-    final var solutionBuilder =
+    constraintManager = ConstraintManager.builder().build();
+    objectiveManager =
+        ObjectiveManager.builder()
+            .objective(visitNewSitesObjective)
+            .objective(visitEndangeredSitesObjective)
+            .build();
+    solution =
         new SolutionBuilder()
             .start(start)
             .visitedSite(site1)
             .visitedSite(site2)
             .visitedSite(site3)
             .unvisitedSite(site4)
-            .objective(visitNewSitesObjective)
-            .objective(visitEndangeredSitesObjective);
-    constraintManager = solutionBuilder.getConstraintManager();
-    objectiveManager = solutionBuilder.getObjectiveManager();
-    solution = solutionBuilder.build(matrix);
+            .build(constraintManager, objectiveManager, matrix);
   }
 
   @Test

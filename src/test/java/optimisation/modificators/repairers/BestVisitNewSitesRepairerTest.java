@@ -27,7 +27,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class VisitNewSiteRepairerTest {
+public class BestVisitNewSitesRepairerTest {
 
   private TravelStartLocation start;
   private Site interestingSite, lessInterestingSite;
@@ -59,26 +59,23 @@ public class VisitNewSiteRepairerTest {
             .build();
     final var locations = Arrays.asList(start, interestingSite, lessInterestingSite);
     matrix = new TravelMatrix(locations);
-    final var solutionBuilder =
+    constraintManager = ConstraintManager.builder().build();
+    objectiveManager =
+        ObjectiveManager.builder().objective(new NumberOfVisitedEndangeredSitesObjective()).build();
+    solution =
         Solution.builder()
             .start(start)
             .unvisitedSite(interestingSite)
             .unvisitedSite(lessInterestingSite)
-            .objective(new NumberOfVisitedEndangeredSitesObjective());
-    constraintManager = solutionBuilder.getConstraintManager();
-    objectiveManager = solutionBuilder.getObjectiveManager();
-    solution = solutionBuilder.build(matrix);
+            .build(constraintManager, objectiveManager, matrix);
   }
 
   @Test
   public void test_repair_on_empty_solution() {
     final var emptySolution =
-        Solution.builder()
-            .start(start)
-            .objective(new NumberOfVisitedEndangeredSitesObjective())
-            .build(matrix);
+        Solution.builder().start(start).build(constraintManager, objectiveManager, matrix);
     final var repairer =
-        VisitNewSitesRepairer.builder()
+        BestVisitNewSitesRepairer.builder()
             .filter(new AcceptAllFilter())
             .stoppingCriterion(new NumberOfIterationsStoppingCriterion(1))
             .build();
@@ -101,7 +98,7 @@ public class VisitNewSiteRepairerTest {
       final boolean isStoppingCriterionMet) {
     final var stoppingCriterion = new NumberOfIterationsStoppingCriterion(maxIterations);
     final var repairer =
-        VisitNewSitesRepairer.builder()
+        BestVisitNewSitesRepairer.builder()
             .filter(new AcceptAllFilter())
             .stoppingCriterion(stoppingCriterion)
             .build();
