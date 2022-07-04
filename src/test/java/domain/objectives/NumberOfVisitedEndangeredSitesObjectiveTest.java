@@ -103,4 +103,27 @@ public class NumberOfVisitedEndangeredSitesObjectiveTest {
         objective.getVisitNewSiteObjectiveValueDelta(
             solution, notEndangeredSite, tripDurationDelta));
   }
+
+  @Test
+  public void test_get_objective_values_delta_when_unvisiting_endangered_site() {
+    final var solution =
+        new SolutionBuilder().start(start).visitedSite(endangeredSite).build(matrix);
+    final var expectedResult =
+        ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(-1L).build();
+    assertEquals(
+        expectedResult,
+        objective.getUnvisitSiteObjectiveValueDelta(solution, endangeredSite, tripDurationDelta));
+  }
+
+  @Test
+  public void test_get_objective_values_delta_when_unvisiting_not_endangered_site() {
+    final var solution =
+        new SolutionBuilder().start(start).visitedSite(notEndangeredSite).build(matrix);
+    final var expectedResult =
+        ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(0L).build();
+    assertEquals(
+        expectedResult,
+        objective.getUnvisitSiteObjectiveValueDelta(
+            solution, notEndangeredSite, tripDurationDelta));
+  }
 }

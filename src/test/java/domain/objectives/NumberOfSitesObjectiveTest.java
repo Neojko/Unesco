@@ -78,4 +78,15 @@ public class NumberOfSitesObjectiveTest {
         expectedResult,
         objective.getVisitNewSiteObjectiveValueDelta(solution, site1, tripDurationDelta));
   }
+
+  @Test
+  public void test_get_objective_values_delta_when_unvisiting_site() {
+    final var solution = new SolutionBuilder().start(start).visitedSite(site1).build(matrix);
+    final var tripDurationDelta = -1L;
+    final var expectedResult =
+        ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(-1L).build();
+    assertEquals(
+        expectedResult,
+        objective.getUnvisitSiteObjectiveValueDelta(solution, site1, tripDurationDelta));
+  }
 }

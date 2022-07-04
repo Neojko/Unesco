@@ -151,4 +151,48 @@ public class NumberOfVisitedCountriesObjectiveTest {
         objective.getVisitNewSiteObjectiveValueDelta(
             solution, afghanAlgerianAndEnglishSite, tripDurationDelta));
   }
+
+  @Test
+  public void get_objectives_value_delta_when_removing_only_site_that_visits_two_countries() {
+    final var solution =
+        new SolutionBuilder().start(start).visitedSite(afghanAndAlgerianSite).build(matrix);
+    final var expectedResult =
+        ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(-2L).build();
+    assertEquals(
+        expectedResult,
+        objective.getUnvisitSiteObjectiveValueDelta(
+            solution, afghanAndAlgerianSite, tripDurationDelta));
+  }
+
+  @Test
+  public void get_objectives_value_delta_when_removing_site_such_that_site_countries_are_still_visited() {
+    final var solution =
+        new SolutionBuilder()
+            .start(start)
+            .visitedSite(afghanAndAlgerianSite)
+            .visitedSite(afghanSite)
+            .build(matrix);
+    final var expectedResult =
+        ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(0L).build();
+    assertEquals(
+        expectedResult,
+        objective.getUnvisitSiteObjectiveValueDelta(solution, afghanSite, tripDurationDelta));
+  }
+
+  @Test
+  public void
+  get_objectives_value_delta_when_removing_sites_with_some_countries_that_only_it_visits() {
+    final var solution =
+        new SolutionBuilder()
+            .start(start)
+            .visitedSite(afghanAndAlgerianSite)
+            .visitedSite(afghanAlgerianAndEnglishSite)
+            .build(matrix);
+    final var expectedResult =
+        ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(-1L).build();
+    assertEquals(
+        expectedResult,
+        objective.getUnvisitSiteObjectiveValueDelta(
+            solution, afghanAlgerianAndEnglishSite, tripDurationDelta));
+  }
 }
