@@ -4,11 +4,13 @@ import domain.locations.sites.Site;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
 import domain.objectives.interfaces.Objective;
+import domain.objectives.interfaces.UnvisitSiteObjective;
 import domain.objectives.interfaces.VisitNewSiteObjective;
 import domain.solution.Solution;
 import lombok.var;
 
-public class NumberOfVisitedCountriesObjective implements Objective, VisitNewSiteObjective {
+public class NumberOfVisitedCountriesObjective
+    implements Objective, VisitNewSiteObjective, UnvisitSiteObjective {
 
   private final ObjectiveSense sense;
 
@@ -37,5 +39,16 @@ public class NumberOfVisitedCountriesObjective implements Objective, VisitNewSit
             .filter(country -> !solution.getVisitedSites().containsCountry(country))
             .count();
     return ObjectiveValue.builder().sense(sense).value(value).build();
+  }
+
+  @Override
+  public ObjectiveValue getUnvisitSiteObjectiveValueDelta(
+      final Solution solution, final Site site, final long tripDurationDelta) {
+    final var sitesPerCountry = solution.getVisitedSites().getSitesPerCountry();
+    final var value =
+        site.getCountries().stream()
+            .filter(country -> sitesPerCountry.get(country).size() == 1)
+            .count();
+    return ObjectiveValue.builder().sense(sense).value(-value).build();
   }
 }

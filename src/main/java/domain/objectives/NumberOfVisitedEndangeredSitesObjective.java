@@ -4,11 +4,13 @@ import domain.locations.sites.Site;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.ObjectiveValue;
 import domain.objectives.interfaces.Objective;
+import domain.objectives.interfaces.UnvisitSiteObjective;
 import domain.objectives.interfaces.VisitNewSiteObjective;
 import domain.solution.Solution;
 import lombok.var;
 
-public class NumberOfVisitedEndangeredSitesObjective implements Objective, VisitNewSiteObjective {
+public class NumberOfVisitedEndangeredSitesObjective
+    implements Objective, VisitNewSiteObjective, UnvisitSiteObjective {
 
   private final ObjectiveSense sense;
 
@@ -32,5 +34,11 @@ public class NumberOfVisitedEndangeredSitesObjective implements Objective, Visit
   public ObjectiveValue getVisitNewSiteObjectiveValueDelta(
       final Solution solution, final Site site, final long tripDurationDelta) {
     return ObjectiveValue.builder().sense(sense).value(site.isEndangered() ? 1L : 0L).build();
+  }
+
+  @Override
+  public ObjectiveValue getUnvisitSiteObjectiveValueDelta(
+      final Solution solution, final Site site, final long tripDurationDelta) {
+    return ObjectiveValue.builder().sense(sense).value(site.isEndangered() ? -1L : 0L).build();
   }
 }

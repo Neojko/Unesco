@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
 
 import domain.objectives.interfaces.Objective;
+import domain.objectives.interfaces.UnvisitSiteObjective;
 import domain.objectives.interfaces.VisitNewSiteObjective;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,7 @@ public class ObjectiveHolderTest {
   @BeforeEach
   public void setUp() {
     objective1 = mock(Objective.class, withSettings().extraInterfaces(VisitNewSiteObjective.class));
-    objective2 = mock(Objective.class);
+    objective2 = mock(Objective.class, withSettings().extraInterfaces(UnvisitSiteObjective.class));
     objectiveHolder = ObjectiveHolder.builder().objective(objective1).objective(objective2).build();
   }
 
@@ -34,5 +35,9 @@ public class ObjectiveHolderTest {
     final var visitNewSiteObjectives = objectiveHolder.getVisitNewSiteObjectives();
     assertEquals(1, visitNewSiteObjectives.size());
     assertTrue(visitNewSiteObjectives.contains((VisitNewSiteObjective) objective1));
+    // Unvisit site objectives
+    final var unvisitSiteObjectives = objectiveHolder.getUnvisitSiteObjectives();
+    assertEquals(1, unvisitSiteObjectives.size());
+    assertTrue(unvisitSiteObjectives.contains((UnvisitSiteObjective) objective2));
   }
 }

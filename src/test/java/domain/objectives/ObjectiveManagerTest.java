@@ -11,6 +11,7 @@ import domain.objectives.components.ObjectiveRanking;
 import domain.objectives.components.ObjectiveValue;
 import domain.objectives.components.ObjectiveValues;
 import domain.objectives.interfaces.Objective;
+import domain.objectives.interfaces.UnvisitSiteObjective;
 import domain.objectives.interfaces.VisitNewSiteObjective;
 import domain.solution.Solution;
 import lombok.var;
@@ -25,7 +26,7 @@ public class ObjectiveManagerTest {
   @BeforeEach
   public void setUp() {
     objective1 = mock(Objective.class, withSettings().extraInterfaces(VisitNewSiteObjective.class));
-    objective2 = mock(Objective.class);
+    objective2 = mock(Objective.class, withSettings().extraInterfaces(UnvisitSiteObjective.class));
     objectiveManager =
         ObjectiveManager.builder().objective(objective1).objective(objective2).build();
   }
@@ -74,6 +75,27 @@ public class ObjectiveManagerTest {
             .build();
     final var result =
         objectiveManager.computeVisitNewSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
+    assertEquals(expectedObjectiveValues, result);
+  }
+
+  // objective2 is a VisitNewSiteObjective (not objective1)
+  @Test
+  public void test_compute_unvisit_site_objective_values_delta() {
+    final var solution = mock(Solution.class);
+    final var site = mock(Site.class);
+    final var objective2AsUnvisitSiteObjective = (UnvisitSiteObjective) objective2;
+    final var objectiveValue2 = ObjectiveValue.WORST_MAX_OBJECTIVE_VALUE;
+    final long tripDurationDelta = 1L;
+    when(objective2AsUnvisitSiteObjective.getUnvisitSiteObjectiveValueDelta(
+            solution, site, tripDurationDelta))
+        .thenReturn(objectiveValue2);
+    final var expectedObjectiveValues =
+        ObjectiveValues.builder()
+            .ranking(objectiveManager.getObjectiveRanking())
+            .value(objective2, objectiveValue2)
+            .build();
+    final var result =
+        objectiveManager.computeUnvisitSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
     assertEquals(expectedObjectiveValues, result);
   }
 }

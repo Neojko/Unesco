@@ -41,7 +41,7 @@ public class SolutionTripDurationComputerTest {
   }
 
   @Test
-  public void test_compute_solution_trip_duration() {
+  public void test_compute_trip_duration() {
     final var expectedResult =
         SolutionTripDurationComputer.timePerSite * 2
             + matrix.time(start, site1)
@@ -51,7 +51,7 @@ public class SolutionTripDurationComputerTest {
         expectedResult, SolutionTripDurationComputer.computeTripDuration(solution, matrix));
   }
 
-  private static Stream<Arguments> test_can_visit_new_site_when_solution_is_not_empty() {
+  private static Stream<Arguments> test_visit_new_site_when_solution_is_not_empty() {
     return Stream.of(
         Arguments.of(SitePosition.START),
         Arguments.of(SitePosition.BETWEEN_TWO_SITES),
@@ -60,16 +60,34 @@ public class SolutionTripDurationComputerTest {
 
   @ParameterizedTest
   @MethodSource
-  public void test_can_visit_new_site_when_solution_is_not_empty(final SitePosition sitePosition) {
-    final long a = getTripDurationDelta(sitePosition);
-
+  public void test_visit_new_site_when_solution_is_not_empty(final SitePosition sitePosition) {
     assertEquals(
-        getTripDurationDelta(sitePosition),
+        getTripDurationDeltaIfVisit(sitePosition),
         SolutionTripDurationComputer.computeTripDurationDeltaToVisitNewSite(
-            solution, site3, getPosition(sitePosition), matrix));
+            solution, site3, getPositionToInsert(sitePosition), matrix));
   }
 
-  private int getPosition(final SitePosition sitePosition) {
+  private static Stream<Arguments> test_unvisit_site_when_solution_is_not_empty() {
+    return Stream.of(Arguments.of(0), Arguments.of(1), Arguments.of(2));
+  }
+
+  @ParameterizedTest
+  @MethodSource
+  public void test_unvisit_site_when_solution_is_not_empty(final int sitePosition) {
+    final var solution =
+        Solution.builder()
+            .start(start)
+            .visitedSite(site1)
+            .visitedSite(site2)
+            .visitedSite(site3)
+            .build(matrix);
+    final var site = solution.getVisitedSites().getSites().get(sitePosition);
+    assertEquals(
+        getTripDurationDeltaIfUnvisit(sitePosition),
+        SolutionTripDurationComputer.computeTripDurationDeltaToUnvisitSite(solution, site, matrix));
+  }
+
+  private int getPositionToInsert(final SitePosition sitePosition) {
     switch (sitePosition) {
       case START:
         return 0;
@@ -80,7 +98,8 @@ public class SolutionTripDurationComputerTest {
     }
   }
 
-  private long getTripDurationDelta(final SitePosition sitePosition) {
+  // Solution is start -> site1 -> site2 -> start
+  private long getTripDurationDeltaIfVisit(final SitePosition sitePosition) {
     switch (sitePosition) {
       case START:
         return matrix.time(start, site3)
@@ -97,6 +116,27 @@ public class SolutionTripDurationComputerTest {
             + SolutionTripDurationComputer.timePerSite
             + matrix.time(site3, start)
             - matrix.time(site2, start);
+    }
+  }
+
+  // Solution is start -> site1 -> site2 -> site3 -> start
+  private long getTripDurationDeltaIfUnvisit(final int sitePosition) {
+    switch (sitePosition) {
+      case 0:
+        return matrix.time(start, site2)
+            - matrix.time(start, site1)
+            - SolutionTripDurationComputer.timePerSite
+            - matrix.time(site1, site2);
+      case 1:
+        return matrix.time(site1, site3)
+            - matrix.time(site1, site2)
+            - SolutionTripDurationComputer.timePerSite
+            - matrix.time(site2, site3);
+      default: // 2
+        return matrix.time(site2, start)
+            - matrix.time(site2, site3)
+            - SolutionTripDurationComputer.timePerSite
+            - matrix.time(site3, start);
     }
   }
 

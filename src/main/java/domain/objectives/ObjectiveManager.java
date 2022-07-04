@@ -50,6 +50,17 @@ public class ObjectiveManager {
     return objectiveValues;
   }
 
+  public ObjectiveValues computeUnvisitSiteObjectiveValuesDelta(
+      final Solution solution, final Site site, final long tripDurationDelta) {
+    final var objectiveValues = ObjectiveValues.builder().ranking(objectiveRanking).build();
+    for (final var objective : objectiveHolder.getUnvisitSiteObjectives()) {
+      objectiveValues.set(
+          (Objective) objective,
+          objective.getUnvisitSiteObjectiveValueDelta(solution, site, tripDurationDelta));
+    }
+    return objectiveValues;
+  }
+
   public static class ObjectiveManagerBuilder {
     private ObjectiveHolderBuilder objectiveHolderBuilder;
     private ObjectiveRanking.ObjectiveRankingBuilder objectiveRankingBuilder;
