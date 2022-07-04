@@ -121,4 +121,36 @@ public class SitesTest {
     sites.removeSite(frenchCulturalSite);
     assertFalse(sites.containsCountry(france));
   }
+
+  @Test
+  public void test_add_cultural_site() {
+    final var sites = Sites.builder().build();
+    final var oldValue = sites.getNumberOfCulturalSites();
+    sites.addSite(frenchCulturalSite);
+    assertEquals(oldValue + 1, sites.getNumberOfCulturalSites());
+  }
+
+  @Test
+  public void test_add_natural_site() {
+    final var sites = Sites.builder().build();
+    final var oldValue = sites.getNumberOfNaturalSites();
+    sites.addSite(englishNaturalSite);
+    assertEquals(oldValue + 1, sites.getNumberOfNaturalSites());
+  }
+
+  @Test
+  public void test_remove_cultural_site() {
+    final var sites = Sites.builder().site(frenchCulturalSite).build();
+    final var oldValue = sites.getNumberOfCulturalSites();
+    sites.removeSite(frenchCulturalSite);
+    assertEquals(oldValue - 1, sites.getNumberOfCulturalSites());
+  }
+
+  @Test
+  public void test_remove_natural_site() {
+    final var sites = Sites.builder().site(englishNaturalSite).build();
+    final var oldValue = sites.getNumberOfNaturalSites();
+    sites.removeSite(englishNaturalSite);
+    assertEquals(oldValue - 1, sites.getNumberOfNaturalSites());
+  }
 }

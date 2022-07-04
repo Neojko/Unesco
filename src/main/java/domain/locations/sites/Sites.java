@@ -47,12 +47,27 @@ public class Sites {
   public void addSite(final Site site, final int position) {
     sites.add(position, site);
     updateSitesPerCountryWhenAddingSite(site);
-    if (site.isCultural()) {
-      numberOfCulturalSites++;
-    }
-    if (site.isNatural()) {
-      numberOfNaturalSites++;
-    }
+    updateNumberOfCulturalAndNaturalSitesWhenAddingSite(site);
+  }
+
+  public void addSite(final Site site) {
+    sites.add(site);
+    updateSitesPerCountryWhenAddingSite(site);
+    updateNumberOfCulturalAndNaturalSitesWhenAddingSite(site);
+  }
+
+  public void removeSite(final Site site) {
+    sites.remove(site);
+    updateSitesPerCountryWhenRemovingSite(site);
+    updateNumberOfCulturalAndNaturalSitesWhenRemovingSite(site);
+  }
+
+  public Sites copy() {
+    return new Sites(
+        new ArrayList<>(this.sites),
+        new HashMap<>(this.sitesPerCountry),
+        numberOfCulturalSites,
+        numberOfNaturalSites);
   }
 
   private void updateSitesPerCountryWhenAddingSite(final Site site) {
@@ -65,9 +80,7 @@ public class Sites {
     }
   }
 
-  public void removeSite(final Site site) {
-    sites.remove(site);
-    updateSitesPerCountryWhenRemovingSite(site);
+  private void updateNumberOfCulturalAndNaturalSitesWhenAddingSite(final Site site) {
     if (site.isCultural()) {
       numberOfCulturalSites++;
     }
@@ -86,12 +99,13 @@ public class Sites {
     }
   }
 
-  public Sites copy() {
-    return new Sites(
-        new ArrayList<>(this.sites),
-        new HashMap<>(this.sitesPerCountry),
-        numberOfCulturalSites,
-        numberOfNaturalSites);
+  private void updateNumberOfCulturalAndNaturalSitesWhenRemovingSite(final Site site) {
+    if (site.isCultural()) {
+      numberOfCulturalSites--;
+    }
+    if (site.isNatural()) {
+      numberOfNaturalSites--;
+    }
   }
 
   public static class SitesBuilder {
