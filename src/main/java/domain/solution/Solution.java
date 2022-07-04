@@ -14,6 +14,7 @@ import domain.objectives.components.ObjectiveValues;
 import domain.objectives.interfaces.Objective;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import optimisation.moves.UnvisitSiteMove;
 import optimisation.moves.VisitNewSiteMove;
 
 @EqualsAndHashCode
@@ -86,6 +87,13 @@ public class Solution {
   public void apply(final VisitNewSiteMove move) {
     visitedSites.addSite(move.getSite(), move.getPosition());
     unvisitedSites.removeSite(move.getSite());
+    objectiveValues.add(move.getObjectiveValuesDelta());
+    tripDurationinSeconds += move.getTripDurationDelta();
+  }
+
+  public void apply(final UnvisitSiteMove move) {
+    visitedSites.removeSite(move.getSite());
+    unvisitedSites.addSite(move.getSite());
     objectiveValues.add(move.getObjectiveValuesDelta());
     tripDurationinSeconds += move.getTripDurationDelta();
   }

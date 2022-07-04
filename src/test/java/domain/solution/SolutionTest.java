@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import lombok.var;
+import optimisation.moves.UnvisitSiteMove;
 import optimisation.moves.VisitNewSiteMove;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -203,7 +204,21 @@ public class SolutionTest {
     assertEquals(
         oldTripDuration + move.getTripDurationDelta(), solution.getTripDurationinSeconds());
     oldObjectiveValues.add(move.getObjectiveValuesDelta());
-    ;
+    assertEquals(oldObjectiveValues, solution.getObjectiveValues());
+  }
+
+  @Test
+  public void test_apply_unvisit_site_move() {
+    final var move = new UnvisitSiteMove(solution, site1, matrix, objectiveManager);
+    assertTrue(move.isFeasible());
+    final var oldTripDuration = solution.getTripDurationinSeconds();
+    final var oldObjectiveValues = solution.getObjectiveValues().copy();
+    solution.apply(move);
+    assertFalse(solution.getVisitedSites().containsSite(site1));
+    assertTrue(solution.getUnvisitedSites().containsSite(site1));
+    assertEquals(
+        oldTripDuration + move.getTripDurationDelta(), solution.getTripDurationinSeconds());
+    oldObjectiveValues.add(move.getObjectiveValuesDelta());
     assertEquals(oldObjectiveValues, solution.getObjectiveValues());
   }
 }
