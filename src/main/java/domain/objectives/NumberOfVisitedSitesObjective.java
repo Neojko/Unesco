@@ -8,8 +8,8 @@ import domain.objectives.interfaces.UnvisitSiteObjective;
 import domain.objectives.interfaces.VisitNewSiteObjective;
 import domain.solution.Solution;
 
-public class NumberOfVisitedSitesObjective implements
-    Objective, VisitNewSiteObjective, UnvisitSiteObjective {
+public class NumberOfVisitedSitesObjective
+    implements Objective, VisitNewSiteObjective, UnvisitSiteObjective {
 
   private final ObjectiveSense sense;
 

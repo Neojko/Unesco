@@ -165,7 +165,8 @@ public class NumberOfVisitedCountriesObjectiveTest {
   }
 
   @Test
-  public void get_objectives_value_delta_when_removing_site_such_that_site_countries_are_still_visited() {
+  public void
+      get_objectives_value_delta_when_removing_site_such_that_site_countries_are_still_visited() {
     final var solution =
         new SolutionBuilder()
             .start(start)
@@ -181,7 +182,7 @@ public class NumberOfVisitedCountriesObjectiveTest {
 
   @Test
   public void
-  get_objectives_value_delta_when_removing_sites_with_some_countries_that_only_it_visits() {
+      get_objectives_value_delta_when_removing_sites_with_some_countries_that_only_it_visits() {
     final var solution =
         new SolutionBuilder()
             .start(start)

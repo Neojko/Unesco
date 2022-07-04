@@ -38,9 +38,9 @@ public class SolutionTripDurationComputer {
 
   public static long computeTripDurationDeltaToUnvisitSite(
       final Solution solution, final Site site, final TravelMatrix matrix) {
-    final var position = solution.getVisitedSites().getSites().indexOf(site);
-    final var previous = getPreviousLocation(solution, position);
-    final var next = getNextLocation(solution, position);
+    final int position = solution.getVisitedSites().getSites().indexOf(site);
+    final Location previous = getPreviousLocation(solution, position);
+    final Location next = getNextLocation(solution, position); // mvn clean install fails if var
     return matrix.time(previous, next)
         - matrix.time(previous, site)
         - timePerSite
@@ -55,10 +55,10 @@ public class SolutionTripDurationComputer {
   }
 
   private static Location getNextLocation(final Solution solution, final int position) {
-    if (position == solution.getVisitedSites().getSites().size()-1) {
+    if (position == solution.getVisitedSites().getSites().size() - 1) {
       return solution.getStart();
     }
-    return solution.getVisitedSites().getSites().get(position+1);
+    return solution.getVisitedSites().getSites().get(position + 1);
   }
 
   private static Location getNextLocationIfInserting(final Solution solution, final int position) {

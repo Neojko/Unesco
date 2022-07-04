@@ -87,7 +87,7 @@ public class ObjectiveManagerTest {
     final var objectiveValue2 = ObjectiveValue.WORST_MAX_OBJECTIVE_VALUE;
     final long tripDurationDelta = 1L;
     when(objective2AsUnvisitSiteObjective.getUnvisitSiteObjectiveValueDelta(
-        solution, site, tripDurationDelta))
+            solution, site, tripDurationDelta))
         .thenReturn(objectiveValue2);
     final var expectedObjectiveValues =
         ObjectiveValues.builder()

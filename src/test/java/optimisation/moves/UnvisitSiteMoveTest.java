@@ -39,7 +39,7 @@ public class UnvisitSiteMoveTest {
           .thenReturn(tripDurationDelta);
       final ObjectiveManager objectiveManager = mock(ObjectiveManager.class);
       when(objectiveManager.computeUnvisitSiteObjectiveValuesDelta(
-          solution, site, tripDurationDelta))
+              solution, site, tripDurationDelta))
           .thenReturn(objectiveValues);
       move = new UnvisitSiteMove(solution, site, matrix, objectiveManager);
     }
@@ -54,5 +54,4 @@ public class UnvisitSiteMoveTest {
   public void test_get_objective_values_delta() {
     assertEquals(objectiveValues, move.getObjectiveValuesDelta());
   }
-
 }

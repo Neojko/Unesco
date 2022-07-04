@@ -14,8 +14,8 @@ import lombok.var;
  * exists as an Objective instead of as a Constraint in order to explore solutions that would not be
  * feasible if it was a Constraint.
  */
-public class SiteTypeParityObjective implements
-    Objective, VisitNewSiteObjective, UnvisitSiteObjective {
+public class SiteTypeParityObjective
+    implements Objective, VisitNewSiteObjective, UnvisitSiteObjective {
 
   private final ObjectiveSense sense;
 

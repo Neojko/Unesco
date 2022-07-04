@@ -84,8 +84,10 @@ public class SiteTypeParityObjectiveTest {
             .country(country)
             .type(Mixed)
             .build();
-    final var sites = new ArrayList<>(Arrays.asList
-        (culturalSite1, culturalSite2, naturalSite1, naturalSite2, mixedSite1, mixedSite2));
+    final var sites =
+        new ArrayList<>(
+            Arrays.asList(
+                culturalSite1, culturalSite2, naturalSite1, naturalSite2, mixedSite1, mixedSite2));
     start = TravelStartLocation.builder().coordinates(coordinates).build();
     matrix = new TravelMatrix(sites, start);
   }
@@ -112,8 +114,7 @@ public class SiteTypeParityObjectiveTest {
         Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.MIXED_1), 1),
         Arguments.of(Arrays.asList(SiteName.NATURAL_1, SiteName.NATURAL_2), 2),
         Arguments.of(Arrays.asList(SiteName.NATURAL_1, SiteName.MIXED_1), 1),
-        Arguments.of(Arrays.asList(SiteName.MIXED_1, SiteName.MIXED_2), 0)
-    );
+        Arguments.of(Arrays.asList(SiteName.MIXED_1, SiteName.MIXED_2), 0));
   }
 
   @ParameterizedTest
@@ -128,8 +129,7 @@ public class SiteTypeParityObjectiveTest {
     assertEquals(expectedResult, objective.computeObjectiveValue(solution).getValue());
   }
 
-  private static Stream<Arguments>
-  test_get_objective_value_delta_when_visiting_new_site() {
+  private static Stream<Arguments> test_get_objective_value_delta_when_visiting_new_site() {
     return Stream.of(
         Arguments.of(Collections.singletonList(SiteName.CULTURAL_1), SiteName.CULTURAL_2, 1),
         Arguments.of(Collections.singletonList(SiteName.CULTURAL_1), SiteName.NATURAL_2, -1),
@@ -140,23 +140,21 @@ public class SiteTypeParityObjectiveTest {
         Arguments.of(Collections.singletonList(SiteName.MIXED_1), SiteName.CULTURAL_2, 1),
         Arguments.of(Collections.singletonList(SiteName.MIXED_1), SiteName.NATURAL_2, 1),
         Arguments.of(Collections.singletonList(SiteName.MIXED_1), SiteName.MIXED_2, 0),
-        Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.NATURAL_1), SiteName.CULTURAL_2, 1),
+        Arguments.of(
+            Arrays.asList(SiteName.CULTURAL_1, SiteName.NATURAL_1), SiteName.CULTURAL_2, 1),
         Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.MIXED_1), SiteName.CULTURAL_2, 1),
         Arguments.of(Arrays.asList(SiteName.NATURAL_1, SiteName.MIXED_1), SiteName.CULTURAL_2, -1),
         Arguments.of(Arrays.asList(SiteName.MIXED_1, SiteName.MIXED_2), SiteName.CULTURAL_2, 1),
         Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.NATURAL_1), SiteName.NATURAL_2, 1),
         Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.MIXED_1), SiteName.NATURAL_2, -1),
         Arguments.of(Arrays.asList(SiteName.NATURAL_1, SiteName.MIXED_1), SiteName.NATURAL_2, 1),
-        Arguments.of(Arrays.asList(SiteName.MIXED_1, SiteName.MIXED_2), SiteName.NATURAL_2, 1)
-    );
+        Arguments.of(Arrays.asList(SiteName.MIXED_1, SiteName.MIXED_2), SiteName.NATURAL_2, 1));
   }
 
   @ParameterizedTest
   @MethodSource
   public void test_get_objective_value_delta_when_visiting_new_site(
-      final List<SiteName> names,
-      final SiteName siteNameToVisit,
-      final int expectedResult) {
+      final List<SiteName> names, final SiteName siteNameToVisit, final int expectedResult) {
     var solutionBuilder = new SolutionBuilder().start(start);
     for (final var name : names) {
       solutionBuilder = solutionBuilder.visitedSite(getSite(name));
@@ -168,30 +166,28 @@ public class SiteTypeParityObjectiveTest {
         objective.getVisitNewSiteObjectiveValueDelta(solution, siteToVisit, 0L).getValue());
   }
 
-  private static Stream<Arguments>
-  test_get_objective_value_delta_when_unvisiting_site() {
+  private static Stream<Arguments> test_get_objective_value_delta_when_unvisiting_site() {
     return Stream.of(
         Arguments.of(Collections.singletonList(SiteName.CULTURAL_1), SiteName.CULTURAL_1, -1),
         Arguments.of(Collections.singletonList(SiteName.NATURAL_1), SiteName.NATURAL_1, -1),
         Arguments.of(Collections.singletonList(SiteName.MIXED_1), SiteName.MIXED_1, 0),
-        Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.CULTURAL_2), SiteName.CULTURAL_1, -1),
-        Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.NATURAL_1), SiteName.CULTURAL_1, 1),
+        Arguments.of(
+            Arrays.asList(SiteName.CULTURAL_1, SiteName.CULTURAL_2), SiteName.CULTURAL_1, -1),
+        Arguments.of(
+            Arrays.asList(SiteName.CULTURAL_1, SiteName.NATURAL_1), SiteName.CULTURAL_1, 1),
         Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.NATURAL_1), SiteName.NATURAL_1, 1),
         Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.MIXED_1), SiteName.CULTURAL_1, -1),
         Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.MIXED_1), SiteName.MIXED_1, 0),
         Arguments.of(Arrays.asList(SiteName.NATURAL_1, SiteName.NATURAL_2), SiteName.NATURAL_1, -1),
         Arguments.of(Arrays.asList(SiteName.NATURAL_1, SiteName.MIXED_1), SiteName.NATURAL_1, -1),
         Arguments.of(Arrays.asList(SiteName.NATURAL_1, SiteName.MIXED_1), SiteName.MIXED_1, 0),
-        Arguments.of(Arrays.asList(SiteName.MIXED_1, SiteName.MIXED_2), SiteName.MIXED_1, 0)
-    );
+        Arguments.of(Arrays.asList(SiteName.MIXED_1, SiteName.MIXED_2), SiteName.MIXED_1, 0));
   }
 
   @ParameterizedTest
   @MethodSource
   public void test_get_objective_value_delta_when_unvisiting_site(
-      final List<SiteName> names,
-      final SiteName siteNameToVisit,
-      final int expectedResult) {
+      final List<SiteName> names, final SiteName siteNameToVisit, final int expectedResult) {
     var solutionBuilder = new SolutionBuilder().start(start);
     for (final var name : names) {
       solutionBuilder = solutionBuilder.visitedSite(getSite(name));

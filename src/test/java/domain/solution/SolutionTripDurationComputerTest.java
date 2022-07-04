@@ -68,26 +68,23 @@ public class SolutionTripDurationComputerTest {
   }
 
   private static Stream<Arguments> test_unvisit_site_when_solution_is_not_empty() {
-    return Stream.of(
-        Arguments.of(0),
-        Arguments.of(1),
-        Arguments.of(2));
+    return Stream.of(Arguments.of(0), Arguments.of(1), Arguments.of(2));
   }
 
   @ParameterizedTest
   @MethodSource
   public void test_unvisit_site_when_solution_is_not_empty(final int sitePosition) {
-    final var solution = Solution.builder()
-        .start(start)
-        .visitedSite(site1)
-        .visitedSite(site2)
-        .visitedSite(site3)
-        .build(matrix);
+    final var solution =
+        Solution.builder()
+            .start(start)
+            .visitedSite(site1)
+            .visitedSite(site2)
+            .visitedSite(site3)
+            .build(matrix);
     final var site = solution.getVisitedSites().getSites().get(sitePosition);
     assertEquals(
         getTripDurationDeltaIfUnvisit(sitePosition),
-        SolutionTripDurationComputer.computeTripDurationDeltaToUnvisitSite(
-            solution, site, matrix));
+        SolutionTripDurationComputer.computeTripDurationDeltaToUnvisitSite(solution, site, matrix));
   }
 
   private int getPositionToInsert(final SitePosition sitePosition) {

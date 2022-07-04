@@ -11,17 +11,14 @@ import lombok.Getter;
 /**
  * UnvisitSiteMove is checking the Move attributes for unvisiting a site
  *
- *
- * We use a shortcut with isFeasible = true by nature because no currently implemented constraint
+ * <p>We use a shortcut with isFeasible = true by nature because no currently implemented constraint
  * would become not feasible if we unvisit a site from a solution.
  */
-
 @Getter
 public class UnvisitSiteMove implements Move {
 
   private final Solution solution;
   private final Site site;
-  private final boolean isFeasible = true; // see above description
   private final long tripDurationDelta;
   private final ObjectiveValues objectiveValuesDelta;
 
@@ -35,14 +32,13 @@ public class UnvisitSiteMove implements Move {
       final Solution solution,
       final Site site,
       final TravelMatrix matrix,
-      final ObjectiveManager objectiveManager
-  ) {
+      final ObjectiveManager objectiveManager) {
     this.solution = solution;
     this.site = site;
-    this.tripDurationDelta = SolutionTripDurationComputer
-        .computeTripDurationDeltaToUnvisitSite(solution, site, matrix);
-    this.objectiveValuesDelta = objectiveManager
-        .computeUnvisitSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
+    this.tripDurationDelta =
+        SolutionTripDurationComputer.computeTripDurationDeltaToUnvisitSite(solution, site, matrix);
+    this.objectiveValuesDelta =
+        objectiveManager.computeUnvisitSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
   }
 
   /**
@@ -55,13 +51,17 @@ public class UnvisitSiteMove implements Move {
       final Solution solution,
       final Site site,
       final long tripDurationDelta,
-      final ObjectiveManager objectiveManager
-  ) {
+      final ObjectiveManager objectiveManager) {
     this.solution = solution;
     this.site = site;
     this.tripDurationDelta = tripDurationDelta;
-    this.objectiveValuesDelta = objectiveManager
-        .computeUnvisitSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
+    this.objectiveValuesDelta =
+        objectiveManager.computeUnvisitSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
   }
 
+  // see class description
+  @Override
+  public boolean isFeasible() {
+    return true;
+  }
 }

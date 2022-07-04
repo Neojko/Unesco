@@ -9,8 +9,8 @@ import domain.objectives.interfaces.VisitNewSiteObjective;
 import domain.solution.Solution;
 import lombok.var;
 
-public class NumberOfVisitedEndangeredSitesObjective implements
-    Objective, VisitNewSiteObjective, UnvisitSiteObjective {
+public class NumberOfVisitedEndangeredSitesObjective
+    implements Objective, VisitNewSiteObjective, UnvisitSiteObjective {
 
   private final ObjectiveSense sense;
 

@@ -14,5 +14,4 @@ public interface UnvisitSiteObjective {
    */
   ObjectiveValue getUnvisitSiteObjectiveValueDelta(
       final Solution solution, final Site site, final long tripDurationDelta);
-
 }
