@@ -1,29 +1,30 @@
 package domain.objectives;
 
 import domain.locations.sites.Site;
+import domain.objectives.components.ObjectiveHolder;
+import domain.objectives.components.ObjectiveHolder.ObjectiveHolderBuilder;
+import domain.objectives.components.ObjectiveRanking;
 import domain.objectives.components.ObjectiveValues;
 import domain.objectives.interfaces.Objective;
-import domain.objectives.interfaces.VisitNewSiteObjective;
 import domain.solution.Solution;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import lombok.var;
 
 /**
- * This class contains all Objectives of the problem and is used to compute everything that is
- * related to the ObjectiveValues of a Solution.
+ * This class aims at computing the ObjectiveValues of a Solution and the ObjectiveValues delta of
+ * any kind of Move. It contains all relevant Objective objects as well as their ranking. It acts as
+ * a bridge between the Solution and its ObjectiveValues (that it computes).
  */
 @Getter
 public class ObjectiveManager {
 
-  private final List<Objective> objectives;
-  private final List<VisitNewSiteObjective> visitNewSiteObjectives;
+  private final ObjectiveHolder objectiveHolder;
+  private final ObjectiveRanking objectiveRanking;
 
   private ObjectiveManager(
-      final List<Objective> objectives, final List<VisitNewSiteObjective> visitNewSiteObjectives) {
-    this.objectives = objectives;
-    this.visitNewSiteObjectives = visitNewSiteObjectives;
+      final ObjectiveHolder objectiveHolder, final ObjectiveRanking objectiveRanking) {
+    this.objectiveHolder = objectiveHolder;
+    this.objectiveRanking = objectiveRanking;
   }
 
   public static ObjectiveManagerBuilder builder() {
@@ -31,8 +32,8 @@ public class ObjectiveManager {
   }
 
   public ObjectiveValues computeObjectiveValues(final Solution solution) {
-    final var objectiveValues = ObjectiveValues.builder().build();
-    for (final var objective : objectives) {
+    final var objectiveValues = ObjectiveValues.builder().ranking(objectiveRanking).build();
+    for (final var objective : objectiveHolder.getObjectives()) {
       objectiveValues.set(objective, objective.computeObjectiveValue(solution));
     }
     return objectiveValues;
@@ -40,8 +41,8 @@ public class ObjectiveManager {
 
   public ObjectiveValues computeVisitNewSiteObjectiveValuesDelta(
       final Solution solution, final Site site, final long tripDurationDelta) {
-    final var objectiveValues = ObjectiveValues.builder().build();
-    for (final var objective : visitNewSiteObjectives) {
+    final var objectiveValues = ObjectiveValues.builder().ranking(objectiveRanking).build();
+    for (final var objective : objectiveHolder.getVisitNewSiteObjectives()) {
       objectiveValues.set(
           (Objective) objective,
           objective.getVisitNewSiteObjectiveValueDelta(solution, site, tripDurationDelta));
@@ -50,24 +51,22 @@ public class ObjectiveManager {
   }
 
   public static class ObjectiveManagerBuilder {
-    private final List<Objective> objectives;
-    private final List<VisitNewSiteObjective> visitNewSiteObjectives;
+    private ObjectiveHolderBuilder objectiveHolderBuilder;
+    private ObjectiveRanking.ObjectiveRankingBuilder objectiveRankingBuilder;
 
     public ObjectiveManagerBuilder() {
-      objectives = new ArrayList<>();
-      visitNewSiteObjectives = new ArrayList<>();
+      objectiveHolderBuilder = ObjectiveHolder.builder();
+      objectiveRankingBuilder = ObjectiveRanking.builder();
     }
 
     public ObjectiveManagerBuilder objective(final Objective objective) {
-      objectives.add(objective);
-      if (objective instanceof VisitNewSiteObjective) {
-        visitNewSiteObjectives.add((VisitNewSiteObjective) objective);
-      }
+      objectiveHolderBuilder = objectiveHolderBuilder.objective(objective);
+      objectiveRankingBuilder = objectiveRankingBuilder.objective(objective);
       return this;
     }
 
     public ObjectiveManager build() {
-      return new ObjectiveManager(objectives, visitNewSiteObjectives);
+      return new ObjectiveManager(objectiveHolderBuilder.build(), objectiveRankingBuilder.build());
     }
   }
 }

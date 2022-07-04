@@ -1,19 +1,34 @@
 package domain.objectives.components;
 
+import domain.locations.sites.Site;
+import domain.objectives.components.ObjectiveHolder.ObjectiveHolderBuilder;
 import domain.objectives.interfaces.Objective;
+import domain.objectives.interfaces.VisitNewSiteObjective;
 import domain.solution.Solution;
+import java.util.HashMap;
 import java.util.Map;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.Singular;
 import lombok.var;
 
-@Builder
 @Getter
-public class WeightedSumObjective implements Objective {
+public class WeightedSumObjective implements Objective, VisitNewSiteObjective {
 
   private final ObjectiveSense sense;
-  @Singular private final Map<Objective, Long> weights;
+  private final ObjectiveHolder objectiveHolder;
+  private final Map<Objective, Long> weights;
+
+  private WeightedSumObjective(
+      final ObjectiveSense sense,
+      final ObjectiveHolder objectiveHolder,
+      final Map<Objective, Long> weights) {
+    this.sense = sense;
+    this.objectiveHolder = objectiveHolder;
+    this.weights = weights;
+  }
+
+  public static WeightedSumObjectiveBuilder builder() {
+    return new WeightedSumObjectiveBuilder();
+  }
 
   public long getWeight(final Objective objective) {
     return weights.get(objective);
@@ -34,5 +49,44 @@ public class WeightedSumObjective implements Objective {
           objectiveValue.sum(objective.computeObjectiveValue(solution).multiply(weight));
     }
     return objectiveValue;
+  }
+
+  @Override
+  public ObjectiveValue getVisitNewSiteObjectiveValueDelta(
+      final Solution solution, final Site site, final long tripDurationDelta) {
+    var result = getZeroObjectiveValue();
+    for (final var objective : objectiveHolder.getVisitNewSiteObjectives()) {
+      final var weight = weights.get((Objective) objective);
+      final var objectiveValue =
+          objective.getVisitNewSiteObjectiveValueDelta(solution, site, tripDurationDelta);
+      result = result.sum(objectiveValue.multiply(weight));
+    }
+    return result;
+  }
+
+  public static class WeightedSumObjectiveBuilder {
+    private ObjectiveSense sense;
+    private ObjectiveHolderBuilder objectiveHolderBuilder;
+    private final Map<Objective, Long> weights;
+
+    WeightedSumObjectiveBuilder() {
+      objectiveHolderBuilder = ObjectiveHolder.builder();
+      weights = new HashMap<>();
+    }
+
+    WeightedSumObjectiveBuilder sense(final ObjectiveSense sense) {
+      this.sense = sense;
+      return this;
+    }
+
+    WeightedSumObjectiveBuilder objective(final Objective objective, final long weight) {
+      objectiveHolderBuilder = objectiveHolderBuilder.objective(objective);
+      weights.put(objective, weight);
+      return this;
+    }
+
+    WeightedSumObjective build() {
+      return new WeightedSumObjective(sense, objectiveHolderBuilder.build(), weights);
+    }
   }
 }

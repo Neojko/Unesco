@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import domain.objectives.NumberOfVisitedCountriesObjective;
 import domain.objectives.NumberOfVisitedSitesObjective;
 import domain.objectives.interfaces.Objective;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,19 +21,18 @@ import org.junit.jupiter.params.provider.MethodSource;
 public class ObjectiveValuesTest {
 
   private Objective objective1, objective2;
-  private ObjectiveRanking objectiveRanking;
+  private List<Objective> objectives;
 
   @BeforeEach
   public void setUp() {
     objective1 = new NumberOfVisitedSitesObjective();
     objective2 = new NumberOfVisitedCountriesObjective();
-    objectiveRanking =
-        ObjectiveRanking.builder().objective(objective1).objective(objective2).build();
+    objectives = Arrays.asList(objective1, objective2);
   }
 
   @Test
   public void test_create_zero_objective_values() {
-    final var objectiveValues = ObjectiveValues.createZeroObjectiveValues(objectiveRanking);
+    final var objectiveValues = ObjectiveValues.createZeroObjectiveValues(objectives);
     assertEquals(2, objectiveValues.getValues().keySet().size());
     assertEquals(objective1.getZeroObjectiveValue(), objectiveValues.getValues().get(objective1));
     assertEquals(objective2.getZeroObjectiveValue(), objectiveValues.getValues().get(objective2));
@@ -39,7 +40,7 @@ public class ObjectiveValuesTest {
 
   @Test
   public void test_create_worst_objective_values() {
-    final var objectiveValues = ObjectiveValues.createWorstObjectiveValues(objectiveRanking);
+    final var objectiveValues = ObjectiveValues.createWorstObjectiveValues(objectives);
     assertEquals(2, objectiveValues.getValues().keySet().size());
     assertEquals(objective1.getWorstObjectiveValue(), objectiveValues.getValues().get(objective1));
     assertEquals(objective2.getWorstObjectiveValue(), objectiveValues.getValues().get(objective2));
@@ -118,7 +119,7 @@ public class ObjectiveValuesTest {
         .value(
             objective2,
             ObjectiveValue.builder().sense(ObjectiveSense.MAXIMIZE).value(value2).build())
-        .ranking(objectiveRanking)
+        .ranking(ObjectiveRanking.builder().objectives(objectives).build())
         .build();
   }
 }

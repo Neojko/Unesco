@@ -19,6 +19,17 @@ public class VisitNewSiteMove implements Move {
   private final boolean isFeasible;
   private final ObjectiveValues objectiveValuesDelta;
 
+  public static VisitNewSiteMove createUnfeasibleMove() {
+    return new VisitNewSiteMove();
+  }
+
+  /**
+   * Main constructor -- we need to compute the value of tripDurationDelta
+   *
+   * @param solution: solution to simulate the move on
+   * @param site: site to visit
+   * @param position: position to insert site
+   */
   public VisitNewSiteMove(
       final Solution solution,
       final Site site,
@@ -35,5 +46,38 @@ public class VisitNewSiteMove implements Move {
     isFeasible = constraintManager.canVisitNewSite(solution, site, position, tripDurationDelta);
     objectiveValuesDelta =
         objectiveManager.computeVisitNewSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
+  }
+
+  /**
+   * Main constructor -- the value of tripDurationDelta is known
+   *
+   * @param solution: solution to simulate the move on
+   * @param site: site to visit
+   * @param position: position to insert site
+   */
+  public VisitNewSiteMove(
+      final Solution solution,
+      final Site site,
+      final int position,
+      final long tripDurationDelta,
+      final ConstraintManager constraintManager,
+      final ObjectiveManager objectiveManager) {
+    this.solution = solution;
+    this.site = site;
+    this.position = position;
+    this.tripDurationDelta = tripDurationDelta;
+    isFeasible = constraintManager.canVisitNewSite(solution, site, position, tripDurationDelta);
+    objectiveValuesDelta =
+        objectiveManager.computeVisitNewSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
+  }
+
+  /** Creates unfeasible move -- no field should never be accessed apart from isFeasible */
+  private VisitNewSiteMove() {
+    this.solution = null;
+    this.site = null;
+    this.position = 0;
+    this.tripDurationDelta = 0;
+    this.isFeasible = false;
+    this.objectiveValuesDelta = null;
   }
 }
