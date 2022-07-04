@@ -27,7 +27,7 @@ public class WeightedSumObjective implements Objective, VisitNewSiteObjective {
     this.weights = weights;
   }
 
-  public static ObjectiveHolderBuilder builder() { return new ObjectiveHolderBuilder(); }
+  public static WeightedSumObjectiveBuilder builder() { return new WeightedSumObjectiveBuilder(); }
 
   public long getWeight(final Objective objective) {
     return weights.get(objective);
@@ -53,16 +53,14 @@ public class WeightedSumObjective implements Objective, VisitNewSiteObjective {
   @Override
   public ObjectiveValue getVisitNewSiteObjectiveValueDelta(
       final Solution solution, final Site site, final long tripDurationDelta) {
-    var objectiveValue = getZeroObjectiveValue();
-    for (final var entry : weights.entrySet()) {
-      final var objective = entry.getKey();
-      if (objective instanceof VisitNewSiteObjective) {
-        final var weight = entry.getValue();
-        objectiveValue =
-            objectiveValue.sum(objective.computeObjectiveValue(solution).multiply(weight));
-      }
+    var result = getZeroObjectiveValue();
+    for (final var objective : objectiveHolder.getVisitNewSiteObjectives()) {
+      final var weight = weights.get((Objective) objective);
+      final var objectiveValue = objective
+          .getVisitNewSiteObjectiveValueDelta(solution, site, tripDurationDelta);
+      result = result.sum(objectiveValue.multiply(weight));
     }
-    return objectiveValue;
+    return result;
   }
 
   public static class WeightedSumObjectiveBuilder {

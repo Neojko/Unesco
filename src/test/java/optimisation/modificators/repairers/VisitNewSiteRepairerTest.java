@@ -21,7 +21,6 @@ import java.util.stream.Stream;
 import lombok.var;
 import optimisation.choosers.filters.AcceptAllFilter;
 import optimisation.criteria.stopping.NumberOfIterationsStoppingCriterion;
-import optimisation.criteria.stopping.StoppingCriterion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,8 +35,6 @@ public class VisitNewSiteRepairerTest {
   private Solution solution;
   private ConstraintManager constraintManager;
   private ObjectiveManager objectiveManager;
-  private StoppingCriterion stoppingCriterion;
-  private VisitNewSitesRepairer repairer;
 
   @BeforeEach
   public void setUp() {
