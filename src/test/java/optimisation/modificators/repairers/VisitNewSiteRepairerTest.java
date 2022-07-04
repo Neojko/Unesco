@@ -39,28 +39,32 @@ public class VisitNewSiteRepairerTest {
   @BeforeEach
   public void setUp() {
     final var country = new Country("France");
-    start = TravelStartLocation.builder().coordinates(0,0).build();
-    interestingSite = Site.builder()
-        .locationID(1)
-        .name("interestingSite")
-        .country(country)
-        .coordinates(new Coordinates(0, 1))
-        .type(SiteType.Natural)
-        .isEndangered()
-        .build();
-    lessInterestingSite = Site.builder()
-        .locationID(2)
-        .name("lessInterestingSite")
-        .country(country)
-        .coordinates(new Coordinates(0, 10))
-        .type(SiteType.Natural)
-        .build();
+    start = TravelStartLocation.builder().coordinates(0, 0).build();
+    interestingSite =
+        Site.builder()
+            .locationID(1)
+            .name("interestingSite")
+            .country(country)
+            .coordinates(new Coordinates(0, 1))
+            .type(SiteType.Natural)
+            .isEndangered()
+            .build();
+    lessInterestingSite =
+        Site.builder()
+            .locationID(2)
+            .name("lessInterestingSite")
+            .country(country)
+            .coordinates(new Coordinates(0, 10))
+            .type(SiteType.Natural)
+            .build();
     final var locations = Arrays.asList(start, interestingSite, lessInterestingSite);
     matrix = new TravelMatrix(locations);
-    final var solutionBuilder = Solution.builder()
-        .start(start)
-        .unvisitedSite(interestingSite).unvisitedSite(lessInterestingSite)
-        .objective(new NumberOfVisitedEndangeredSitesObjective());
+    final var solutionBuilder =
+        Solution.builder()
+            .start(start)
+            .unvisitedSite(interestingSite)
+            .unvisitedSite(lessInterestingSite)
+            .objective(new NumberOfVisitedEndangeredSitesObjective());
     constraintManager = solutionBuilder.getConstraintManager();
     objectiveManager = solutionBuilder.getObjectiveManager();
     solution = solutionBuilder.build(matrix);
@@ -68,14 +72,16 @@ public class VisitNewSiteRepairerTest {
 
   @Test
   public void test_repair_on_empty_solution() {
-    final var emptySolution = Solution.builder()
-        .start(start)
-        .objective(new NumberOfVisitedEndangeredSitesObjective())
-        .build(matrix);
-    final var repairer = VisitNewSitesRepairer.builder()
-        .filter(new AcceptAllFilter())
-        .stoppingCriterion(new NumberOfIterationsStoppingCriterion(1))
-        .build();
+    final var emptySolution =
+        Solution.builder()
+            .start(start)
+            .objective(new NumberOfVisitedEndangeredSitesObjective())
+            .build(matrix);
+    final var repairer =
+        VisitNewSitesRepairer.builder()
+            .filter(new AcceptAllFilter())
+            .stoppingCriterion(new NumberOfIterationsStoppingCriterion(1))
+            .build();
     repairer.repair(constraintManager, objectiveManager, matrix, emptySolution);
     assertTrue(emptySolution.getVisitedSites().getSites().isEmpty());
   }
@@ -84,8 +90,7 @@ public class VisitNewSiteRepairerTest {
     return Stream.of(
         Arguments.of(1, Collections.singletonList(SiteName.INTERESTING), true),
         Arguments.of(2, Arrays.asList(SiteName.LESS_INTERESTING, SiteName.INTERESTING), true),
-        Arguments.of(3, Arrays.asList(SiteName.LESS_INTERESTING, SiteName.INTERESTING), false)
-    );
+        Arguments.of(3, Arrays.asList(SiteName.LESS_INTERESTING, SiteName.INTERESTING), false));
   }
 
   @ParameterizedTest
@@ -93,17 +98,16 @@ public class VisitNewSiteRepairerTest {
   public void test_repair(
       final int maxIterations,
       final List<SiteName> expectedVisitedSiteNames,
-      final boolean isStoppingCriterionMet
-  ) {
+      final boolean isStoppingCriterionMet) {
     final var stoppingCriterion = new NumberOfIterationsStoppingCriterion(maxIterations);
-    final var repairer = VisitNewSitesRepairer.builder()
-        .filter(new AcceptAllFilter())
-        .stoppingCriterion(stoppingCriterion)
-        .build();
+    final var repairer =
+        VisitNewSitesRepairer.builder()
+            .filter(new AcceptAllFilter())
+            .stoppingCriterion(stoppingCriterion)
+            .build();
     repairer.repair(constraintManager, objectiveManager, matrix, solution);
-    final var expectedVisitedSites = expectedVisitedSiteNames.stream()
-        .map(this::getSite)
-        .collect(Collectors.toList());
+    final var expectedVisitedSites =
+        expectedVisitedSiteNames.stream().map(this::getSite).collect(Collectors.toList());
     assertEquals(expectedVisitedSites, solution.getVisitedSites().getSites());
     assertEquals(isStoppingCriterionMet, stoppingCriterion.isMet());
   }
@@ -119,5 +123,4 @@ public class VisitNewSiteRepairerTest {
     INTERESTING,
     LESS_INTERESTING
   }
-
 }

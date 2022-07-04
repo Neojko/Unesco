@@ -11,9 +11,9 @@ import lombok.Getter;
 import lombok.var;
 
 /**
- * This class aims at computing the ObjectiveValues of a Solution and the ObjectiveValues delta
- * of any kind of Move. It contains all relevant Objective objects as well as their ranking.
- * It acts as a bridge between the Solution and its ObjectiveValues (that it computes).
+ * This class aims at computing the ObjectiveValues of a Solution and the ObjectiveValues delta of
+ * any kind of Move. It contains all relevant Objective objects as well as their ranking. It acts as
+ * a bridge between the Solution and its ObjectiveValues (that it computes).
  */
 @Getter
 public class ObjectiveManager {

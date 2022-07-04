@@ -20,8 +20,7 @@ public class ObjectiveHolderTest {
   public void setUp() {
     objective1 = mock(Objective.class, withSettings().extraInterfaces(VisitNewSiteObjective.class));
     objective2 = mock(Objective.class);
-    objectiveHolder =
-        ObjectiveHolder.builder().objective(objective1).objective(objective2).build();
+    objectiveHolder = ObjectiveHolder.builder().objective(objective1).objective(objective2).build();
   }
 
   @Test
@@ -36,5 +35,4 @@ public class ObjectiveHolderTest {
     assertEquals(1, visitNewSiteObjectives.size());
     assertTrue(visitNewSiteObjectives.contains((VisitNewSiteObjective) objective1));
   }
-
 }

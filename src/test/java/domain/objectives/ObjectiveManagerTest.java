@@ -32,12 +32,10 @@ public class ObjectiveManagerTest {
 
   @Test
   public void test_constructor() {
-    final var objectiveHolder = ObjectiveHolder.builder()
-        .objective(objective1).objective(objective2)
-        .build();
-    final var objectiveRanking = ObjectiveRanking.builder()
-            .objective(objective1).objective(objective2)
-            .build();
+    final var objectiveHolder =
+        ObjectiveHolder.builder().objective(objective1).objective(objective2).build();
+    final var objectiveRanking =
+        ObjectiveRanking.builder().objective(objective1).objective(objective2).build();
     assertEquals(objectiveHolder, objectiveManager.getObjectiveHolder());
     assertEquals(objectiveRanking, objectiveManager.getObjectiveRanking());
   }

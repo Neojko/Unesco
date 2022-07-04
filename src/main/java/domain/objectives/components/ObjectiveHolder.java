@@ -11,7 +11,6 @@ import lombok.Getter;
  * This class is here to contain a list of Objective objects as well as lists of Objective objects
  * for all types of Objective
  */
-
 @EqualsAndHashCode
 @Getter
 public class ObjectiveHolder {
@@ -20,8 +19,7 @@ public class ObjectiveHolder {
   private final List<VisitNewSiteObjective> visitNewSiteObjectives;
 
   private ObjectiveHolder(
-      final List<Objective> objectives,
-      final List<VisitNewSiteObjective> visitNewSiteObjectives) {
+      final List<Objective> objectives, final List<VisitNewSiteObjective> visitNewSiteObjectives) {
     this.objectives = objectives;
     this.visitNewSiteObjectives = visitNewSiteObjectives;
   }
@@ -51,5 +49,4 @@ public class ObjectiveHolder {
       return new ObjectiveHolder(objectives, visitNewSiteObjectives);
     }
   }
-
 }

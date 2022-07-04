@@ -20,14 +20,15 @@ public class WeightedSumObjective implements Objective, VisitNewSiteObjective {
   private WeightedSumObjective(
       final ObjectiveSense sense,
       final ObjectiveHolder objectiveHolder,
-      final Map<Objective, Long> weights
-  ) {
+      final Map<Objective, Long> weights) {
     this.sense = sense;
     this.objectiveHolder = objectiveHolder;
     this.weights = weights;
   }
 
-  public static WeightedSumObjectiveBuilder builder() { return new WeightedSumObjectiveBuilder(); }
+  public static WeightedSumObjectiveBuilder builder() {
+    return new WeightedSumObjectiveBuilder();
+  }
 
   public long getWeight(final Objective objective) {
     return weights.get(objective);
@@ -56,8 +57,8 @@ public class WeightedSumObjective implements Objective, VisitNewSiteObjective {
     var result = getZeroObjectiveValue();
     for (final var objective : objectiveHolder.getVisitNewSiteObjectives()) {
       final var weight = weights.get((Objective) objective);
-      final var objectiveValue = objective
-          .getVisitNewSiteObjectiveValueDelta(solution, site, tripDurationDelta);
+      final var objectiveValue =
+          objective.getVisitNewSiteObjectiveValueDelta(solution, site, tripDurationDelta);
       result = result.sum(objectiveValue.multiply(weight));
     }
     return result;

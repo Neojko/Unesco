@@ -28,18 +28,19 @@ public class WeightedSumObjectiveTest {
     sense = ObjectiveSense.MAXIMIZE;
     weight1 = 2;
     weight2 = 3;
-    weightedSumObjective = WeightedSumObjective.builder()
-        .sense(sense)
-        .objective(objective1, weight1).objective(objective2, weight2)
-        .build();
+    weightedSumObjective =
+        WeightedSumObjective.builder()
+            .sense(sense)
+            .objective(objective1, weight1)
+            .objective(objective2, weight2)
+            .build();
   }
 
   @Test
   public void test_constructor() {
     assertEquals(sense, weightedSumObjective.getSense());
-    final var expectedObjectiveHolder = ObjectiveHolder.builder()
-        .objective(objective1).objective(objective2)
-        .build();
+    final var expectedObjectiveHolder =
+        ObjectiveHolder.builder().objective(objective1).objective(objective2).build();
     assertEquals(expectedObjectiveHolder, weightedSumObjective.getObjectiveHolder());
     assertEquals(2, weightedSumObjective.getWeights().size());
     assertEquals(weight1, weightedSumObjective.getWeight(objective1));
@@ -56,10 +57,8 @@ public class WeightedSumObjectiveTest {
     when(objective1.computeObjectiveValue(any(Solution.class))).thenReturn(objectiveValue1);
     when(objective2.computeObjectiveValue(any(Solution.class))).thenReturn(objectiveValue2);
     final var expectedValue = value1 * weight1 + value2 * weight2;
-    final var expectedObjectiveValue = ObjectiveValue.builder()
-        .sense(sense)
-        .value(expectedValue)
-        .build();
+    final var expectedObjectiveValue =
+        ObjectiveValue.builder().sense(sense).value(expectedValue).build();
     assertEquals(expectedObjectiveValue, weightedSumObjective.computeObjectiveValue(solution));
   }
 
@@ -71,16 +70,14 @@ public class WeightedSumObjectiveTest {
     final var value1 = 1L;
     final var objectiveValue1 = ObjectiveValue.builder().sense(sense).value(value1).build();
     final var objective1AsVisitNewSiteObjective = (VisitNewSiteObjective) objective1;
-    when(objective1AsVisitNewSiteObjective.getVisitNewSiteObjectiveValueDelta(solution, site, delta)
-    ).thenReturn(objectiveValue1);
+    when(objective1AsVisitNewSiteObjective.getVisitNewSiteObjectiveValueDelta(
+            solution, site, delta))
+        .thenReturn(objectiveValue1);
     final var expectedValue = value1 * weight1;
-    final var expectedObjectiveValue = ObjectiveValue.builder()
-        .sense(sense)
-        .value(expectedValue)
-        .build();
+    final var expectedObjectiveValue =
+        ObjectiveValue.builder().sense(sense).value(expectedValue).build();
     assertEquals(
         expectedObjectiveValue,
         weightedSumObjective.getVisitNewSiteObjectiveValueDelta(solution, site, delta));
   }
-
 }
