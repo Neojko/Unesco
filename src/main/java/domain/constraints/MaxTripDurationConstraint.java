@@ -9,11 +9,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class MaxTripDurationConstraint implements Constraint, VisitNewSiteConstraint {
 
-  private final long maxDurationInSeconds;
+  private final long maxTripDurationInSeconds;
 
   @Override
   public boolean isFeasible(final Solution solution) {
-    return solution.getTripDurationinSeconds() <= maxDurationInSeconds;
+    return solution.getTripDurationinSeconds() <= maxTripDurationInSeconds;
   }
 
   @Override
@@ -22,6 +22,6 @@ public class MaxTripDurationConstraint implements Constraint, VisitNewSiteConstr
       final Site site,
       final int position,
       final long tripDurationIncrease) {
-    return solution.getTripDurationinSeconds() + tripDurationIncrease <= maxDurationInSeconds;
+    return solution.getTripDurationinSeconds() + tripDurationIncrease <= maxTripDurationInSeconds;
   }
 }
