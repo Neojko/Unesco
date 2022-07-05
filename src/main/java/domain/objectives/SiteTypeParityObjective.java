@@ -10,9 +10,8 @@ import domain.solution.Solution;
 import lombok.var;
 
 /**
- * This Objective aims to minimise the absolute difference between natural and cultural sites It
- * exists as an Objective instead of as a Constraint in order to explore solutions that would not be
- * feasible if it was a Constraint.
+ * This Objective aims to minimise the absolute difference between natural and cultural sites. It is
+ * implemented with sense MAXIMISE to integrate it into a weighted sum of other MAXIMIZE objectives.
  */
 public class SiteTypeParityObjective
     implements Objective, VisitNewSiteObjective, UnvisitSiteObjective {
@@ -20,7 +19,7 @@ public class SiteTypeParityObjective
   private final ObjectiveSense sense;
 
   public SiteTypeParityObjective() {
-    this.sense = ObjectiveSense.MINIMIZE;
+    this.sense = ObjectiveSense.MAXIMIZE;
   }
 
   @Override
@@ -30,35 +29,53 @@ public class SiteTypeParityObjective
 
   @Override
   public ObjectiveValue computeObjectiveValue(final Solution solution) {
-    final var value = getAbsoluteDifferenceBetweenCulturalAndNaturalSites(solution);
+    final var value = -getAbsoluteDifference(solution); // negative to maximise objective
     return ObjectiveValue.builder().sense(sense).value(value).build();
   }
 
   @Override
   public ObjectiveValue getVisitNewSiteObjectiveValueDelta(
       final Solution solution, final Site site, final long tripDurationIncrease) {
-    final var oldValue = getAbsoluteDifferenceBetweenCulturalAndNaturalSites(solution);
-    final var visitedSites = solution.getVisitedSites();
-    final var cultural = visitedSites.getNumberOfCulturalSites() + (site.isCultural() ? 1 : 0);
-    final var natural = visitedSites.getNumberOfNaturalSites() + (site.isNatural() ? 1 : 0);
-    final var newValue = Math.abs(cultural - natural);
-    return ObjectiveValue.builder().sense(sense).value(newValue - oldValue).build();
+    final var oldValue = getAbsoluteDifference(solution);
+    final var newValue =
+        getAbsoluteDifference(solution, site.isCultural() ? 1 : 0, site.isNatural() ? 1 : 0);
+    final var negativeValueDelta = oldValue - newValue; // = -(newValue - oldValue)
+    return ObjectiveValue.builder().sense(sense).value(negativeValueDelta).build();
   }
 
   @Override
   public ObjectiveValue getUnvisitSiteObjectiveValueDelta(
       final Solution solution, final Site site, final long tripDurationIncrease) {
-    final var oldValue = getAbsoluteDifferenceBetweenCulturalAndNaturalSites(solution);
-    final var visitedSites = solution.getVisitedSites();
-    final var cultural = visitedSites.getNumberOfCulturalSites() - (site.isCultural() ? 1 : 0);
-    final var natural = visitedSites.getNumberOfNaturalSites() - (site.isNatural() ? 1 : 0);
-    final var newValue = Math.abs(cultural - natural);
-    return ObjectiveValue.builder().sense(sense).value(newValue - oldValue).build();
+    final var oldValue = getAbsoluteDifference(solution);
+    final var newValue =
+        getAbsoluteDifference(solution, site.isCultural() ? -1 : 0, site.isNatural() ? -1 : 0);
+    final var negativeValueDelta = oldValue - newValue; // = -(newValue - oldValue)
+    return ObjectiveValue.builder().sense(sense).value(negativeValueDelta).build();
   }
 
-  private int getAbsoluteDifferenceBetweenCulturalAndNaturalSites(final Solution solution) {
+  /**
+   * Returns absolute difference between numbers of cultural sites and natural sites in solution
+   */
+  private int getAbsoluteDifference(final Solution solution) {
     final var cultural = solution.getVisitedSites().getNumberOfCulturalSites();
     final var natural = solution.getVisitedSites().getNumberOfNaturalSites();
+    return Math.abs(cultural - natural);
+  }
+
+  /**
+   * Returns absolute difference between numbers of cultural sites and natural sites in solution
+   * with a delta change for cultural and natural sites.
+   * @param solution: used to get initial number of cultural and natural sites
+   * @param culturalDelta: cultural site delta
+   * @param naturalDelta: natural site delta
+   */
+  private int getAbsoluteDifference(
+      final Solution solution,
+      final int culturalDelta,
+      final int naturalDelta
+  ) {
+    final var cultural = solution.getVisitedSites().getNumberOfCulturalSites() + culturalDelta;
+    final var natural = solution.getVisitedSites().getNumberOfNaturalSites() + naturalDelta;
     return Math.abs(cultural - natural);
   }
 }
