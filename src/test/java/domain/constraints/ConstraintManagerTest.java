@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
 
 import domain.constraints.interfaces.Constraint;
+import domain.constraints.interfaces.UnvisitSiteConstraint;
 import domain.constraints.interfaces.VisitNewSiteConstraint;
 import domain.locations.sites.Site;
 import domain.solution.Solution;
@@ -26,10 +27,14 @@ public class ConstraintManagerTest {
   @BeforeEach
   public void setUp() {
     constraint1 =
-        mock(Constraint.class, withSettings().extraInterfaces(VisitNewSiteConstraint.class));
+        mock(
+            Constraint.class,
+            withSettings()
+                .extraInterfaces(VisitNewSiteConstraint.class, UnvisitSiteConstraint.class));
     constraint2 =
         mock(Constraint.class, withSettings().extraInterfaces(VisitNewSiteConstraint.class));
-    constraint3 = mock(Constraint.class);
+    constraint3 =
+        mock(Constraint.class, withSettings().extraInterfaces(UnvisitSiteConstraint.class));
     constraintManager =
         ConstraintManager.builder()
             .constraint(constraint1)
@@ -47,8 +52,24 @@ public class ConstraintManagerTest {
     assertTrue(constraintManager.getConstraints().contains(constraint3));
     // Visit new site constraints
     assertEquals(2, constraintManager.getVisitNewSiteConstraints().size());
-    assertTrue(constraintManager.getVisitNewSiteConstraints().contains(constraint1));
-    assertTrue(constraintManager.getVisitNewSiteConstraints().contains(constraint2));
+    assertTrue(
+        constraintManager
+            .getVisitNewSiteConstraints()
+            .contains((VisitNewSiteConstraint) constraint1));
+    assertTrue(
+        constraintManager
+            .getVisitNewSiteConstraints()
+            .contains((VisitNewSiteConstraint) constraint2));
+    // Unvisit site constraints
+    assertEquals(2, constraintManager.getUnvisitSiteConstraints().size());
+    assertTrue(
+        constraintManager
+            .getUnvisitSiteConstraints()
+            .contains((UnvisitSiteConstraint) constraint1));
+    assertTrue(
+        constraintManager
+            .getUnvisitSiteConstraints()
+            .contains((UnvisitSiteConstraint) constraint3));
   }
 
   private static Stream<Arguments> test_compute_is_feasible() {
@@ -103,5 +124,32 @@ public class ConstraintManagerTest {
         .thenReturn(constraint2IsFeasible);
     final var result = constraintManager.canVisitNewSite(solution, site, position, increase);
     assertEquals(expectedResult, result);
+  }
+
+  private static Stream<Arguments> test_can_unvisit_site() {
+    return Stream.of(
+        Arguments.of(true, true, true), // both constraints are feasible
+        Arguments.of(false, true, false), // first constraint not feasible
+        Arguments.of(true, false, false), // second constraint not feasible
+        Arguments.of(false, false, false) // no feasible constraint
+        );
+  }
+
+  // constraint1 and constraint3 are VisitNewSiteConstraints (not constraint2)
+  @ParameterizedTest
+  @MethodSource
+  public void test_can_unvisit_site(
+      final boolean constraint1IsFeasible,
+      final boolean constraint3IsFeasible,
+      final boolean expectedResult) {
+    final var solution = mock(Solution.class);
+    final var site = mock(Site.class);
+    final var constraint1AsVisitNewSiteConstraint = (UnvisitSiteConstraint) constraint1;
+    final var constraint3AsVisitNewSiteConstraint = (UnvisitSiteConstraint) constraint3;
+    when(constraint1AsVisitNewSiteConstraint.canUnvisitSite(solution, site))
+        .thenReturn(constraint1IsFeasible);
+    when(constraint3AsVisitNewSiteConstraint.canUnvisitSite(solution, site))
+        .thenReturn(constraint3IsFeasible);
+    assertEquals(expectedResult, constraintManager.canUnvisitSite(solution, site));
   }
 }

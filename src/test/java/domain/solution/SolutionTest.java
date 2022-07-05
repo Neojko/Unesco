@@ -216,7 +216,8 @@ public class SolutionTest {
 
   @Test
   public void test_apply_unvisit_site_move() {
-    final var move = new UnvisitSiteMove(solution, site1, matrix, objectiveManager);
+    final var move =
+        new UnvisitSiteMove(solution, site1, matrix, constraintManager, objectiveManager);
     assertTrue(move.isFeasible());
     final var oldTripDuration = solution.getTripDurationinSeconds();
     final var oldObjectiveValues = solution.getObjectiveValues().copy();

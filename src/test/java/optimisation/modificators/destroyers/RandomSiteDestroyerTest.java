@@ -1,10 +1,13 @@
 package optimisation.modificators.destroyers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import domain.constraints.ConstraintManager;
+import domain.constraints.LessThanXSiteTypeDifferenceConstraint;
 import domain.locations.Coordinates;
 import domain.locations.TravelStartLocation;
 import domain.locations.sites.Country;
@@ -20,16 +23,18 @@ import optimisation.choosers.filters.AcceptAllFilter;
 import optimisation.choosers.filters.SiteFilter;
 import optimisation.choosers.selectors.SiteSelector;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 public class RandomSiteDestroyerTest {
 
-  private Site site1, site2;
+  private Site culturalSite, naturalSite;
   private TravelStartLocation start;
   private TravelMatrix matrix;
   private Solution solution;
+  private ConstraintManager constraintManager;
   private ObjectiveManager objectiveManager;
   private SiteFilter filter;
   private SiteSelector selector;
@@ -38,7 +43,7 @@ public class RandomSiteDestroyerTest {
   public void setUp() {
     final var country = new Country("France");
     start = TravelStartLocation.builder().coordinates(0, 0).build();
-    site1 =
+    culturalSite =
         Site.builder()
             .locationID(1)
             .name("site1")
@@ -47,18 +52,24 @@ public class RandomSiteDestroyerTest {
             .type(SiteType.Natural)
             .isEndangered()
             .build();
-    site2 =
+    naturalSite =
         Site.builder()
             .locationID(2)
             .name("site2")
             .country(country)
             .coordinates(new Coordinates(0, 10))
-            .type(SiteType.Natural)
+            .type(SiteType.Cultural)
             .build();
-    final var locations = Arrays.asList(start, site1, site2);
+    final var locations = Arrays.asList(start, culturalSite, naturalSite);
     matrix = new TravelMatrix(locations);
+    constraintManager = ConstraintManager.builder().build();
     objectiveManager = ObjectiveManager.builder().build();
-    solution = Solution.builder().start(start).visitedSite(site1).visitedSite(site2).build(matrix);
+    solution =
+        Solution.builder()
+            .start(start)
+            .visitedSite(culturalSite)
+            .visitedSite(naturalSite)
+            .build(matrix);
     filter = new AcceptAllFilter();
     selector = mock(SiteSelector.class);
   }
@@ -82,8 +93,8 @@ public class RandomSiteDestroyerTest {
             .selector(selector)
             .filter(filter)
             .build();
-    when(selector.select(any())).thenReturn(site1).thenReturn(site2);
-    randomDestroyer.destroy(objectiveManager, matrix, solution);
+    when(selector.select(any())).thenReturn(culturalSite).thenReturn(naturalSite);
+    randomDestroyer.destroy(constraintManager, objectiveManager, matrix, solution);
     final var expectedSolution = getExpectedSolution(percentage);
     assertEquals(expectedSolution, solution);
   }
@@ -93,8 +104,28 @@ public class RandomSiteDestroyerTest {
       return solution.copy();
     }
     if (percentage < 0.75) {
-      return Solution.builder().start(start).visitedSite(site2).unvisitedSite(site1).build(matrix);
+      return Solution.builder()
+          .start(start)
+          .visitedSite(naturalSite)
+          .unvisitedSite(culturalSite)
+          .build(matrix);
     }
-    return Solution.builder().start(start).unvisitedSite(site1).unvisitedSite(site2).build(matrix);
+    return Solution.builder()
+        .start(start)
+        .unvisitedSite(culturalSite)
+        .unvisitedSite(naturalSite)
+        .build(matrix);
+  }
+
+  @Test
+  public void test_destroy_with_not_empty_constraint_manager() {
+    when(selector.select(any())).thenReturn(culturalSite);
+    final var randomDestroyer =
+        RandomSiteDestroyer.builder().percentage(1).selector(selector).filter(filter).build();
+    final var constraint = LessThanXSiteTypeDifferenceConstraint.builder().maxDifference(0).build();
+    constraintManager = ConstraintManager.builder().constraint(constraint).build();
+    randomDestroyer.destroy(constraintManager, objectiveManager, matrix, solution);
+    // Destroyer couldn't unvisit naturalSite without breaking the constraint even with percentage 1
+    assertTrue(solution.getVisitedSites().containsSite(naturalSite));
   }
 }

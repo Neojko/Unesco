@@ -1,5 +1,6 @@
 package optimisation.modificators.destroyers;
 
+import domain.constraints.ConstraintManager;
 import domain.matrix.TravelMatrix;
 import domain.objectives.ObjectiveManager;
 import domain.solution.Solution;
@@ -11,5 +12,8 @@ import domain.solution.Solution;
 public interface Destroyer {
 
   void destroy(
-      final ObjectiveManager objectiveManager, final TravelMatrix matrix, final Solution solution);
+      final ConstraintManager constraintManager,
+      final ObjectiveManager objectiveManager,
+      final TravelMatrix matrix,
+      final Solution solution);
 }
