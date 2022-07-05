@@ -1,0 +1,13 @@
+{
+  "sites_file_path": "src/main/resources/whc-sites-2021.xls",
+  "matrix_file_path": "src/main/resources/matrix.csv",
+  "latitude": "0",
+  "longitude": "0",
+  "time_budget_in_seconds": "1",
+  "destroyer_removal_percentage": "0.50",
+  "weight_number_of_visited_sites_objective": "1000",
+  "weight_number_of_visited_countries_objective": "2000",
+  "weight_number_of_visited_endangered_sites_objective": "3000",
+  "weight_site_type_parity_objective": "1500",
+  "weight_remaining_trip_duration_objective": "1500"
+}
