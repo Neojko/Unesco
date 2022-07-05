@@ -92,7 +92,7 @@ public class SiteTypeParityObjectiveTest {
 
   @Test
   public void test_get_sense() {
-    assertEquals(ObjectiveSense.MINIMIZE, objective.getObjectiveSense());
+    assertEquals(ObjectiveSense.MAXIMIZE, objective.getObjectiveSense());
   }
 
   @Test
@@ -104,14 +104,14 @@ public class SiteTypeParityObjectiveTest {
   private static Stream<Arguments>
       test_get_objective_value_when_list_of_visited_sites_contains_at_least_one_site() {
     return Stream.of(
-        Arguments.of(Collections.singletonList(cultural1), 1),
-        Arguments.of(Collections.singletonList(natural1), 1),
+        Arguments.of(Collections.singletonList(cultural1), -1),
+        Arguments.of(Collections.singletonList(natural1), -1),
         Arguments.of(Collections.singletonList(mixed1), 0),
-        Arguments.of(Arrays.asList(cultural1, cultural2), 2),
+        Arguments.of(Arrays.asList(cultural1, cultural2), -2),
         Arguments.of(Arrays.asList(cultural1, natural1), 0),
-        Arguments.of(Arrays.asList(cultural1, mixed1), 1),
-        Arguments.of(Arrays.asList(natural1, natural2), 2),
-        Arguments.of(Arrays.asList(natural1, mixed1), 1),
+        Arguments.of(Arrays.asList(cultural1, mixed1), -1),
+        Arguments.of(Arrays.asList(natural1, natural2), -2),
+        Arguments.of(Arrays.asList(natural1, mixed1), -1),
         Arguments.of(Arrays.asList(mixed1, mixed2), 0));
   }
 
@@ -129,23 +129,23 @@ public class SiteTypeParityObjectiveTest {
 
   private static Stream<Arguments> test_get_objective_value_delta_when_visiting_new_site() {
     return Stream.of(
-        Arguments.of(Collections.singletonList(cultural1), cultural2, 1),
-        Arguments.of(Collections.singletonList(cultural1), natural2, -1),
+        Arguments.of(Collections.singletonList(cultural1), cultural2, -1),
+        Arguments.of(Collections.singletonList(cultural1), natural2, 1),
         Arguments.of(Collections.singletonList(cultural1), mixed2, 0),
-        Arguments.of(Collections.singletonList(natural1), cultural2, -1),
-        Arguments.of(Collections.singletonList(natural1), natural2, 1),
+        Arguments.of(Collections.singletonList(natural1), cultural2, 1),
+        Arguments.of(Collections.singletonList(natural1), natural2, -1),
         Arguments.of(Collections.singletonList(natural1), mixed2, 0),
-        Arguments.of(Collections.singletonList(mixed1), cultural2, 1),
-        Arguments.of(Collections.singletonList(mixed1), natural2, 1),
+        Arguments.of(Collections.singletonList(mixed1), cultural2, -1),
+        Arguments.of(Collections.singletonList(mixed1), natural2, -1),
         Arguments.of(Collections.singletonList(mixed1), mixed2, 0),
-        Arguments.of(Arrays.asList(cultural1, natural1), cultural2, 1),
-        Arguments.of(Arrays.asList(cultural1, mixed1), cultural2, 1),
-        Arguments.of(Arrays.asList(natural1, mixed1), cultural2, -1),
-        Arguments.of(Arrays.asList(mixed1, mixed2), cultural2, 1),
-        Arguments.of(Arrays.asList(cultural1, natural1), natural2, 1),
-        Arguments.of(Arrays.asList(cultural1, mixed1), natural2, -1),
-        Arguments.of(Arrays.asList(natural1, mixed1), natural2, 1),
-        Arguments.of(Arrays.asList(mixed1, mixed2), natural2, 1));
+        Arguments.of(Arrays.asList(cultural1, natural1), cultural2, -1),
+        Arguments.of(Arrays.asList(cultural1, mixed1), cultural2, -1),
+        Arguments.of(Arrays.asList(natural1, mixed1), cultural2, 1),
+        Arguments.of(Arrays.asList(mixed1, mixed2), cultural2, -1),
+        Arguments.of(Arrays.asList(cultural1, natural1), natural2, -1),
+        Arguments.of(Arrays.asList(cultural1, mixed1), natural2, 1),
+        Arguments.of(Arrays.asList(natural1, mixed1), natural2, -1),
+        Arguments.of(Arrays.asList(mixed1, mixed2), natural2, -1));
   }
 
   @ParameterizedTest
@@ -164,16 +164,16 @@ public class SiteTypeParityObjectiveTest {
 
   private static Stream<Arguments> test_get_objective_value_delta_when_unvisiting_site() {
     return Stream.of(
-        Arguments.of(Collections.singletonList(cultural1), cultural1, -1),
-        Arguments.of(Collections.singletonList(natural1), natural1, -1),
+        Arguments.of(Collections.singletonList(cultural1), cultural1, 1),
+        Arguments.of(Collections.singletonList(natural1), natural1, 1),
         Arguments.of(Collections.singletonList(mixed1), mixed1, 0),
-        Arguments.of(Arrays.asList(cultural1, cultural2), cultural1, -1),
-        Arguments.of(Arrays.asList(cultural1, natural1), cultural1, 1),
-        Arguments.of(Arrays.asList(cultural1, natural1), natural1, 1),
-        Arguments.of(Arrays.asList(cultural1, mixed1), cultural1, -1),
+        Arguments.of(Arrays.asList(cultural1, cultural2), cultural1, 1),
+        Arguments.of(Arrays.asList(cultural1, natural1), cultural1, -1),
+        Arguments.of(Arrays.asList(cultural1, natural1), natural1, -1),
+        Arguments.of(Arrays.asList(cultural1, mixed1), cultural1, 1),
         Arguments.of(Arrays.asList(cultural1, mixed1), mixed1, 0),
-        Arguments.of(Arrays.asList(natural1, natural2), natural1, -1),
-        Arguments.of(Arrays.asList(natural1, mixed1), natural1, -1),
+        Arguments.of(Arrays.asList(natural1, natural2), natural1, 1),
+        Arguments.of(Arrays.asList(natural1, mixed1), natural1, 1),
         Arguments.of(Arrays.asList(natural1, mixed1), mixed1, 0),
         Arguments.of(Arrays.asList(mixed1, mixed2), mixed1, 0));
   }
