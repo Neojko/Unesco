@@ -16,7 +16,6 @@ import domain.solution.Solution;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.var;
 import optimisation.choosers.filters.AcceptAllFilter;
@@ -30,7 +29,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 public class BestVisitNewSitesRepairerTest {
 
   private TravelStartLocation start;
-  private Site interestingSite, lessInterestingSite;
+  private static Site interestingSite, lessInterestingSite;
   private TravelMatrix matrix;
   private Solution solution;
   private ConstraintManager constraintManager;
@@ -85,16 +84,16 @@ public class BestVisitNewSitesRepairerTest {
 
   private static Stream<Arguments> test_repair() {
     return Stream.of(
-        Arguments.of(1, Collections.singletonList(SiteName.INTERESTING), true),
-        Arguments.of(2, Arrays.asList(SiteName.LESS_INTERESTING, SiteName.INTERESTING), true),
-        Arguments.of(3, Arrays.asList(SiteName.LESS_INTERESTING, SiteName.INTERESTING), false));
+        Arguments.of(1, Collections.singletonList(interestingSite), true),
+        Arguments.of(2, Arrays.asList(lessInterestingSite, interestingSite), true),
+        Arguments.of(3, Arrays.asList(lessInterestingSite, interestingSite), false));
   }
 
   @ParameterizedTest
   @MethodSource
   public void test_repair(
       final int maxIterations,
-      final List<SiteName> expectedVisitedSiteNames,
+      final List<Site> expectedVisitedSites,
       final boolean isStoppingCriterionMet) {
     final var stoppingCriterion = new NumberOfIterationsStoppingCriterion(maxIterations);
     final var repairer =
@@ -103,21 +102,7 @@ public class BestVisitNewSitesRepairerTest {
             .stoppingCriterion(stoppingCriterion)
             .build();
     repairer.repair(constraintManager, objectiveManager, matrix, solution);
-    final var expectedVisitedSites =
-        expectedVisitedSiteNames.stream().map(this::getSite).collect(Collectors.toList());
     assertEquals(expectedVisitedSites, solution.getVisitedSites().getSites());
     assertEquals(isStoppingCriterionMet, stoppingCriterion.isMet());
-  }
-
-  private Site getSite(final SiteName name) {
-    if (name == SiteName.INTERESTING) {
-      return interestingSite;
-    }
-    return lessInterestingSite;
-  }
-
-  private enum SiteName {
-    INTERESTING,
-    LESS_INTERESTING
   }
 }
