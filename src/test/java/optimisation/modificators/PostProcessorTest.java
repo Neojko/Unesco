@@ -27,7 +27,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 public class PostProcessorTest {
 
   private TravelStartLocation start;
-  private static Site natural1, natural2, cultural1, cultural2, mixed1, mixed2;
+  private Site natural1, natural2, cultural1, cultural2, mixed1, mixed2;
   private TravelMatrix matrix;
   private ConstraintManager constraintManager;
   private ObjectiveManager objectiveManager;
@@ -98,39 +98,65 @@ public class PostProcessorTest {
         Arguments.of(new ArrayList<>(), 0),
 
         // One site
-        Arguments.of(Collections.singletonList(cultural1), 1),
-        Arguments.of(Collections.singletonList(natural1), 1),
-        Arguments.of(Collections.singletonList(mixed1), 1),
+        Arguments.of(Collections.singletonList(SiteName.CULTURAL_1), 0),
+        Arguments.of(Collections.singletonList(SiteName.NATURAL_1), 0),
+        Arguments.of(Collections.singletonList(SiteName.MIXED_1), 1),
 
         // Two sites
-        Arguments.of(Arrays.asList(cultural1, cultural2), 1),
-        Arguments.of(Arrays.asList(cultural1, natural1), 2),
-        Arguments.of(Arrays.asList(cultural1, mixed1), 1),
-        Arguments.of(Arrays.asList(natural1, natural2), 1),
-        Arguments.of(Arrays.asList(natural1, mixed1), 1),
-        Arguments.of(Arrays.asList(mixed1, mixed2), 2),
+        Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.CULTURAL_2), 0),
+        Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.NATURAL_1), 2),
+        Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.MIXED_1), 1),
+        Arguments.of(Arrays.asList(SiteName.NATURAL_1, SiteName.NATURAL_2), 0),
+        Arguments.of(Arrays.asList(SiteName.NATURAL_1, SiteName.MIXED_1), 1),
+        Arguments.of(Arrays.asList(SiteName.MIXED_1, SiteName.MIXED_2), 2),
 
         // Three sites
-        Arguments.of(Arrays.asList(cultural1, cultural2, natural1), 2),
-        Arguments.of(Arrays.asList(cultural1, cultural2, mixed1), 1),
-        Arguments.of(Arrays.asList(cultural1, natural1, natural2), 2),
-        Arguments.of(Arrays.asList(cultural1, natural1, mixed1), 3),
-        Arguments.of(Arrays.asList(natural1, natural2, mixed1), 1),
-        Arguments.of(Arrays.asList(natural1, mixed1, mixed2), 2),
+        Arguments.of(
+            Arrays.asList(SiteName.CULTURAL_1, SiteName.CULTURAL_2, SiteName.NATURAL_1), 2),
+        Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.CULTURAL_2, SiteName.MIXED_1), 1),
+        Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.NATURAL_1, SiteName.NATURAL_2), 2),
+        Arguments.of(Arrays.asList(SiteName.CULTURAL_1, SiteName.NATURAL_1, SiteName.MIXED_1), 3),
+        Arguments.of(Arrays.asList(SiteName.NATURAL_1, SiteName.NATURAL_2, SiteName.MIXED_1), 1),
+        Arguments.of(Arrays.asList(SiteName.NATURAL_1, SiteName.MIXED_1, SiteName.MIXED_2), 2),
 
         // More sites
-        Arguments.of(Arrays.asList(cultural1, cultural2, natural1, natural2), 4),
-        Arguments.of(Arrays.asList(cultural1, cultural2, natural1, mixed1, mixed2), 5),
-        Arguments.of(Arrays.asList(cultural1, natural1, natural2, mixed1, mixed2), 5),
-        Arguments.of(Arrays.asList(cultural1, cultural2, natural1, natural2, mixed1, mixed2), 6));
+        Arguments.of(
+            Arrays.asList(
+                SiteName.CULTURAL_1, SiteName.CULTURAL_2, SiteName.NATURAL_1, SiteName.NATURAL_2),
+            4),
+        Arguments.of(
+            Arrays.asList(
+                SiteName.CULTURAL_1,
+                SiteName.CULTURAL_2,
+                SiteName.NATURAL_1,
+                SiteName.MIXED_1,
+                SiteName.MIXED_2),
+            4),
+        Arguments.of(
+            Arrays.asList(
+                SiteName.CULTURAL_1,
+                SiteName.NATURAL_1,
+                SiteName.NATURAL_2,
+                SiteName.MIXED_1,
+                SiteName.MIXED_2),
+            4),
+        Arguments.of(
+            Arrays.asList(
+                SiteName.CULTURAL_1,
+                SiteName.CULTURAL_2,
+                SiteName.NATURAL_1,
+                SiteName.NATURAL_2,
+                SiteName.MIXED_1,
+                SiteName.MIXED_2),
+            6));
   }
 
   @ParameterizedTest
   @MethodSource
-  public void test_fix(final List<Site> sites, final int expectedNoOfVisitedSitesAfterFix) {
+  public void test_fix(final List<SiteName> siteNames, final int expectedNoOfVisitedSitesAfterFix) {
     var solutionBuilder = new SolutionBuilder().start(start);
-    for (final var site : sites) {
-      solutionBuilder = solutionBuilder.visitedSite(site);
+    for (final var siteName : siteNames) {
+      solutionBuilder = solutionBuilder.visitedSite(getSite(siteName));
     }
     final var solution = solutionBuilder.build(constraintManager, objectiveManager, matrix);
     PostProcesser.fix(constraintManager, objectiveManager, matrix, solution);
@@ -138,5 +164,33 @@ public class PostProcessorTest {
     final var natural = solution.getVisitedSites().getNumberOfNaturalSites();
     assertEquals(cultural, natural);
     assertEquals(expectedNoOfVisitedSitesAfterFix, solution.getVisitedSites().getSites().size());
+  }
+
+  private Site getSite(final SiteName siteName) {
+    switch (siteName) {
+      case CULTURAL_1:
+        return cultural1;
+      case CULTURAL_2:
+        return cultural2;
+      case NATURAL_1:
+        return natural1;
+      case NATURAL_2:
+        return natural2;
+      case MIXED_1:
+        return mixed1;
+      case MIXED_2:
+        return mixed2;
+      default:
+        throw new IllegalArgumentException();
+    }
+  }
+
+  private enum SiteName {
+    CULTURAL_1,
+    CULTURAL_2,
+    NATURAL_1,
+    NATURAL_2,
+    MIXED_1,
+    MIXED_2
   }
 }
