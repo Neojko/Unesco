@@ -19,6 +19,10 @@ public class UnvisitSiteMove implements Move {
   private final long tripDurationDelta;
   private final ObjectiveValues objectiveValuesDelta;
 
+  public static UnvisitSiteMove createUnfeasibleMove() {
+    return new UnvisitSiteMove();
+  }
+
   /**
    * Main constructor -- we need to compute the value of tripDurationDelta
    *
@@ -60,9 +64,12 @@ public class UnvisitSiteMove implements Move {
         objectiveManager.computeUnvisitSiteObjectiveValuesDelta(solution, site, tripDurationDelta);
   }
 
-  // see class description
-  @Override
-  public boolean isFeasible() {
-    return true;
+  /** Creates unfeasible move -- no field should never be accessed apart from isFeasible */
+  private UnvisitSiteMove() {
+    this.solution = null;
+    this.site = null;
+    this.tripDurationDelta = 0;
+    this.isFeasible = false;
+    this.objectiveValuesDelta = null;
   }
 }

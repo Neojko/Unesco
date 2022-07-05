@@ -29,7 +29,7 @@ public class SiteTypeParityObjectiveTest {
   private SiteTypeParityObjective objective;
   private TravelStartLocation start;
   private static Site natural1, natural2, cultural1, cultural2, mixed1, mixed2;
-  TravelMatrix matrix;
+  private TravelMatrix matrix;
 
   @BeforeEach
   public void setUp() {
