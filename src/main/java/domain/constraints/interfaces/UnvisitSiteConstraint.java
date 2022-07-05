@@ -6,5 +6,4 @@ import domain.solution.Solution;
 public interface UnvisitSiteConstraint {
 
   boolean canUnvisitSite(final Solution solution, final Site site);
-
 }

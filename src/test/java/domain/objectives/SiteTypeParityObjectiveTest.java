@@ -85,9 +85,7 @@ public class SiteTypeParityObjectiveTest {
             .type(Mixed)
             .build();
     final var sites =
-        new ArrayList<>(
-            Arrays.asList(
-                cultural1, cultural2, natural1, natural2, mixed1, mixed2));
+        new ArrayList<>(Arrays.asList(cultural1, cultural2, natural1, natural2, mixed1, mixed2));
     start = TravelStartLocation.builder().coordinates(coordinates).build();
     matrix = new TravelMatrix(sites, start);
   }
@@ -169,10 +167,8 @@ public class SiteTypeParityObjectiveTest {
         Arguments.of(Collections.singletonList(cultural1), cultural1, -1),
         Arguments.of(Collections.singletonList(natural1), natural1, -1),
         Arguments.of(Collections.singletonList(mixed1), mixed1, 0),
-        Arguments.of(
-            Arrays.asList(cultural1, cultural2), cultural1, -1),
-        Arguments.of(
-            Arrays.asList(cultural1, natural1), cultural1, 1),
+        Arguments.of(Arrays.asList(cultural1, cultural2), cultural1, -1),
+        Arguments.of(Arrays.asList(cultural1, natural1), cultural1, 1),
         Arguments.of(Arrays.asList(cultural1, natural1), natural1, 1),
         Arguments.of(Arrays.asList(cultural1, mixed1), cultural1, -1),
         Arguments.of(Arrays.asList(cultural1, mixed1), mixed1, 0),
