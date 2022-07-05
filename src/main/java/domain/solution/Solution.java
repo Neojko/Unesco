@@ -104,14 +104,26 @@ public class Solution {
     result.append("Travel itinerary: \n");
     for (int i = 0; i < visitedSites.getSites().size(); i++) {
       final var site = visitedSites.getSites().get(i);
-      result.append(i).append(") ").append(site).append("\n");
+      result.append(i+1).append(") ").append(site).append("\n");
     }
     result.append("\n");
     result.append("Evaluation: \n");
-    for (final var objective : objectiveValues.getObjectiveRanking().getObjectives()) {
-      final var value = objectiveValues.getValues().get(objective).getValue();
-      result.append(objective.toString()).append(": ").append(value).append("\n");
-    }
+    final var numberOfSites = visitedSites.getSites().size();
+    final var numberOfCountries = visitedSites.getSitesPerCountry().size();
+    final var numberOfEndangeredSites = visitedSites.getSites().stream()
+        .filter(Site::isEndangered).count();
+    final var score = numberOfSites + numberOfCountries * 2L + numberOfEndangeredSites * 3L;
+    result
+        .append("   ")
+        .append(numberOfSites)
+        .append(" destinations x 1 point\n")
+        .append("   ")
+        .append(numberOfCountries)
+        .append(" countries x 2 points\n")
+        .append("   ")
+        .append(numberOfEndangeredSites)
+        .append(" endangered x 3 points\n");
+    result.append("Overall score: ").append(score);
     return result.toString();
   }
 
