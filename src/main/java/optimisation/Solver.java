@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.var;
 import optimisation.algorithms.Algorithm;
+import optimisation.modificators.PostProcesser;
 import optimisation.modificators.repairers.Repairer;
 
 /** A Solver produces an initial Solution from an Instance and run an Algorithm on it */
@@ -24,7 +25,10 @@ public class Solver {
   public Solution solve() {
     final var initialSolution = createInitialSolution();
     final var matrix = instance.getMatrix();
-    return algorithm.improve(constraintManager, objectiveManager, matrix, initialSolution);
+    final var solution =
+        algorithm.improve(constraintManager, objectiveManager, matrix, initialSolution);
+    PostProcesser.fix(constraintManager, objectiveManager, matrix, solution);
+    return solution;
   }
 
   private Solution createInitialSolution() {

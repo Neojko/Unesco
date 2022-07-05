@@ -54,7 +54,7 @@ public class ObjectiveValues implements Comparable<ObjectiveValues> {
   /**
    * Updating the current ObjectiveValues by adding the other ObjectiveValues
    *
-   * @param other: needs to have the same Objective as this
+   * @param other: all Objectives should also belong to this
    */
   public void add(final ObjectiveValues other) {
     for (final var entry : other.getValues().entrySet()) {

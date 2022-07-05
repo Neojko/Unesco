@@ -36,8 +36,23 @@ public class LNS implements Algorithm {
     var currentSolution = solution.copy();
     stoppingCriterion.initialise();
     while (!stoppingCriterion.isMet()) {
+      // REMOVE HERE
+      if (!objectiveManager.computeObjectiveValues(solution).equals(solution.getObjectiveValues())) {
+        final int a = 3;
+      }
+      // REMOVE HERE
       destroyer.destroy(constraintManager, objectiveManager, matrix, solution);
+      // REMOVE HERE
+      if (!objectiveManager.computeObjectiveValues(solution).equals(solution.getObjectiveValues())) {
+        final int a = 3;
+      }
+      // REMOVE HERE
       repairer.repair(constraintManager, objectiveManager, matrix, solution);
+      // REMOVE HERE
+      if (!objectiveManager.computeObjectiveValues(solution).equals(solution.getObjectiveValues())) {
+        final int a = 3;
+      }
+      // REMOVE HERE
       if (currentSolution.isBetterThan(bestSolution)) {
         bestSolution = currentSolution.copy();
       } else if (!acceptanceCriterion.accept(currentSolution, bestSolution)) {
@@ -45,6 +60,11 @@ public class LNS implements Algorithm {
       }
       stoppingCriterion.update();
     }
+    // REMOVE HERE
+    if (!objectiveManager.computeObjectiveValues(solution).equals(solution.getObjectiveValues())) {
+      final int a = 3;
+    }
+    // REMOVE HERE
     return bestSolution;
   }
 }
