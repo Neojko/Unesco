@@ -55,7 +55,7 @@ public class TripRemainingTimeObjectiveTest {
   @Test
   public void test_compute_objective_value_delta_when_unvisiting_site() {
     assertEquals(
-        tripDurationDelta,
+        -tripDurationDelta,
         objective.getUnvisitSiteObjectiveValueDelta(solution, site, tripDurationDelta).getValue());
   }
 }

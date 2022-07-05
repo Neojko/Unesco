@@ -3,6 +3,7 @@ package domain.objectives.components;
 import domain.locations.sites.Site;
 import domain.objectives.components.ObjectiveHolder.ObjectiveHolderBuilder;
 import domain.objectives.interfaces.Objective;
+import domain.objectives.interfaces.UnvisitSiteObjective;
 import domain.objectives.interfaces.VisitNewSiteObjective;
 import domain.solution.Solution;
 import java.util.HashMap;
@@ -11,7 +12,8 @@ import lombok.Getter;
 import lombok.var;
 
 @Getter
-public class WeightedSumObjective implements Objective, VisitNewSiteObjective {
+public class WeightedSumObjective
+    implements Objective, VisitNewSiteObjective, UnvisitSiteObjective {
 
   private final ObjectiveSense sense;
   private final ObjectiveHolder objectiveHolder;
@@ -59,6 +61,19 @@ public class WeightedSumObjective implements Objective, VisitNewSiteObjective {
       final var weight = weights.get((Objective) objective);
       final var objectiveValue =
           objective.getVisitNewSiteObjectiveValueDelta(solution, site, tripDurationDelta);
+      result = result.sum(objectiveValue.multiply(weight));
+    }
+    return result;
+  }
+
+  @Override
+  public ObjectiveValue getUnvisitSiteObjectiveValueDelta(
+      final Solution solution, final Site site, final long tripDurationDelta) {
+    var result = getZeroObjectiveValue();
+    for (final var objective : objectiveHolder.getUnvisitSiteObjectives()) {
+      final var weight = weights.get((Objective) objective);
+      final var objectiveValue =
+          objective.getUnvisitSiteObjectiveValueDelta(solution, site, tripDurationDelta);
       result = result.sum(objectiveValue.multiply(weight));
     }
     return result;

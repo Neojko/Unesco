@@ -63,11 +63,14 @@ public class Sites {
   }
 
   public Sites copy() {
+    final Map<Country, List<Site>> copiedCountries = new HashMap<>();
+    for (final var entry : sitesPerCountry.entrySet()) {
+      final var country = entry.getKey();
+      final var sitesList = entry.getValue();
+      copiedCountries.put(country, new ArrayList<>(sitesList));
+    }
     return new Sites(
-        new ArrayList<>(this.sites),
-        new HashMap<>(this.sitesPerCountry),
-        numberOfCulturalSites,
-        numberOfNaturalSites);
+        new ArrayList<>(this.sites), copiedCountries, numberOfCulturalSites, numberOfNaturalSites);
   }
 
   private void updateSitesPerCountryWhenAddingSite(final Site site) {
