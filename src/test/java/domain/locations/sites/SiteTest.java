@@ -100,4 +100,10 @@ public class SiteTest {
             .build();
     assertNotEquals(site, other);
   }
+
+  @Test
+  public void test_to_string() {
+    final var toString = site.toString();
+    final var x = 3;
+  }
 }

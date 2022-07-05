@@ -69,23 +69,23 @@ public class WeightedSumObjective implements Objective, VisitNewSiteObjective {
     private ObjectiveHolderBuilder objectiveHolderBuilder;
     private final Map<Objective, Long> weights;
 
-    WeightedSumObjectiveBuilder() {
+    public WeightedSumObjectiveBuilder() {
       objectiveHolderBuilder = ObjectiveHolder.builder();
       weights = new HashMap<>();
     }
 
-    WeightedSumObjectiveBuilder sense(final ObjectiveSense sense) {
+    public WeightedSumObjectiveBuilder sense(final ObjectiveSense sense) {
       this.sense = sense;
       return this;
     }
 
-    WeightedSumObjectiveBuilder objective(final Objective objective, final long weight) {
+    public WeightedSumObjectiveBuilder objective(final Objective objective, final long weight) {
       objectiveHolderBuilder = objectiveHolderBuilder.objective(objective);
       weights.put(objective, weight);
       return this;
     }
 
-    WeightedSumObjective build() {
+    public WeightedSumObjective build() {
       return new WeightedSumObjective(sense, objectiveHolderBuilder.build(), weights);
     }
   }

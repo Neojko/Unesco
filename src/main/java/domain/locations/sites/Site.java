@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
+import lombok.var;
 
 @Builder
 @Getter
@@ -29,6 +30,27 @@ public class Site implements Location {
 
   public boolean isNatural() {
     return type.isNatural();
+  }
+
+  @Override
+  public String toString() {
+    final StringBuilder result = new StringBuilder();
+    result.append(name).append(" / ");
+    result.append(countries.get(0));
+    if (countries.size() > 1) {
+      for (int i = 1; i < countries.size() - 1; i++) {
+        final var country = countries.get(i);
+        result.append(", ").append(country.toString());
+      }
+      final var lastCountry = countries.get(countries.size()-1);
+      result.append(" and ").append(lastCountry.toString());
+    }
+    result.append(" / ");
+    result.append(type.toString());
+    if (isEndangered) {
+      result.append(" / endangered");
+    }
+    return result.toString();
   }
 
   public static class SiteBuilder {

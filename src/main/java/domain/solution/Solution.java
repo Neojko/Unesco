@@ -10,6 +10,7 @@ import domain.objectives.ObjectiveManager;
 import domain.objectives.components.ObjectiveValues;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.var;
 import optimisation.moves.UnvisitSiteMove;
 import optimisation.moves.VisitNewSiteMove;
 
@@ -92,6 +93,26 @@ public class Solution {
     unvisitedSites.addSite(move.getSite());
     objectiveValues.add(move.getObjectiveValuesDelta());
     tripDurationinSeconds += move.getTripDurationDelta();
+  }
+
+  @Override
+  public String toString() {
+    final StringBuilder result = new StringBuilder();
+    result.append("Starting at: ").append(start.getCoordinates().toString())
+        .append("\n")
+        .append("\n");
+    result.append("Travel itinerary: \n");
+    for (int i = 0; i < visitedSites.getSites().size(); i++) {
+      final var site = visitedSites.getSites().get(i);
+      result.append(i).append(") ").append(site).append("\n");
+    }
+    result.append("\n");
+    result.append("Evaluation: \n");
+    for (final var objective : objectiveValues.getObjectiveRanking().getObjectives()) {
+      final var value = objectiveValues.getValues().get(objective).getValue();
+      result.append(objective.toString()).append(": ").append(value).append("\n");
+    }
+    return result.toString();
   }
 
   public static class SolutionBuilder {
