@@ -109,6 +109,19 @@ public class Solution {
       result.append(i + 1).append(") ").append(site).append("\n");
     }
     result.append("\n");
+
+    result
+        .append("Feasibility: \n")
+        .append("   Number of cultural sites: ")
+        .append(visitedSites.getNumberOfCulturalSites())
+        .append("\n")
+        .append("   Number of natural sites: ")
+        .append(visitedSites.getNumberOfNaturalSites())
+        .append("\n")
+        .append("   Trip duration: ")
+        .append(tripDurationinSeconds)
+        .append(" seconds (with 3 weeks = 1814400 seconds)\n\n");
+
     result.append("Evaluation: \n");
     final var numberOfSites = visitedSites.getSites().size();
     final var numberOfCountries = visitedSites.getSitesPerCountry().size();

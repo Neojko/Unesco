@@ -1,5 +1,6 @@
 import domain.Instance;
 import domain.constraints.ConstraintManager;
+import domain.constraints.LessThanXSiteTypeDifferenceConstraint;
 import domain.constraints.MaxTripDurationConstraint;
 import domain.locations.Coordinates;
 import domain.locations.TravelStartLocation;
@@ -10,6 +11,7 @@ import domain.objectives.NumberOfVisitedEndangeredSitesObjective;
 import domain.objectives.NumberOfVisitedSitesObjective;
 import domain.objectives.ObjectiveManager;
 import domain.objectives.SiteTypeParityObjective;
+import domain.objectives.TripRemainingTimeObjective;
 import domain.objectives.components.ObjectiveSense;
 import domain.objectives.components.WeightedSumObjective;
 import domain.solution.Solution;
@@ -41,7 +43,15 @@ public class App {
   private static final Coordinates USER_COORDINATES = new Coordinates(0, 0);
   private static final double DESTROYER_PERCENTAGE = 0.10;
   private static final long BUDGET_TIME_IN_SECONDS = 10;
-  private static final int ALGORITHM_ITERATIONS = 10;
+  private static final int ALGORITHM_ITERATIONS = 100;
+  // Constraint parameters
+  private static final int MAX_SITE_DIFFERENCE = 1;
+  // Objective weights
+  private static final long WEIGHT_VISITED_SITES = 1000;
+  private static final long WEIGHT_VISITED_COUNTRIES = 2000;
+  private static final long WEIGHT_VISITED_ENDANGERED_SITES = 3000;
+  private static final long WEIGHT_TRIP_REMAINING_TIME = 1;
+  private static final long WEIGHT_SITE_PARITY = 1500;
 
   public static void main(final String[] args) throws IOException {
     final Instance instance = createInstance();
@@ -72,18 +82,26 @@ public class App {
   private static ConstraintManager createConstraintManager() {
     return ConstraintManager.builder()
         .constraint(new MaxTripDurationConstraint(THREE_WEEKS_IN_SECONDS))
+        .constraint(
+            LessThanXSiteTypeDifferenceConstraint.builder()
+                .maxDifference(MAX_SITE_DIFFERENCE)
+                .build())
         .build();
   }
 
   private static ObjectiveManager createObjectiveManager() {
     return ObjectiveManager.builder()
-        .objective(new SiteTypeParityObjective())
         .objective(
             WeightedSumObjective.builder()
                 .sense(ObjectiveSense.MAXIMIZE)
-                .objective(new NumberOfVisitedSitesObjective(), 1L)
-                .objective(new NumberOfVisitedCountriesObjective(), 2L)
-                .objective(new NumberOfVisitedEndangeredSitesObjective(), 3L)
+                .objective(new NumberOfVisitedSitesObjective(), WEIGHT_VISITED_SITES)
+                .objective(new NumberOfVisitedCountriesObjective(), WEIGHT_VISITED_COUNTRIES)
+                .objective(
+                    new NumberOfVisitedEndangeredSitesObjective(), WEIGHT_VISITED_ENDANGERED_SITES)
+                .objective(
+                    new TripRemainingTimeObjective(THREE_WEEKS_IN_SECONDS),
+                    WEIGHT_TRIP_REMAINING_TIME)
+                .objective(new SiteTypeParityObjective(), WEIGHT_SITE_PARITY)
                 .build())
         .build();
   }
