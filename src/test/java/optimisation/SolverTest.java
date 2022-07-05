@@ -31,6 +31,7 @@ import optimisation.modificators.destroyers.RandomSiteDestroyer;
 import optimisation.modificators.repairers.BestVisitNewSitesRepairer;
 import optimisation.modificators.repairers.Repairer;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import util.RandomNumberGenerator;
 
@@ -54,41 +55,47 @@ public class SolverTest {
   private static final long WEIGHT_TRIP_REMAINING_TIME = 1;
   private static final long WEIGHT_SITE_PARITY = 1500;
 
+  @Disabled
   @Test
   public void test_solve() throws IOException {
     final var sites = new SiteReader().createSites(UNESCO_FILE_PATH);
     final var start = TravelStartLocation.builder().coordinates(USER_COORDINATES).build();
     final var matrix = new TravelMatrix(sites, TRAVEL_MATRIX_PATH, start);
     final Instance instance = Instance.builder().start(start).sites(sites).matrix(matrix).build();
-    final ConstraintManager constraintManager = ConstraintManager.builder()
-        .constraint(new MaxTripDurationConstraint(THREE_WEEKS_IN_SECONDS))
-        .constraint(
-            LessThanXSiteTypeDifferenceConstraint.builder()
-                .maxDifference(MAX_SITE_DIFFERENCE)
-                .build())
-        .build();
-    final ObjectiveManager objectiveManager = ObjectiveManager.builder()
-        .objective(new NumberOfVisitedSitesObjective())
-        .objective(new NumberOfVisitedCountriesObjective())
-        .objective(new NumberOfVisitedEndangeredSitesObjective())
-        .objective(new TripRemainingTimeObjective(THREE_WEEKS_IN_SECONDS))
-        .objective(new SiteTypeParityObjective())
-        .build();
-    final Destroyer destroyer = RandomSiteDestroyer.builder()
-        .percentage(DESTROYER_PERCENTAGE)
-        .filter(new OverRepresentedSiteTypeFilter())
-        .selector(new RandomSiteSelector(new RandomNumberGenerator(0)))
-        .build();
-    final Repairer repairer = BestVisitNewSitesRepairer.builder()
-        .filter(new UnderRepresentedSiteTypeFilter())
-        .stoppingCriterion(new NumberOfIterationsStoppingCriterion(75))
-        .build();
-    final Algorithm algorithm = LNS.builder()
-        .destroyer(destroyer)
-        .repairer(repairer)
-        .acceptanceCriterion(new AcceptBestSolution())
-        .stoppingCriterion(new NumberOfIterationsStoppingCriterion(ALGORITHM_ITERATIONS))
-        .build();
+    final ConstraintManager constraintManager =
+        ConstraintManager.builder()
+            .constraint(new MaxTripDurationConstraint(THREE_WEEKS_IN_SECONDS))
+            .constraint(
+                LessThanXSiteTypeDifferenceConstraint.builder()
+                    .maxDifference(MAX_SITE_DIFFERENCE)
+                    .build())
+            .build();
+    final ObjectiveManager objectiveManager =
+        ObjectiveManager.builder()
+            .objective(new NumberOfVisitedSitesObjective())
+            .objective(new NumberOfVisitedCountriesObjective())
+            .objective(new NumberOfVisitedEndangeredSitesObjective())
+            .objective(new TripRemainingTimeObjective(THREE_WEEKS_IN_SECONDS))
+            .objective(new SiteTypeParityObjective())
+            .build();
+    final Destroyer destroyer =
+        RandomSiteDestroyer.builder()
+            .percentage(DESTROYER_PERCENTAGE)
+            .filter(new OverRepresentedSiteTypeFilter())
+            .selector(new RandomSiteSelector(new RandomNumberGenerator(0)))
+            .build();
+    final Repairer repairer =
+        BestVisitNewSitesRepairer.builder()
+            .filter(new UnderRepresentedSiteTypeFilter())
+            .stoppingCriterion(new NumberOfIterationsStoppingCriterion(75))
+            .build();
+    final Algorithm algorithm =
+        LNS.builder()
+            .destroyer(destroyer)
+            .repairer(repairer)
+            .acceptanceCriterion(new AcceptBestSolution())
+            .stoppingCriterion(new NumberOfIterationsStoppingCriterion(ALGORITHM_ITERATIONS))
+            .build();
     final Solver solver =
         Solver.builder()
             .constraintManager(constraintManager)
@@ -102,48 +109,55 @@ public class SolverTest {
     Assertions.assertEquals(expectedObjectiveValues, solution.getObjectiveValues());
   }
 
+  @Disabled
   @Test
   public void test_solve_with_weighted_sum() throws IOException {
     final var sites = new SiteReader().createSites(UNESCO_FILE_PATH);
     final var start = TravelStartLocation.builder().coordinates(USER_COORDINATES).build();
     final var matrix = new TravelMatrix(sites, TRAVEL_MATRIX_PATH, start);
     final Instance instance = Instance.builder().start(start).sites(sites).matrix(matrix).build();
-    final ConstraintManager constraintManager = ConstraintManager.builder()
-        .constraint(new MaxTripDurationConstraint(THREE_WEEKS_IN_SECONDS))
-        .constraint(
-            LessThanXSiteTypeDifferenceConstraint.builder()
-                .maxDifference(MAX_SITE_DIFFERENCE)
-                .build())
-        .build();
-    final ObjectiveManager objectiveManager = ObjectiveManager.builder()
-        .objective(
-            WeightedSumObjective.builder()
-                .sense(ObjectiveSense.MAXIMIZE)
-                .objective(new NumberOfVisitedSitesObjective(), WEIGHT_VISITED_SITES)
-                .objective(new NumberOfVisitedCountriesObjective(), WEIGHT_VISITED_COUNTRIES)
-                .objective(
-                    new NumberOfVisitedEndangeredSitesObjective(), WEIGHT_VISITED_ENDANGERED_SITES)
-                .objective(
-                    new TripRemainingTimeObjective(THREE_WEEKS_IN_SECONDS),
-                    WEIGHT_TRIP_REMAINING_TIME)
-                .objective(new SiteTypeParityObjective(), WEIGHT_SITE_PARITY)
-                .build())
-        .build();
-    final Destroyer destroyer = RandomSiteDestroyer.builder()
-        .percentage(DESTROYER_PERCENTAGE)
-        .filter(new OverRepresentedSiteTypeFilter())
-        .selector(new RandomSiteSelector(new RandomNumberGenerator(0)))
-        .build();
-    final Repairer repairer = BestVisitNewSitesRepairer.builder()
-        .filter(new UnderRepresentedSiteTypeFilter())
-        .stoppingCriterion(new NumberOfIterationsStoppingCriterion(75))
-        .build();
-    final Algorithm algorithm = LNS.builder()
-        .destroyer(destroyer)
-        .repairer(repairer)
-        .acceptanceCriterion(new AcceptBestSolution())
-        .stoppingCriterion(new NumberOfIterationsStoppingCriterion(ALGORITHM_ITERATIONS))
-        .build();
+    final ConstraintManager constraintManager =
+        ConstraintManager.builder()
+            .constraint(new MaxTripDurationConstraint(THREE_WEEKS_IN_SECONDS))
+            .constraint(
+                LessThanXSiteTypeDifferenceConstraint.builder()
+                    .maxDifference(MAX_SITE_DIFFERENCE)
+                    .build())
+            .build();
+    final ObjectiveManager objectiveManager =
+        ObjectiveManager.builder()
+            .objective(
+                WeightedSumObjective.builder()
+                    .sense(ObjectiveSense.MAXIMIZE)
+                    .objective(new NumberOfVisitedSitesObjective(), WEIGHT_VISITED_SITES)
+                    .objective(new NumberOfVisitedCountriesObjective(), WEIGHT_VISITED_COUNTRIES)
+                    .objective(
+                        new NumberOfVisitedEndangeredSitesObjective(),
+                        WEIGHT_VISITED_ENDANGERED_SITES)
+                    .objective(
+                        new TripRemainingTimeObjective(THREE_WEEKS_IN_SECONDS),
+                        WEIGHT_TRIP_REMAINING_TIME)
+                    .objective(new SiteTypeParityObjective(), WEIGHT_SITE_PARITY)
+                    .build())
+            .build();
+    final Destroyer destroyer =
+        RandomSiteDestroyer.builder()
+            .percentage(DESTROYER_PERCENTAGE)
+            .filter(new OverRepresentedSiteTypeFilter())
+            .selector(new RandomSiteSelector(new RandomNumberGenerator(0)))
+            .build();
+    final Repairer repairer =
+        BestVisitNewSitesRepairer.builder()
+            .filter(new UnderRepresentedSiteTypeFilter())
+            .stoppingCriterion(new NumberOfIterationsStoppingCriterion(75))
+            .build();
+    final Algorithm algorithm =
+        LNS.builder()
+            .destroyer(destroyer)
+            .repairer(repairer)
+            .acceptanceCriterion(new AcceptBestSolution())
+            .stoppingCriterion(new NumberOfIterationsStoppingCriterion(ALGORITHM_ITERATIONS))
+            .build();
     final Solver solver =
         Solver.builder()
             .constraintManager(constraintManager)

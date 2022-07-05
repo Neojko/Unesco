@@ -70,10 +70,7 @@ public class Sites {
       copiedCountries.put(country, new ArrayList<>(sitesList));
     }
     return new Sites(
-        new ArrayList<>(this.sites),
-        copiedCountries,
-        numberOfCulturalSites,
-        numberOfNaturalSites);
+        new ArrayList<>(this.sites), copiedCountries, numberOfCulturalSites, numberOfNaturalSites);
   }
 
   private void updateSitesPerCountryWhenAddingSite(final Site site) {

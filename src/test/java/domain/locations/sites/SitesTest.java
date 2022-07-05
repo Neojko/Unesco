@@ -153,4 +153,20 @@ public class SitesTest {
     sites.removeSite(englishNaturalSite);
     assertEquals(oldValue - 1, sites.getNumberOfNaturalSites());
   }
+
+  @Test
+  public void remove_site_and_country_does_not_impact_copied_sites() {
+    final var sites = Sites.builder().site(englishNaturalSite).build();
+    final var copy = sites.copy();
+    assertTrue(sites.containsCountry(england));
+    assertEquals(1, sites.getSitesPerCountry().get(england).size());
+    assertTrue(copy.containsCountry(england));
+    assertEquals(1, copy.getSitesPerCountry().get(england).size());
+
+    sites.removeSite(englishNaturalSite);
+
+    assertFalse(sites.containsCountry(england));
+    assertTrue(copy.containsCountry(england));
+    assertEquals(1, copy.getSitesPerCountry().get(england).size());
+  }
 }
