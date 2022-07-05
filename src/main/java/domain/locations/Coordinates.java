@@ -12,4 +12,9 @@ import lombok.Getter;
 public class Coordinates {
   private final double latitude;
   private final double longitude;
+
+  @Override
+  public String toString() {
+    return latitude + ", " + longitude;
+  }
 }

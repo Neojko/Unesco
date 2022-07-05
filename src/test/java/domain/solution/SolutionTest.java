@@ -47,18 +47,21 @@ public class SolutionTest {
     start = TravelStartLocation.builder().coordinates(-83.839219, 87.234581).build();
     france = new Country("France");
     england = new Country("England");
-    spain = new Country("spain");
+    spain = new Country("Spain");
     site1 =
         Site.builder()
             .locationID(1)
+            .name("Site 1")
             .coordinates(new Coordinates(23.183948, 2.349192))
             .country(france)
             .country(england)
             .type(SiteType.Cultural)
+            .isEndangered()
             .build();
     site2 =
         Site.builder()
             .locationID(2)
+            .name("Site 2")
             .coordinates(new Coordinates(81.183948, -35.349192))
             .country(england)
             .country(spain)
@@ -67,6 +70,7 @@ public class SolutionTest {
     site3 =
         Site.builder()
             .locationID(3)
+            .name("Site 3")
             .coordinates(new Coordinates(1.183948, 9.349192))
             .country(spain)
             .type(SiteType.Mixed)
@@ -74,6 +78,7 @@ public class SolutionTest {
     site4 =
         Site.builder()
             .locationID(4)
+            .name("Site 4")
             .coordinates(new Coordinates(15.183948, 4.349192))
             .country(germany)
             .type(SiteType.Natural)
@@ -222,5 +227,23 @@ public class SolutionTest {
         oldTripDuration + move.getTripDurationDelta(), solution.getTripDurationinSeconds());
     oldObjectiveValues.add(move.getObjectiveValuesDelta());
     assertEquals(oldObjectiveValues, solution.getObjectiveValues());
+  }
+
+  @Test
+  public void to_string_test() {
+    final var expectedResult =
+        "Starting at: -83.839219, 87.234581\n"
+            + "\n"
+            + "Travel itinerary: \n"
+            + "1) Site 1 / France and England / Cultural / Endangered\n"
+            + "2) Site 2 / England and Spain / Natural\n"
+            + "3) Site 3 / Spain / Mixed\n"
+            + "\n"
+            + "Evaluation: \n"
+            + "   3 destinations x 1 point\n"
+            + "   3 countries x 2 points\n"
+            + "   1 endangered x 3 points\n"
+            + "Overall score: 12";
+    assertEquals(expectedResult, solution.toString());
   }
 }
