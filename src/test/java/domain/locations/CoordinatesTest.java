@@ -47,4 +47,9 @@ public class CoordinatesTest {
     final var other = new Coordinates(latitude, 1.34);
     assertNotEquals(coordinates, other);
   }
+
+  @Test
+  public void test_to_string() {
+    assertEquals(latitude + ", " + longitude, coordinates.toString());
+  }
 }
