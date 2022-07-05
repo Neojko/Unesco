@@ -42,7 +42,7 @@ public class Site implements Location {
         final var country = countries.get(i);
         result.append(", ").append(country.toString());
       }
-      final var lastCountry = countries.get(countries.size()-1);
+      final var lastCountry = countries.get(countries.size() - 1);
       result.append(" and ").append(lastCountry.toString());
     }
     result.append(" / ");

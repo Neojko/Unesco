@@ -98,20 +98,22 @@ public class Solution {
   @Override
   public String toString() {
     final StringBuilder result = new StringBuilder();
-    result.append("Starting at: ").append(start.getCoordinates().toString())
+    result
+        .append("Starting at: ")
+        .append(start.getCoordinates().toString())
         .append("\n")
         .append("\n");
     result.append("Travel itinerary: \n");
     for (int i = 0; i < visitedSites.getSites().size(); i++) {
       final var site = visitedSites.getSites().get(i);
-      result.append(i+1).append(") ").append(site).append("\n");
+      result.append(i + 1).append(") ").append(site).append("\n");
     }
     result.append("\n");
     result.append("Evaluation: \n");
     final var numberOfSites = visitedSites.getSites().size();
     final var numberOfCountries = visitedSites.getSitesPerCountry().size();
-    final var numberOfEndangeredSites = visitedSites.getSites().stream()
-        .filter(Site::isEndangered).count();
+    final var numberOfEndangeredSites =
+        visitedSites.getSites().stream().filter(Site::isEndangered).count();
     final var score = numberOfSites + numberOfCountries * 2L + numberOfEndangeredSites * 3L;
     result
         .append("   ")

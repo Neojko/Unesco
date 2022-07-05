@@ -231,18 +231,19 @@ public class SolutionTest {
 
   @Test
   public void to_string_test() {
-    final var expectedResult = "Starting at: -83.839219, 87.234581\n"
-        + "\n"
-        + "Travel itinerary: \n"
-        + "1) Site 1 / France and England / Cultural / Endangered\n"
-        + "2) Site 2 / England and Spain / Natural\n"
-        + "3) Site 3 / Spain / Mixed\n"
-        + "\n"
-        + "Evaluation: \n"
-        + "   3 destinations x 1 point\n"
-        + "   3 countries x 2 points\n"
-        + "   1 endangered x 3 points\n"
-        + "Overall score: 12";
+    final var expectedResult =
+        "Starting at: -83.839219, 87.234581\n"
+            + "\n"
+            + "Travel itinerary: \n"
+            + "1) Site 1 / France and England / Cultural / Endangered\n"
+            + "2) Site 2 / England and Spain / Natural\n"
+            + "3) Site 3 / Spain / Mixed\n"
+            + "\n"
+            + "Evaluation: \n"
+            + "   3 destinations x 1 point\n"
+            + "   3 countries x 2 points\n"
+            + "   1 endangered x 3 points\n"
+            + "Overall score: 12";
     assertEquals(expectedResult, solution.toString());
   }
 }

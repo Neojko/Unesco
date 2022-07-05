@@ -111,7 +111,9 @@ public class SiteTest {
             .name("Super cool name")
             .locationID(1)
             .coordinates(new Coordinates(34.84694, 67.82525))
-            .country(country1).country(country2).country(country3)
+            .country(country1)
+            .country(country2)
+            .country(country3)
             .type(SiteType.Cultural)
             .build();
     final var expectedResult = "Super cool name / Country1, Country2 and Country3 / Cultural";
@@ -128,11 +130,14 @@ public class SiteTest {
             .name("Super cool name")
             .locationID(1)
             .coordinates(new Coordinates(34.84694, 67.82525))
-            .country(country1).country(country2).country(country3)
+            .country(country1)
+            .country(country2)
+            .country(country3)
             .type(SiteType.Cultural)
             .isEndangered()
             .build();
-    final var expectedResult = "Super cool name / Country1, Country2 and Country3 / Cultural / Endangered";
+    final var expectedResult =
+        "Super cool name / Country1, Country2 and Country3 / Cultural / Endangered";
     assertEquals(expectedResult, site.toString());
   }
 }
