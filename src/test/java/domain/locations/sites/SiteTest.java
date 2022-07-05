@@ -102,8 +102,37 @@ public class SiteTest {
   }
 
   @Test
-  public void test_to_string() {
-    final var toString = site.toString();
-    final var x = 3;
+  public void test_to_string_for_not_endangered_site() {
+    final var country1 = new Country("Country1");
+    final var country2 = new Country("Country2");
+    final var country3 = new Country("Country3");
+    final var site =
+        Site.builder()
+            .name("Super cool name")
+            .locationID(1)
+            .coordinates(new Coordinates(34.84694, 67.82525))
+            .country(country1).country(country2).country(country3)
+            .type(SiteType.Cultural)
+            .build();
+    final var expectedResult = "Super cool name / Country1, Country2 and Country3 / Cultural";
+    assertEquals(expectedResult, site.toString());
+  }
+
+  @Test
+  public void test_to_string_for_endangered_site() {
+    final var country1 = new Country("Country1");
+    final var country2 = new Country("Country2");
+    final var country3 = new Country("Country3");
+    final var site =
+        Site.builder()
+            .name("Super cool name")
+            .locationID(1)
+            .coordinates(new Coordinates(34.84694, 67.82525))
+            .country(country1).country(country2).country(country3)
+            .type(SiteType.Cultural)
+            .isEndangered()
+            .build();
+    final var expectedResult = "Super cool name / Country1, Country2 and Country3 / Cultural / Endangered";
+    assertEquals(expectedResult, site.toString());
   }
 }

@@ -48,7 +48,7 @@ public class Site implements Location {
     result.append(" / ");
     result.append(type.toString());
     if (isEndangered) {
-      result.append(" / endangered");
+      result.append(" / Endangered");
     }
     return result.toString();
   }
