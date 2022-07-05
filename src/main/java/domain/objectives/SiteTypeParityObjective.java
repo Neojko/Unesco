@@ -53,9 +53,7 @@ public class SiteTypeParityObjective
     return ObjectiveValue.builder().sense(sense).value(negativeValueDelta).build();
   }
 
-  /**
-   * Returns absolute difference between numbers of cultural sites and natural sites in solution
-   */
+  /** Returns absolute difference between numbers of cultural sites and natural sites in solution */
   private int getAbsoluteDifference(final Solution solution) {
     final var cultural = solution.getVisitedSites().getNumberOfCulturalSites();
     final var natural = solution.getVisitedSites().getNumberOfNaturalSites();
@@ -65,15 +63,13 @@ public class SiteTypeParityObjective
   /**
    * Returns absolute difference between numbers of cultural sites and natural sites in solution
    * with a delta change for cultural and natural sites.
+   *
    * @param solution: used to get initial number of cultural and natural sites
    * @param culturalDelta: cultural site delta
    * @param naturalDelta: natural site delta
    */
   private int getAbsoluteDifference(
-      final Solution solution,
-      final int culturalDelta,
-      final int naturalDelta
-  ) {
+      final Solution solution, final int culturalDelta, final int naturalDelta) {
     final var cultural = solution.getVisitedSites().getNumberOfCulturalSites() + culturalDelta;
     final var natural = solution.getVisitedSites().getNumberOfNaturalSites() + naturalDelta;
     return Math.abs(cultural - natural);
