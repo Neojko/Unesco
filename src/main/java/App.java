@@ -24,20 +24,40 @@ import optimisation.choosers.selectors.RandomSiteSelector;
 import optimisation.criteria.acceptance.AcceptBestSolution;
 import optimisation.criteria.stopping.NumberOfIterationsStoppingCriterion;
 import optimisation.criteria.stopping.TimeBudgetStoppingCriterion;
+import optimisation.modificators.destroyers.Destroyer;
 import optimisation.modificators.destroyers.RandomSiteDestroyer;
 import optimisation.modificators.repairers.BestVisitNewSitesRepairer;
+import optimisation.modificators.repairers.Repairer;
 import util.RandomNumberGenerator;
 
 public class App {
 
+  // Generic parameters
   private static final String UNESCO_FILE_PATH = "src/main/resources/whc-sites-2021.xls";
   private static final String TRAVEL_MATRIX_PATH = "src/main/resources/matrix.csv";
-  private static final Coordinates USER_COORDINATES = new Coordinates(0, 0);
   private static final long THREE_WEEKS_IN_SECONDS = 3 * 7 * 24 * 3600;
+
+  // User parameters
+  private static final Coordinates USER_COORDINATES = new Coordinates(0, 0);
+  private static final double DESTROYER_PERCENTAGE = 0.10;
+  private static final long BUDGET_TIME_IN_SECONDS = 10;
+  private static final int ALGORITHM_ITERATIONS = 10;
 
   public static void main(final String[] args) throws IOException {
     final Instance instance = createInstance();
-    final Solver solver = createSolver(instance);
+    final ConstraintManager constraintManager = createConstraintManager();
+    final ObjectiveManager objectiveManager = createObjectiveManager();
+    final Destroyer destroyer = createDestroyer();
+    final Repairer repairer = createRepairer();
+    final Algorithm algorithm = createAlgorithm(destroyer, repairer, Stop.ITERATIONS);
+    final Solver solver =
+        Solver.builder()
+            .constraintManager(constraintManager)
+            .objectiveManager(objectiveManager)
+            .algorithm(algorithm)
+            .initialRepairer(repairer)
+            .instance(instance)
+            .build();
     final Solution solution = solver.solve();
     System.out.println(solution);
   }
@@ -49,46 +69,56 @@ public class App {
     return Instance.builder().start(start).sites(sites).matrix(matrix).build();
   }
 
-  private static Solver createSolver(final Instance instance) {
-    final var constraintManager =
-        ConstraintManager.builder()
-            .constraint(new MaxTripDurationConstraint(THREE_WEEKS_IN_SECONDS))
-            .build();
-    final var objectiveManager =
-        ObjectiveManager.builder()
-            .objective(new SiteTypeParityObjective())
-            .objective(
-                WeightedSumObjective.builder()
-                    .sense(ObjectiveSense.MAXIMIZE)
-                    .objective(new NumberOfVisitedSitesObjective(), 1L)
-                    .objective(new NumberOfVisitedCountriesObjective(), 2L)
-                    .objective(new NumberOfVisitedEndangeredSitesObjective(), 3L)
-                    .build())
-            .build();
-    final var repairer =
-        BestVisitNewSitesRepairer.builder()
-            .filter(new UnderRepresentedSiteTypeFilter())
-            .stoppingCriterion(new NumberOfIterationsStoppingCriterion(75))
-            .build();
-    final var destroyer =
-        RandomSiteDestroyer.builder()
-            .percentage(0.10)
-            .filter(new OverRepresentedSiteTypeFilter())
-            .selector(new RandomSiteSelector(new RandomNumberGenerator(0)))
-            .build();
-    final Algorithm algorithm =
-        LNS.builder()
-            .destroyer(destroyer)
-            .repairer(repairer)
-            .acceptanceCriterion(new AcceptBestSolution())
-            .stoppingCriterion(new TimeBudgetStoppingCriterion(10 * 1000))
-            .build();
-    return Solver.builder()
-        .constraintManager(constraintManager)
-        .objectiveManager(objectiveManager)
-        .algorithm(algorithm)
-        .initialRepairer(repairer)
-        .instance(instance)
+  private static ConstraintManager createConstraintManager() {
+    return ConstraintManager.builder()
+        .constraint(new MaxTripDurationConstraint(THREE_WEEKS_IN_SECONDS))
         .build();
+  }
+
+  private static ObjectiveManager createObjectiveManager() {
+    return ObjectiveManager.builder()
+        .objective(new SiteTypeParityObjective())
+        .objective(
+            WeightedSumObjective.builder()
+                .sense(ObjectiveSense.MAXIMIZE)
+                .objective(new NumberOfVisitedSitesObjective(), 1L)
+                .objective(new NumberOfVisitedCountriesObjective(), 2L)
+                .objective(new NumberOfVisitedEndangeredSitesObjective(), 3L)
+                .build())
+        .build();
+  }
+
+  private static Repairer createRepairer() {
+    return BestVisitNewSitesRepairer.builder()
+        .filter(new UnderRepresentedSiteTypeFilter())
+        .stoppingCriterion(new NumberOfIterationsStoppingCriterion(75))
+        .build();
+  }
+
+  private static Destroyer createDestroyer() {
+    return RandomSiteDestroyer.builder()
+        .percentage(DESTROYER_PERCENTAGE)
+        .filter(new OverRepresentedSiteTypeFilter())
+        .selector(new RandomSiteSelector(new RandomNumberGenerator(0)))
+        .build();
+  }
+
+  private static Algorithm createAlgorithm(
+      final Destroyer destroyer, final Repairer repairer, final Stop stop) {
+    final var stoppingCriterion =
+        stop.equals(Stop.TIME)
+            ? new TimeBudgetStoppingCriterion(BUDGET_TIME_IN_SECONDS * 1000)
+            : new NumberOfIterationsStoppingCriterion(ALGORITHM_ITERATIONS);
+    return LNS.builder()
+        .destroyer(destroyer)
+        .repairer(repairer)
+        .acceptanceCriterion(new AcceptBestSolution())
+        .stoppingCriterion(stoppingCriterion)
+        .build();
+  }
+
+  private enum Stop {
+    TIME,
+    ITERATIONS
   }
 }
