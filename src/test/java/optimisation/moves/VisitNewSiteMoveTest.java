@@ -20,6 +20,7 @@ import org.mockito.Mockito;
 public class VisitNewSiteMoveTest {
 
   private boolean isFeasible;
+  private long tripDurationDelta;
   private ObjectiveValues objectiveValues;
   private VisitNewSiteMove move;
 
@@ -30,9 +31,9 @@ public class VisitNewSiteMoveTest {
     final var position = 2;
     final TravelMatrix matrix = mock(TravelMatrix.class);
     isFeasible = true;
+    tripDurationDelta = 1L;
     objectiveValues = mock(ObjectiveValues.class);
     final ConstraintManager constraintManager = mock(ConstraintManager.class);
-    final long tripDurationDelta = 1L;
     try (MockedStatic<SolutionTripDurationComputer> mockDelta =
         Mockito.mockStatic(SolutionTripDurationComputer.class)) {
       mockDelta
@@ -55,8 +56,12 @@ public class VisitNewSiteMoveTest {
 
   @Test
   public void test_is_feasible() {
-
     assertEquals(isFeasible, move.isFeasible());
+  }
+
+  @Test
+  public void test_get_trip_duration_delta() {
+    assertEquals(tripDurationDelta, move.getTripDurationDelta());
   }
 
   @Test

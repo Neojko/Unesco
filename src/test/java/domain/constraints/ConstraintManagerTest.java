@@ -27,8 +27,10 @@ public class ConstraintManagerTest {
   @BeforeEach
   public void setUp() {
     constraint1 =
-        mock(Constraint.class, withSettings()
-            .extraInterfaces(VisitNewSiteConstraint.class, UnvisitSiteConstraint.class));
+        mock(
+            Constraint.class,
+            withSettings()
+                .extraInterfaces(VisitNewSiteConstraint.class, UnvisitSiteConstraint.class));
     constraint2 =
         mock(Constraint.class, withSettings().extraInterfaces(VisitNewSiteConstraint.class));
     constraint3 =
@@ -50,12 +52,24 @@ public class ConstraintManagerTest {
     assertTrue(constraintManager.getConstraints().contains(constraint3));
     // Visit new site constraints
     assertEquals(2, constraintManager.getVisitNewSiteConstraints().size());
-    assertTrue(constraintManager.getVisitNewSiteConstraints().contains((VisitNewSiteConstraint) constraint1));
-    assertTrue(constraintManager.getVisitNewSiteConstraints().contains((VisitNewSiteConstraint) constraint2));
+    assertTrue(
+        constraintManager
+            .getVisitNewSiteConstraints()
+            .contains((VisitNewSiteConstraint) constraint1));
+    assertTrue(
+        constraintManager
+            .getVisitNewSiteConstraints()
+            .contains((VisitNewSiteConstraint) constraint2));
     // Unvisit site constraints
     assertEquals(2, constraintManager.getUnvisitSiteConstraints().size());
-    assertTrue(constraintManager.getUnvisitSiteConstraints().contains((UnvisitSiteConstraint) constraint1));
-    assertTrue(constraintManager.getUnvisitSiteConstraints().contains((UnvisitSiteConstraint) constraint3));
+    assertTrue(
+        constraintManager
+            .getUnvisitSiteConstraints()
+            .contains((UnvisitSiteConstraint) constraint1));
+    assertTrue(
+        constraintManager
+            .getUnvisitSiteConstraints()
+            .contains((UnvisitSiteConstraint) constraint3));
   }
 
   private static Stream<Arguments> test_compute_is_feasible() {
@@ -118,7 +132,7 @@ public class ConstraintManagerTest {
         Arguments.of(false, true, false), // first constraint not feasible
         Arguments.of(true, false, false), // second constraint not feasible
         Arguments.of(false, false, false) // no feasible constraint
-    );
+        );
   }
 
   // constraint1 and constraint3 are VisitNewSiteConstraints (not constraint2)

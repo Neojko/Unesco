@@ -1,10 +1,10 @@
 package optimisation.moves;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import domain.constraints.ConstraintManager;
 import domain.locations.sites.Site;
 import domain.matrix.TravelMatrix;
 import domain.objectives.ObjectiveManager;
@@ -19,6 +19,8 @@ import org.mockito.Mockito;
 
 public class UnvisitSiteMoveTest {
 
+  private boolean isFeasible;
+  private long tripDurationDelta;
   private ObjectiveValues objectiveValues;
   private UnvisitSiteMove move;
 
@@ -27,8 +29,9 @@ public class UnvisitSiteMoveTest {
     final var solution = mock(Solution.class);
     final var site = mock(Site.class);
     final TravelMatrix matrix = mock(TravelMatrix.class);
+    isFeasible = true;
+    tripDurationDelta = 1L;
     objectiveValues = mock(ObjectiveValues.class);
-    final long tripDurationDelta = 1L;
     try (MockedStatic<SolutionTripDurationComputer> mockDelta =
         Mockito.mockStatic(SolutionTripDurationComputer.class)) {
       mockDelta
@@ -37,17 +40,24 @@ public class UnvisitSiteMoveTest {
                   SolutionTripDurationComputer.computeTripDurationDeltaToUnvisitSite(
                       solution, site, matrix))
           .thenReturn(tripDurationDelta);
+      final ConstraintManager constraintManager = mock(ConstraintManager.class);
+      when(constraintManager.canUnvisitSite(solution, site)).thenReturn(isFeasible);
       final ObjectiveManager objectiveManager = mock(ObjectiveManager.class);
       when(objectiveManager.computeUnvisitSiteObjectiveValuesDelta(
               solution, site, tripDurationDelta))
           .thenReturn(objectiveValues);
-      move = new UnvisitSiteMove(solution, site, matrix, objectiveManager);
+      move = new UnvisitSiteMove(solution, site, matrix, constraintManager, objectiveManager);
     }
   }
 
   @Test
   public void test_is_feasible() {
-    assertTrue(move.isFeasible());
+    assertEquals(isFeasible, move.isFeasible());
+  }
+
+  @Test
+  public void test_get_trip_duration_delta() {
+    assertEquals(tripDurationDelta, move.getTripDurationDelta());
   }
 
   @Test

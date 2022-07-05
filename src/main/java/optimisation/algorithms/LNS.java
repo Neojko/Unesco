@@ -36,7 +36,7 @@ public class LNS implements Algorithm {
     var currentSolution = solution.copy();
     stoppingCriterion.initialise();
     while (!stoppingCriterion.isMet()) {
-      destroyer.destroy(objectiveManager, matrix, solution);
+      destroyer.destroy(constraintManager, objectiveManager, matrix, solution);
       repairer.repair(constraintManager, objectiveManager, matrix, solution);
       if (currentSolution.isBetterThan(bestSolution)) {
         bestSolution = currentSolution.copy();
