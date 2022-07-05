@@ -1,3 +1,5 @@
+package app;
+
 import domain.Instance;
 import domain.constraints.ConstraintManager;
 import domain.constraints.LessThanXSiteTypeDifferenceConstraint;
@@ -34,32 +36,21 @@ import util.RandomNumberGenerator;
 
 public class App {
 
-  // Generic parameters
-  private static final String UNESCO_FILE_PATH = "src/main/resources/whc-sites-2021.xls";
-  private static final String TRAVEL_MATRIX_PATH = "src/main/resources/matrix.csv";
+  // Fixed parameters
   private static final long THREE_WEEKS_IN_SECONDS = 3 * 7 * 24 * 3600;
-
-  // User parameters
-  private static final Coordinates USER_COORDINATES = new Coordinates(0, 0);
-  private static final double DESTROYER_PERCENTAGE = 0.10;
-  private static final long BUDGET_TIME_IN_SECONDS = 10;
-  private static final int ALGORITHM_ITERATIONS = 100;
-  // Constraint parameters
+  private static final int REPAIRER_ITERATIONS = 80;
   private static final int MAX_SITE_DIFFERENCE = 1;
-  // Objective weights
-  private static final long WEIGHT_VISITED_SITES = 1000;
-  private static final long WEIGHT_VISITED_COUNTRIES = 2000;
-  private static final long WEIGHT_VISITED_ENDANGERED_SITES = 3000;
-  private static final long WEIGHT_TRIP_REMAINING_TIME = 1;
-  private static final long WEIGHT_SITE_PARITY = 1500;
 
   public static void main(final String[] args) throws IOException {
-    final Instance instance = createInstance();
+    final String jsonAppConfigPath = args[0];
+    System.out.println("Reading config from " + jsonAppConfigPath);
+    final AppConfig config = JsonHelper.build(jsonAppConfigPath, JsonAppConfig.class).toConfig();
+    final Instance instance = createInstance(config);
     final ConstraintManager constraintManager = createConstraintManager();
-    final ObjectiveManager objectiveManager = createObjectiveManager();
-    final Destroyer destroyer = createDestroyer();
+    final ObjectiveManager objectiveManager = createObjectiveManager(config);
+    final Destroyer destroyer = createDestroyer(config);
     final Repairer repairer = createRepairer();
-    final Algorithm algorithm = createAlgorithm(destroyer, repairer, Stop.ITERATIONS);
+    final Algorithm algorithm = createAlgorithm(config, destroyer, repairer);
     final Solver solver =
         Solver.builder()
             .constraintManager(constraintManager)
@@ -68,14 +59,16 @@ public class App {
             .initialRepairer(repairer)
             .instance(instance)
             .build();
+    System.out.println("Running solver for " + config.getTimeBudgetInSeconds() + " seconds..");
     final Solution solution = solver.solve();
     System.out.println(solution);
   }
 
-  private static Instance createInstance() throws IOException {
-    final var sites = new SiteReader().createSites(UNESCO_FILE_PATH);
-    final var start = TravelStartLocation.builder().coordinates(USER_COORDINATES).build();
-    final var matrix = new TravelMatrix(sites, TRAVEL_MATRIX_PATH, start);
+  private static Instance createInstance(final AppConfig config) throws IOException {
+    final var sites = new SiteReader().createSites(config.getSitesFilePath());
+    final var userCoordinates = new Coordinates(config.getLatitude(), config.getLongitude());
+    final var start = TravelStartLocation.builder().coordinates(userCoordinates).build();
+    final var matrix = new TravelMatrix(sites, config.getMatrixFilePath(), start);
     return Instance.builder().start(start).sites(sites).matrix(matrix).build();
   }
 
@@ -89,19 +82,24 @@ public class App {
         .build();
   }
 
-  private static ObjectiveManager createObjectiveManager() {
+  private static ObjectiveManager createObjectiveManager(final AppConfig config) {
     return ObjectiveManager.builder()
         .objective(
             WeightedSumObjective.builder()
                 .sense(ObjectiveSense.MAXIMIZE)
-                .objective(new NumberOfVisitedSitesObjective(), WEIGHT_VISITED_SITES)
-                .objective(new NumberOfVisitedCountriesObjective(), WEIGHT_VISITED_COUNTRIES)
                 .objective(
-                    new NumberOfVisitedEndangeredSitesObjective(), WEIGHT_VISITED_ENDANGERED_SITES)
+                    new NumberOfVisitedSitesObjective(),
+                    config.getWeightNumberOfVisitedSitesObjective())
+                .objective(
+                    new NumberOfVisitedCountriesObjective(),
+                    config.getWeightNumberOfVisitedCountriesObjective())
+                .objective(
+                    new NumberOfVisitedEndangeredSitesObjective(),
+                    config.getWeightNumberOfVisitedEndangeredSitesObjective())
+                .objective(new SiteTypeParityObjective(), config.getWeightSiteTypeParityObjective())
                 .objective(
                     new TripRemainingTimeObjective(THREE_WEEKS_IN_SECONDS),
-                    WEIGHT_TRIP_REMAINING_TIME)
-                .objective(new SiteTypeParityObjective(), WEIGHT_SITE_PARITY)
+                    config.getWeightRemainingTripDurationObjective())
                 .build())
         .build();
   }
@@ -109,34 +107,27 @@ public class App {
   private static Repairer createRepairer() {
     return BestVisitNewSitesRepairer.builder()
         .filter(new UnderRepresentedSiteTypeFilter())
-        .stoppingCriterion(new NumberOfIterationsStoppingCriterion(75))
+        .stoppingCriterion(new NumberOfIterationsStoppingCriterion(REPAIRER_ITERATIONS))
         .build();
   }
 
-  private static Destroyer createDestroyer() {
+  private static Destroyer createDestroyer(final AppConfig config) {
     return RandomSiteDestroyer.builder()
-        .percentage(DESTROYER_PERCENTAGE)
+        .percentage(config.getDestroyerRemovalPercentage())
         .filter(new OverRepresentedSiteTypeFilter())
         .selector(new RandomSiteSelector(new RandomNumberGenerator(0)))
         .build();
   }
 
   private static Algorithm createAlgorithm(
-      final Destroyer destroyer, final Repairer repairer, final Stop stop) {
+      final AppConfig config, final Destroyer destroyer, final Repairer repairer) {
     final var stoppingCriterion =
-        stop.equals(Stop.TIME)
-            ? new TimeBudgetStoppingCriterion(BUDGET_TIME_IN_SECONDS * 1000)
-            : new NumberOfIterationsStoppingCriterion(ALGORITHM_ITERATIONS);
+        new TimeBudgetStoppingCriterion(config.getTimeBudgetInSeconds() * 1000);
     return LNS.builder()
         .destroyer(destroyer)
         .repairer(repairer)
         .acceptanceCriterion(new AcceptBestSolution())
         .stoppingCriterion(stoppingCriterion)
         .build();
-  }
-
-  private enum Stop {
-    TIME,
-    ITERATIONS
   }
 }
