@@ -8,6 +8,7 @@ import static org.mockito.Mockito.withSettings;
 
 import domain.locations.sites.Site;
 import domain.objectives.interfaces.Objective;
+import domain.objectives.interfaces.UnvisitSiteObjective;
 import domain.objectives.interfaces.VisitNewSiteObjective;
 import domain.solution.Solution;
 import lombok.var;
@@ -24,7 +25,7 @@ public class WeightedSumObjectiveTest {
   @BeforeEach
   public void setUp() {
     objective1 = mock(Objective.class, withSettings().extraInterfaces(VisitNewSiteObjective.class));
-    objective2 = mock(Objective.class);
+    objective2 = mock(Objective.class, withSettings().extraInterfaces(UnvisitSiteObjective.class));
     sense = ObjectiveSense.MAXIMIZE;
     weight1 = 2;
     weight2 = 3;
@@ -79,5 +80,23 @@ public class WeightedSumObjectiveTest {
     assertEquals(
         expectedObjectiveValue,
         weightedSumObjective.getVisitNewSiteObjectiveValueDelta(solution, site, delta));
+  }
+
+  @Test
+  public void test_compute_objective_value_delta_when_unvisiting_site() {
+    final var solution = mock(Solution.class);
+    final var site = mock(Site.class);
+    final var delta = 0;
+    final var value2 = 1L;
+    final var objectiveValue2 = ObjectiveValue.builder().sense(sense).value(value2).build();
+    final var objective2AsUnvisitSiteObjective = (UnvisitSiteObjective) objective2;
+    when(objective2AsUnvisitSiteObjective.getUnvisitSiteObjectiveValueDelta(solution, site, delta))
+        .thenReturn(objectiveValue2);
+    final var expectedValue = value2 * weight2;
+    final var expectedObjectiveValue =
+        ObjectiveValue.builder().sense(sense).value(expectedValue).build();
+    assertEquals(
+        expectedObjectiveValue,
+        weightedSumObjective.getUnvisitSiteObjectiveValueDelta(solution, site, delta));
   }
 }
